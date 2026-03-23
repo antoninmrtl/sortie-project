@@ -19,4 +19,14 @@ final class MainController extends AbstractController
             'quests' => $qests,
         ]);
     }
+
+    #[Route('/test', name: 'main_test')]
+    public function test(QuestRepository $questRepository): Response
+    {
+
+        $qests = $questRepository->findAll();
+        return $this->render('main/test.html.twig', [
+            'quests' => $qests,
+        ]);
+    }
 }
