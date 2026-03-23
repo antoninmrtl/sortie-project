@@ -3,8 +3,8 @@
 {% block title %}{{ parent() }} Home{% endblock %}
 {% block extraStyle %}
     <style>
-        body{
-            background-image:url("{{ asset('images/Image.png') }}");
+        body {
+            background-image: url("{{ asset('images/Image.png') }}");
             background-size: cover;
 
         }
@@ -14,6 +14,9 @@
 {% block body %}
     <header>
         <h1 class="text-red-500">Hello ! ✅</h1>
+        {% for quest in quests %}
+            <h3 class="text-white">{{ quest.name }}</h3>
+        {% endfor %}
     </header>
 
 {% endblock %}
