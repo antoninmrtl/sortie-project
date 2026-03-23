@@ -14,11 +14,9 @@
 {% endblock %}
 
 {% block body %}
-    <header>
         <h1 class="text-red-500">Hello ! ✅</h1>
         {% for quest in quests %}
             <h3 class="text-white">{{ quest.name }}</h3>
         {% endfor %}
-    </header>
 
 {% endblock %}
