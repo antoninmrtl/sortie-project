@@ -33,6 +33,8 @@ class AppFixtures extends Fixture
                 ->setStatus($faker->randomElement($status))
             ->setNbMaxInscription($faker->numberBetween([5], [60]));
 
+            $manager->persist($quest);
+
         }
 
         $manager->flush();
