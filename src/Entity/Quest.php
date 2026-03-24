@@ -32,6 +32,10 @@ class Quest
     #[ORM\Column(type: Types::TEXT)]
     private ?string $infoQuest = null;
 
+    #[ORM\ManyToOne(inversedBy: 'quests')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +109,18 @@ class Quest
     public function setInfoQuest(string $infoQuest): static
     {
         $this->infoQuest = $infoQuest;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
