@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quest index{% endblock %}
+
+{% block body %}
+    <h1>Quest index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>StartDateTime</th>
+                <th>Duration</th>
+                <th>InscriptionLimitDate</th>
+                <th>NbMaxInscription</th>
+                <th>InfoQuest</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quest in quests %}
+            <tr>
+                <td>{{ quest.id }}</td>
+                <td>{{ quest.name }}</td>
+                <td>{{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ quest.duration }}</td>
+                <td>{{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ quest.nbMaxInscription }}</td>
+                <td>{{ quest.infoQuest }}</td>
+                <td>
+                    <a href="{{ path('quest_show', {'id': quest.id}) }}">show</a>
+                    <a href="{{ path('quest_edit', {'id': quest.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('quest_create') }}">Create new</a>
+{% endblock %}
