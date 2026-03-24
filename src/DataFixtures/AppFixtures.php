@@ -82,6 +82,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 50; $i++) {
             $user = new User();
             $user->setFirstname($faker->text(25))
+                ->setUsername($faker->text(25))
                 ->setLastname($faker->text(25))
                 ->setCampus($faker->randomElement($campus))
                 ->setRoles($faker->randomElements(['ROLE_USER', 'ROLE_ADMIN']))
