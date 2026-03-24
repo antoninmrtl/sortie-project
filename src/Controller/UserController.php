@@ -64,46 +64,6 @@ final class UserController extends AbstractController
         ]);
     }
 
-//    #[Route('/create', name: 'create', methods: ['POST', 'GET'])]
-//    public function create(
-//        EntityManagerInterface $entityManager,
-//        Request                $request,
-//        FileUploader           $fileUploader
-//    ): Response
-//    {
-//        $serie = new Serie();
-////        $serie->setName('La série de Michel');
-//        $serieForm = $this->createForm(SerieType::class, $serie);
-//
-//        //extraction des données de la requête pour injection dans l'instance de l'entité
-//        $serieForm->handleRequest($request);
-//
-//        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
-//
-//            /**
-//             * @var UploadedFile $file
-//             */
-//            $file = $serieForm->get('backdrop')->getData();
-//            if ($file) {
-//                $serie->setBackdrop(
-//                    $fileUploader->upload($file, 'assets/images/backdrops', $serie->getName())
-//                );
-//            }
-//
-//            //traitement des données
-////            $serie->setDateCreated(new \DateTime());
-//            $entityManager->persist($serie);
-//            $entityManager->flush();
-//
-//            $this->addFlash('success', 'Serie ' . $serie->getName() . ' added !');
-//            return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
-//
-//        }
-//        return $this->render('serie/create.html.twig', [
-//            'serieForm' => $serieForm
-//        ]);
-//    }
-
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(UserRepository $userRepository, int $id): Response
