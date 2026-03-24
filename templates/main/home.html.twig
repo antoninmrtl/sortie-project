@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Home{% endblock %}
+{% block extraStyle %}
+    <style>
+        body {
+            background-image: url("{{ asset('images/Image.png') }}");
+            background-size: cover;
+            background-color: gray;
+            background-blend-mode: luminosity;
+
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+        <h1 class="text-red-500">Hello !</h1>
+        {% for quest in quests %}
+            <div>
+                <h3 class="text-white">{{ quest.name }}</h3>
+                <h3 class="text-white">{{ quest.status.label }}</h3>
+            </div>
+
+        {% endfor %}
+
+{% endblock %}
