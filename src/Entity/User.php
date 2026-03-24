@@ -42,9 +42,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     private ?string $phone = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $mail = null;
-
     #[ORM\Column]
     private ?bool $active = null;
 
@@ -183,17 +180,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getMail(): ?string
-    {
-        return $this->mail;
-    }
-
-    public function setMail(string $mail): static
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
 
     public function isActive(): ?bool
     {
