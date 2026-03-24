@@ -58,6 +58,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Quest::class, inversedBy: 'users')]
     private Collection $quests;
 
+    #[ORM\Column(length: 50)]
+    private ?string $username = null;
+
     public function __construct()
     {
         $this->quests = new ArrayCollection();
@@ -237,6 +240,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeQuest(Quest $quest): static
     {
         $this->quests->removeElement($quest);
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
 
         return $this;
     }
