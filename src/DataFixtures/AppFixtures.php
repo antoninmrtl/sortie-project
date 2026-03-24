@@ -44,6 +44,8 @@ class AppFixtures extends Fixture
             $manager->persist($city);
         }
 
+        $manager->flush();
+
         $city = $manager->getRepository(City::class)->findAll();
 
         for ($i = 0; $i < 15; $i++) {
@@ -55,6 +57,9 @@ class AppFixtures extends Fixture
                 ->setStreet($faker->text(100));
             $manager->persist($place);
         }
+
+
+        $manager->flush();
 
         $place = $manager->getRepository(Place::class)->findAll();
 
@@ -82,8 +87,9 @@ class AppFixtures extends Fixture
                 ->setRoles($faker->randomElements(['ROLE_USER', 'ROLE_ADMIN']))
                 ->setActive($faker->boolean(75))
                 ->setEmail($faker->text(35))
-                ->setPassword($faker->randomElement($campus))
-                ->setProfilePicture($faker->text(35));
+                ->setPassword($faker->text(20))
+                ->setProfilePicture($faker->text(35))
+                ->setPhone($faker->text(25));
 
             $manager->persist($user);
 
