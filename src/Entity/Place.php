@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PlaceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PlaceRepository::class)]
@@ -28,6 +30,17 @@ class Place
     #[ORM\ManyToOne(inversedBy: 'places')]
     #[ORM\JoinColumn(nullable: false)]
     private ?City $city = null;
+
+    /**
+     * @var Collection<int, Quest>
+     */
+    #[ORM\OneToMany(targetEntity: Quest::class, mappedBy: 'place', orphanRemoval: true)]
+    private Collection $quests;
+
+    public function __construct()
+    {
+        $this->quests = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +103,36 @@ class Place
     public function setCity(?City $city): static
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quest>
+     */
+    public function getQuests(): Collection
+    {
+        return $this->quests;
+    }
+
+    public function addQuest(Quest $quest): static
+    {
+        if (!$this->quests->contains($quest)) {
+            $this->quests->add($quest);
+            $quest->setPlace($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuest(Quest $quest): static
+    {
+        if ($this->quests->removeElement($quest)) {
+            // set the owning side to null (unless already changed)
+            if ($quest->getPlace() === $this) {
+                $quest->setPlace(null);
+            }
+        }
 
         return $this;
     }
