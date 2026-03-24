@@ -14,9 +14,9 @@ final class MainController extends AbstractController
     public function home(QuestRepository $questRepository): Response
     {
 
-        $qests = $questRepository->findAll();
+        $quests = $questRepository->findAll();
         return $this->render('main/home.html.twig', [
-            'quests' => $qests,
+            'quests' => $quests,
         ]);
     }
 
@@ -24,9 +24,9 @@ final class MainController extends AbstractController
     public function test(QuestRepository $questRepository): Response
     {
 
-        $qests = $questRepository->findAll();
+        $quests = $questRepository->findAll();
         return $this->render('main/test.html.twig', [
-            'quests' => $qests,
+            'quests' => $quests,
         ]);
     }
 }
