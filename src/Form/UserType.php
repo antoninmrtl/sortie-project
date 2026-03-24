@@ -5,10 +5,14 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\Quest;
 use App\Entity\User;
+use Doctrine\DBAL\Types\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -20,11 +24,23 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username')
-            ->add('firstname')
-            ->add('lastname')
-            ->add('phone')
-            ->add('email')
+            ->add('username', TextType::class,[
+                'required' => true,
+                'constraints' => [new Assert\Length(min: 3, max: 50)],
+            ])
+            ->add('firstname', TextType::class,[
+                'required' => true,
+                'constraints' => [new Assert\Length(min: 3, max: 50)],
+            ])
+            ->add('lastname', TextType::class,[
+                'required' => true,
+                'constraints' => [new Assert\Length(min: 3, max: 50)],
+            ])
+            ->add('phone', TextType::class,[
+                'required' => true,
+                'constraints' => [new Assert\Length(min: 10)],
+            ])
+            ->add('email', EmailType::class)
             ->add('Password', PasswordType::class, [
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
@@ -39,7 +55,7 @@ class UserType extends AbstractType
                     ),
                 ],
             ])
-            ->add('active')
+            ->add('active', CheckboxType::class)
             ->add('profilePicture', FileType::class, [
                 'label' => 'Photo de profile (png,jpeg)',
                 'mapped' => false,
@@ -55,16 +71,7 @@ class UserType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',
-            ])
-//            ->add('quests', EntityType::class, [
-//                'class' => Quest::class,
-//                'choice_label' => 'name',
-//                'multiple' => true,
-//                'attr' => [
-//                    'class' => 'select select-bordered select-warning w-full bg-[#3D2C1F] text-[#BF9B30]'
-//                ]
-//            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
