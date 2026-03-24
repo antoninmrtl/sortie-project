@@ -5,8 +5,8 @@
 {% block body %}
     <h1>Quest</h1>
 
-    <table class="table">
-        <tbody>
+
+
             <tr>
                 <th>Id</th>
                 <td>{{ quest.id }}</td>
@@ -35,8 +35,10 @@
                 <th>InfoQuest</th>
                 <td>{{ quest.infoQuest }}</td>
             </tr>
-        </tbody>
-    </table>
+
+                <h1>image</h1>
+                <img src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
+
 
     <a href="{{ path('quest_index') }}">back to list</a>
 

@@ -2,12 +2,13 @@
 
 namespace App\Utils;
 
+use App\Repository\QuestRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository, private QuestRepository $questRepository)
     {
     }
 

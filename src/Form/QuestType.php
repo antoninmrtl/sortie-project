@@ -9,8 +9,10 @@ use App\Entity\Status;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class QuestType extends AbstractType
 {
@@ -23,26 +25,26 @@ class QuestType extends AbstractType
             ->add('inscriptionLimitDate')
             ->add('nbMaxInscription')
             ->add('infoQuest')
-//            JE PENSE PAS QU'IL FAUT LES INDIQUER
-//            ->add('status', EntityType::class, [
-//                'class' => Status::class,
-//                'choice_label' => 'id',
-//            ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
             ->add('place', EntityType::class, [
                 'class' => Place::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
-            //            JE PENSE PAS QU'IL FAUT LES INDIQUER
-//            ->add('users', EntityType::class, [
-//                'class' => User::class,
-//                'choice_label' => 'id',
-//                'multiple' => true,
-//            ])
-        ;
+            ->add('picture', FileType::class, [
+                'label' => 'Photo de l\'evenement (png,jpeg)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new Assert\File(
+                        maxSize: '1024k',
+                        extensions: ['pdf','png','jpeg', 'jpg'],
+                        extensionsMessage: 'Please upload a valid image / document',
+                    )
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

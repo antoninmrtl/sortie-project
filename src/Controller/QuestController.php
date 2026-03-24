@@ -6,6 +6,7 @@ use App\Entity\Quest;
 use App\Form\QuestType;
 use App\Repository\QuestRepository;
 use App\Repository\StatusRepository;
+use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,13 +32,14 @@ final class  QuestController extends AbstractController
         EntityManagerInterface $entityManager,
         StatusRepository $statusRepository,
         QuestRepository $questRepository,
+        FileUploader $fileUploader,
         int $id = null): Response
     {
         $quest = new Quest();
         if($id !=null){
             $quest = $questRepository->find($id);
             if($quest->getUsers() != $this->getUser()){
-                throw $this->createAccessDeniedException("Vas saboter la sortie d'autrui, malautru!");
+                throw $this->createAccessDeniedException("Vas saboter la Quest d'autrui, malautru!");
             }
         }
         $status = $statusRepository->findAll();
@@ -45,8 +47,14 @@ final class  QuestController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $quest->setUsers($this->getUser());
 
+            $file = $form->get('picture')->getData();
+            if ($file) {
+                $quest->setPicture(
+                    $fileUploader->upload($file, 'assets/images/pictureQuest', $quest->getName())
+                );
+            }
+            //$quest->setUsers($this->getUser()); Ya un probleme avec ça
             $quest->setStatus($status[1]);
 
             $entityManager->persist($quest);
