@@ -41,7 +41,8 @@
 {#            </tr>#}
             <tr>
                 <th>ProfilePicture</th>
-                <td>{{ user.profilePicture }}</td>
+                <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}" alt="">
+
             </tr>
         </tbody>
     </table>
