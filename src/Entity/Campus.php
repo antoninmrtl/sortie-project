@@ -28,12 +28,15 @@ class Campus
      * @var Collection<int, User>
      */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'campus')]
-    private Collection $users;
+    private Collection $userss;
+
+
 
     public function __construct()
     {
         $this->quests = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->userss = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -86,30 +89,33 @@ class Campus
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    public function getUserss(): Collection
     {
-        return $this->users;
+        return $this->userss;
     }
 
-    public function addUser(User $user): static
+    public function addUserss(User $userss): static
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->setCampus($this);
+        if (!$this->userss->contains($userss)) {
+            $this->userss->add($userss);
+            $userss->setCampus($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): static
+    public function removeUserss(User $userss): static
     {
-        if ($this->users->removeElement($user)) {
+        if ($this->userss->removeElement($userss)) {
             // set the owning side to null (unless already changed)
-            if ($user->getCampus() === $this) {
-                $user->setCampus(null);
+            if ($userss->getCampus() === $this) {
+                $userss->setCampus(null);
             }
         }
 
         return $this;
     }
+
+
+
 }

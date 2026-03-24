@@ -44,17 +44,23 @@ class Quest
     /**
      * @var Collection<int, User>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'quests')]
-    private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'quests')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Place $place = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'quests')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
@@ -157,6 +163,19 @@ class Quest
         return $this;
     }
 
+
+    public function getPlace(): ?Place
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?Place $place): static
+    {
+        $this->place = $place;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, User>
      */
@@ -180,18 +199,6 @@ class Quest
         if ($this->users->removeElement($user)) {
             $user->removeQuest($this);
         }
-
-        return $this;
-    }
-
-    public function getPlace(): ?Place
-    {
-        return $this->place;
-    }
-
-    public function setPlace(?Place $place): static
-    {
-        $this->place = $place;
 
         return $this;
     }
