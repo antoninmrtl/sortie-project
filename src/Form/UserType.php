@@ -7,11 +7,13 @@ use App\Entity\Quest;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class UserType extends AbstractType
 {
@@ -38,7 +40,18 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('active')
-            ->add('profilePicture')
+            ->add('profilePicture', FileType::class, [
+                'label' => 'Photo de profile (png,jpeg)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new Assert\File(
+                        maxSize: '1024k',
+                        extensions: ['pdf','png','jpeg', 'jpg'],
+                        extensionsMessage: 'Please upload a valid image / document',
+                    )
+                ],
+            ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'name',

@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Serie;
 use App\Entity\User;
+use App\Form\SerieType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,13 +29,23 @@ final class UserController extends AbstractController
     }
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function new(Request $request,UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var UploadedFile $file
+             */
+            $file = $form->get('profilePicture')->getData();
+            if ($file) {
+                $user->setProfilePicture(
+                    $fileUploader->upload($file, 'assets/images/profilePicture', $user->getUsername())
+                );
+            }
+
             /** @var string $plainPassword */
             $plainPassword = $form->get('Password')->getData();
 
@@ -41,7 +55,7 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('user_show', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/new.html.twig', [
@@ -50,32 +64,46 @@ final class UserController extends AbstractController
         ]);
     }
 
-//    #[Route('/register', name: 'app_register')]
-//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+//    #[Route('/create', name: 'create', methods: ['POST', 'GET'])]
+//    public function create(
+//        EntityManagerInterface $entityManager,
+//        Request                $request,
+//        FileUploader           $fileUploader
+//    ): Response
 //    {
-//        $user = new User();
-//        $form = $this->createForm(RegistrationFormType::class, $user);
-//        $form->handleRequest($request);
+//        $serie = new Serie();
+////        $serie->setName('La série de Michel');
+//        $serieForm = $this->createForm(SerieType::class, $serie);
 //
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            /** @var string $plainPassword */
-//            $plainPassword = $form->get('Password')->getData();
+//        //extraction des données de la requête pour injection dans l'instance de l'entité
+//        $serieForm->handleRequest($request);
 //
-//            // encode the plain password
-//            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-//            $user->setRoles(["ROLE_USER"]);
-//            $entityManager->persist($user);
+//        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
+//
+//            /**
+//             * @var UploadedFile $file
+//             */
+//            $file = $serieForm->get('backdrop')->getData();
+//            if ($file) {
+//                $serie->setBackdrop(
+//                    $fileUploader->upload($file, 'assets/images/backdrops', $serie->getName())
+//                );
+//            }
+//
+//            //traitement des données
+////            $serie->setDateCreated(new \DateTime());
+//            $entityManager->persist($serie);
 //            $entityManager->flush();
 //
-//            // do anything else you need here, like send an email
+//            $this->addFlash('success', 'Serie ' . $serie->getName() . ' added !');
+//            return $this->redirectToRoute('series_show', ['id' => $serie->getId()]);
 //
-//            return $security->login($user, UserAuthenticator::class, 'main');
 //        }
-//
-//        return $this->render('registration/register.html.twig', [
-//            'registrationForm' => $form,
+//        return $this->render('serie/create.html.twig', [
+//            'serieForm' => $serieForm
 //        ]);
 //    }
+
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(UserRepository $userRepository, int $id): Response
@@ -87,7 +115,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager,UserRepository $userRepository,int $id): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
         $form = $this->createForm(UserType::class, $user);
@@ -96,7 +124,7 @@ final class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('user_show', ['id'=>$user->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('user/edit.html.twig', [
@@ -106,10 +134,10 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, EntityManagerInterface $entityManager,UserRepository $userRepository, int $id): Response
+    public function delete(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($user);
             $entityManager->flush();
         }
