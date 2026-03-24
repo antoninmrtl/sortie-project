@@ -17,8 +17,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
-    #[Assert\NotNull(message: 'Ne peut pas être nul')]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
@@ -27,23 +25,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email(
         message: 'The email {{ value }} is not a valid email.',
     )]
-    #[Assert\Unique]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
-    #[Assert\NotNull(message: 'Ne peut pas être nul')]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
-    #[Assert\NotNull(message: 'Ne peut pas être nul')]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
@@ -77,8 +70,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phone = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
-    #[Assert\NotNull(message: 'Ne peut pas être nul')]
     private ?bool $active = null;
 
     #[ORM\Column(length: 50)]

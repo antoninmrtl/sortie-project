@@ -40,7 +40,7 @@ class UserType extends AbstractType
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 10)],
             ])
-            ->add('email', EmailType::class)
+            ->add('email')
             ->add('Password', PasswordType::class, [
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
