@@ -38,7 +38,7 @@ final class  QuestController extends AbstractController
             $entityManager->persist($quest);
             $entityManager->flush();
 
-            return $this->redirectToRoute('quest_show', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('quest_show', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('quest/new.html.twig', [
@@ -64,7 +64,7 @@ final class  QuestController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('quest_show', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('quest_show', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('quest/edit.html.twig', [
@@ -73,7 +73,7 @@ final class  QuestController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_quest_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Quest $quest, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$quest->getId(), $request->getPayload()->getString('_token'))) {
@@ -81,6 +81,6 @@ final class  QuestController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('quest_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
     }
 }
