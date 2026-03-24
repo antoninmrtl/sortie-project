@@ -7,8 +7,10 @@ use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/user', name: 'user_')]
@@ -23,13 +25,18 @@ final class UserController extends AbstractController
     }
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request,UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var string $plainPassword */
+            $plainPassword = $form->get('Password')->getData();
+
+            // encode the plain password
+            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $user->setRoles(['ROLE_USER']);
             $entityManager->persist($user);
             $entityManager->flush();
@@ -42,6 +49,33 @@ final class UserController extends AbstractController
             'form' => $form,
         ]);
     }
+
+//    #[Route('/register', name: 'app_register')]
+//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+//    {
+//        $user = new User();
+//        $form = $this->createForm(RegistrationFormType::class, $user);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            /** @var string $plainPassword */
+//            $plainPassword = $form->get('Password')->getData();
+//
+//            // encode the plain password
+//            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+//            $user->setRoles(["ROLE_USER"]);
+//            $entityManager->persist($user);
+//            $entityManager->flush();
+//
+//            // do anything else you need here, like send an email
+//
+//            return $security->login($user, UserAuthenticator::class, 'main');
+//        }
+//
+//        return $this->render('registration/register.html.twig', [
+//            'registrationForm' => $form,
+//        ]);
+//    }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(UserRepository $userRepository, int $id): Response
