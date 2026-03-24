@@ -1,3 +1,0 @@
-  {% block %}
-         <p>   {{hola jdyyuryhola r}} </p>
-{% endblock %}ll
