@@ -1,22 +1,32 @@
-<div class="flex justify-between text-white p-5">
-    <div>
-        <h1 class="ml-2 mr-2 ">Quest.ENI</h1>
+<nav class="grid grid-cols-3 items-center px-4 text-white h-16">
+    <div class="flex justify-start">
+        <h1 class="font-bold">Quest.ENI</h1>
     </div>
-    <div>
-        <a class="ml-2 mr-2" href="{{ path('user_create') }}">add User</a>
-        <a class="ml-2 mr-2" href="{{ path('user_index') }}">display user</a>
-        <a class="ml-2 mr-2 text-[1.5rem]" href="{{ path('main_home') }}">Home</a>
-        <a class="ml-2 mr-2" href="{{ path('quest_index') }}">display quests</a>
-        <a class="ml-2 mr-2" href="{{ path('quest_create') }}">create quests</a>
-        {% if app.user %}
-            <a class="ml-2 mr-2" href="{{ path('user_profile') }}">Profile</a>
-            <a class="ml-2 mr-2" href="{{ path('app_logout') }}">logout</a>
-        {% else %}
-            <a class="ml-2 mr-2" href="{{ path('app_login') }}">login</a>
+
+    <div class="flex justify-center items-center gap-x-6">
+        <a href="{{ path('quest_index') }}" class="hover:text-yellow-500 transition">display quests</a>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('user_index') }}" class="hover:text-yellow-500 transition">display user</a>
+            <a href="{{ path('user_create') }}" class="hover:text-yellow-500 transition">add User</a>
         {% endif %}
 
+        <a href="{{ path('main_home') }}" class="text-[1.5rem] font-bold text-yellow-500">Home</a>
+
+        <a href="{{ path('quest_create') }}" class="hover:text-yellow-500 transition">create quests</a>
+
+        {% if app.user %}
+            <a href="{{ path('user_profile') }}" class="hover:text-yellow-500 transition">Profile</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="hover:text-yellow-500 transition">login</a>
+        {% endif %}
     </div>
-    <div>
+
+    <div class="flex justify-end">
+        {% if app.user %}
+            <a href="{{ path('app_logout') }}" class="hover:underline text-gray-300">logout</a>
+        {% endif %}
     </div>
-</div>
-<div class="border-1 border-yellow-500"></div>
+</nav>
+
+<div class="border-b-2 border-yellow-600"></div>

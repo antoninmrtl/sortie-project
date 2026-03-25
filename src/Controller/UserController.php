@@ -6,6 +6,7 @@ use App\Entity\Serie;
 use App\Entity\User;
 use App\Form\SerieType;
 use App\Form\UserType;
+use App\Repository\QuestRepository;
 use App\Repository\UserRepository;
 use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
@@ -109,10 +110,8 @@ final class UserController extends AbstractController
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/profile', name: 'profile', methods: ['GET'])]
-    public function profile(#[CurrentUser] User $user): Response
+    public function profile(#[CurrentUser] User $user, QuestRepository $questRepository): Response
     {
-
-        //return new Response('Well hi there '.$user->getFirstName());
 
         return $this->render('user/profile.html.twig');
     }

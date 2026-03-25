@@ -42,14 +42,25 @@
             <tr>
                 <th>ProfilePicture</th>
                 <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}" alt="">
+            </tr>
+            <tr>
+                <th>Les quetes créee par le user</th>
+                {% for quest in user.quest %}
+                    <div>
+                        quesst : {{ quest.name }}
+                    </div>
 
+                {% endfor %}
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('user_index') }}">back to list</a>
 
-    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
 
-    {{ include('user/_delete_form.html.twig') }}
+        {{ include('user/_delete_form.html.twig') }}
+    {% endif %}
+
 {% endblock %}

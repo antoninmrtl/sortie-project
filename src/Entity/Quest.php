@@ -58,6 +58,10 @@ class Quest
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $picture = null;
 
+    #[ORM\ManyToOne(inversedBy: 'quest')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $promoter = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -214,6 +218,18 @@ class Quest
     public function setPicture(?string $picture): static
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getPromoter(): ?User
+    {
+        return $this->promoter;
+    }
+
+    public function setPromoter(?User $promoter): static
+    {
+        $this->promoter = $promoter;
 
         return $this;
     }

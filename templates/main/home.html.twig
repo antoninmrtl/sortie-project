@@ -45,11 +45,16 @@
                             {{ quest.infoQuest }}
                         </h3>
 
-                        <div>
-                            <h3>
-                                Places : {{ quest.nbMaxInscription }} |
-                                Durée : {{ quest.duration }}h
-                            </h3>
+                        <div class="flex justify-between">
+                            <div>
+                                <h3>
+                                    Places : {{ quest.nbMaxInscription }} |
+                                    Durée : {{ quest.duration }}h
+                                </h3>
+                            </div>
+                            <div>
+                                {{ quest.promoter.username }}
+                            </div>
                         </div>
 
                         <hr class="border-yellow-500/30">
