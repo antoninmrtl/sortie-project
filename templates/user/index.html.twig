@@ -17,8 +17,10 @@
 
 {% block body %}
     <h1>User index</h1>
+    <div class="flex justify-center">
 
-    <table class="table text-white">
+
+    <table class="table text-white border border-yellow-500 bg-black w-2/3" >
         <thead>
             <tr>
                 <th>Id</th>
@@ -53,6 +55,7 @@
         {% endfor %}
         </tbody>
     </table>
+    </div>
 
     <a href="{{ path('user_create') }}">Create new</a>
 {% endblock %}
