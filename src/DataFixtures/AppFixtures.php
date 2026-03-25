@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 25; $i++) {
             $city = new City();
             $city->setName($faker->text(25))
-                ->setPostalCode($faker->numberBetween(1000, 9999));
+                ->setPostalCode($faker->postcode());
             $manager->persist($city);
         }
 
@@ -57,11 +57,11 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 15; $i++) {
             $place = new Place();
-            $place->setName($faker->text(25))
+            $place->setName($faker->domainWord())
                 ->setCity($faker->randomElement($city))
-                ->setLatitude($faker->randomFloat([2], [0], [10000]))
-                ->setLongitude($faker->randomFloat([2], [0], [10000]))
-                ->setStreet($faker->text(100));
+                ->setLatitude($faker->latitude($min = -90, $max = 90))
+                ->setLongitude($faker->longitude($min = -180, $max = 180))
+                ->setStreet($faker->streetAddress());
             $manager->persist($place);
         }
 
@@ -77,16 +77,16 @@ class AppFixtures extends Fixture
                 $user,
                 'azerty'
             );
-            $user->setFirstname($faker->text(25))
-                ->setUsername($faker->text(15))
-                ->setLastname($faker->text(25))
+            $user->setFirstname($faker->firstName($gender = null|'male'|'female'))
+                ->setUsername($faker->userName())
+                ->setLastname($faker->lastName())
                 ->setCampus($faker->randomElement($campus))
                 ->setRoles($faker->randomElements(['ROLE_USER', 'ROLE_ADMIN']))
                 ->setActive($faker->boolean(75))
                 ->setEmail($faker->email())
                 ->setPassword($hashedPassword)
                 ->setProfilePicture($faker->text(35))
-                ->setPhone($faker->text(25));
+                ->setPhone($faker->e164PhoneNumber());
 
             $manager->persist($user);
 
