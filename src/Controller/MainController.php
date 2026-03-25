@@ -14,7 +14,7 @@ final class MainController extends AbstractController
     public function home(QuestRepository $questRepository): Response
     {
 
-        $quests = $questRepository->findAll();
+        $quests = $questRepository->find6Last();
         return $this->render('main/home.html.twig', [
             'quests' => $quests,
         ]);

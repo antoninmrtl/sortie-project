@@ -99,9 +99,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private ?string $username = null;
 
+    /**
+     * @var Collection<int, Quest>
+     */
+    #[ORM\OneToMany(targetEntity: Quest::class, mappedBy: 'promoter')]
+    private Collection $quest;
+
     public function __construct()
     {
         $this->quests = new ArrayCollection();
+        $this->quest = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -292,5 +299,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Quest>
+     */
+    public function getQuest(): Collection
+    {
+        return $this->quest;
     }
 }

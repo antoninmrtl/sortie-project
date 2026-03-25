@@ -70,6 +70,32 @@ class AppFixtures extends Fixture
 
         $place = $manager->getRepository(Place::class)->findAll();
 
+
+        for ($i = 0; $i < 50; $i++) {
+            $user = new User();
+            $hashedPassword = $this->passwordHasher->hashPassword(
+                $user,
+                'azerty'
+            );
+            $user->setFirstname($faker->text(25))
+                ->setUsername($faker->text(15))
+                ->setLastname($faker->text(25))
+                ->setCampus($faker->randomElement($campus))
+                ->setRoles($faker->randomElements(['ROLE_USER', 'ROLE_ADMIN']))
+                ->setActive($faker->boolean(75))
+                ->setEmail($faker->email())
+                ->setPassword($hashedPassword)
+                ->setProfilePicture($faker->text(35))
+                ->setPhone($faker->text(25));
+
+            $manager->persist($user);
+
+        }
+
+        $manager->flush();
+
+        $user = $manager->getRepository(User::class)->findAll();
+
         for ($i = 0; $i < 50; $i++) {
             $quest = new Quest();
             $quest->setName($faker->text(25))
@@ -80,32 +106,13 @@ class AppFixtures extends Fixture
                 ->setStatus($faker->randomElement($status))
                 ->setNbMaxInscription($faker->numberBetween(5, 60))
                 ->setCampus($faker->randomElement($campus))
-                ->setPlace($faker->randomElement($place));
+                ->setPlace($faker->randomElement($place))
+                ->setPromoter($faker->randomElement($user));
 
             $manager->persist($quest);
 
         }
 
-        for ($i = 0; $i < 50; $i++) {
-            $user = new User();
-            $hashedPassword = $this->passwordHasher->hashPassword(
-                $user,
-                'azerty'
-            );
-            $user->setFirstname($faker->text(25))
-                ->setUsername($faker->text(25))
-                ->setLastname($faker->text(25))
-                ->setCampus($faker->randomElement($campus))
-                ->setRoles($faker->randomElements(['ROLE_USER', 'ROLE_ADMIN']))
-                ->setActive($faker->boolean(75))
-                ->setEmail($faker->text(35))
-                ->setPassword($hashedPassword)
-                ->setProfilePicture($faker->text(35))
-                ->setPhone($faker->text(25));
-
-            $manager->persist($user);
-
-        }
 
         $manager->flush();
     }
