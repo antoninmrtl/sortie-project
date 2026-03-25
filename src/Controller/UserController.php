@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/user', name: 'user_')]
 final class UserController extends AbstractController
@@ -65,7 +67,7 @@ final class UserController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', requirements: ['id'=>'\d+'],methods: ['GET'])]
     public function show(UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
@@ -103,5 +105,15 @@ final class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[Route('/profile', name: 'profile', methods: ['GET'])]
+    public function profile(#[CurrentUser] User $user): Response
+    {
+
+        //return new Response('Well hi there '.$user->getFirstName());
+
+        return $this->render('user/profile.html.twig');
     }
 }
