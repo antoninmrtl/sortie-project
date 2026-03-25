@@ -2,9 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Serie;
 use App\Entity\User;
-use App\Form\SerieType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Utils\FileUploader;
@@ -20,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/user', name: 'user_')]
-final class UserController extends AbstractController
+final class                   UserController extends AbstractController
 {
     #[Route('',name: 'index', methods: ['GET'])]
     public function displayAll(UserRepository $userRepository): Response
