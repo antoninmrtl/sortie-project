@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/quest', name: 'quest_')]
 final class  QuestController extends AbstractController
@@ -25,20 +26,20 @@ final class  QuestController extends AbstractController
     }
 
 //GET USERS AU PLURIEL PARCE QUE USER (ORGANISATEUR N'EXISTE PAS ENCORE
-    #[Route('/create', name:'create')]
-    #[Route('/edit/{id}', name:'edit', requirements: ['id'=>'\d+'])]
+    #[Route('/create', name: 'create')]
+    #[Route('/edit/{id}', name: 'edit', requirements: ['id' => '\d+'])]
     public function createOrEdit(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $entityManager,
-        StatusRepository $statusRepository,
-        QuestRepository $questRepository,
-        FileUploader $fileUploader,
-        int $id = null): Response
+        StatusRepository       $statusRepository,
+        QuestRepository        $questRepository,
+        FileUploader           $fileUploader,
+        int                    $id = null): Response
     {
         $quest = new Quest();
-        if($id !=null){
+        if ($id != null) {
             $quest = $questRepository->find($id);
-            if($quest->getUsers() != $this->getUser()){
+            if ($quest->getUsers() != $this->getUser()) {
                 throw $this->createAccessDeniedException("Vas saboter la Quest d'autrui, malautru!");
             }
         }
@@ -62,7 +63,7 @@ final class  QuestController extends AbstractController
             $entityManager->persist($quest);
             $entityManager->flush();
 
-            return $this->redirectToRoute('quest_show', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('quest_show', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('quest/new.html.twig', [
@@ -70,64 +71,45 @@ final class  QuestController extends AbstractController
             'form' => $form,
         ]);
     }
-//    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-//    public function new(Request $request, EntityManagerInterface $entityManager, StatusRepository $repository): Response
-//    {
-//        $quest = new Quest();
-//        $status = $repository->findAll();
-//        $form = $this->createForm(QuestType::class, $quest);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//
-//            $quest->setStatus($status[1]);
-//
-//            $entityManager->persist($quest);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('quest_show', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
-//        }
-//
-//        return $this->render('quest/new.html.twig', [
-//            'quest' => $quest,
-//            'form' => $form,
-//        ]);
-//    }
-//
-//
-//    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-//    public function edit(Request $request, Quest $quest, EntityManagerInterface $entityManager): Response
-//    {
-//        $form = $this->createForm(QuestType::class, $quest);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('quest_show', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
-//        }
-//
-//        return $this->render('quest/edit.html.twig', [
-//            'quest' => $quest,
-//            'form' => $form,
-//        ]);
-//    }
+
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[IsGranted("ROLE_USER")]
     public function show(Quest $quest): Response
     {
         return $this->render('quest/show.html.twig', [
             'quest' => $quest,
         ]);
     }
+
+    #[Route('/inscription/{id}', name: 'inscription', methods: ['GET'])]
+    #[IsGranted("ROLE_USER")]
+    public function inscription(Quest $quest, EntityManagerInterface $entityManager): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user)) {
+            $this->addFlash('warning', 'Vous participez déjà à cette quête, aventurier ! ou la quête est déja pleine');
+        } else {
+            $quest = $quest->addUser($user);
+            $entityManager->persist($quest);
+            $entityManager->flush();
+            $this->addFlash('success', 'Bienvenue a l\'aventure');
+            return $this->redirectToRoute('quest_show',['id' => $quest->getId()]);
+        }
+
+        return $this->redirectToRoute('quest_index');
+    }
+
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Quest $quest, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$quest->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $quest->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($quest);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('quest_index', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
     }
 }

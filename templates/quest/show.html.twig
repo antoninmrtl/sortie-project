@@ -38,6 +38,28 @@
                 <td>{{ quest.promoter.username }}</td>
             </tr>
 
+            <div>
+                nbr inscrit
+                {{ quest.users | length }} / {{ quest.nbMaxInscription }}
+                {% for user in quest.users %}
+                    <div>
+                        <h3>
+                            users inscrit : {{ user.username }}
+                        </h3>
+                    </div>
+                {% endfor %}
+
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="p-4 mb-2 text-white font-bold bg-{{ label == 'success' ? 'green' : 'red' }}-500">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+
+
                 <h1>image</h1>
                 <img src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
 
