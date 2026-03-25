@@ -2,40 +2,128 @@
 
 {% block title %}Log in!{% endblock %}
 
+
+
+{% block extraStyle %}
+
+    <style>
+
+        body {
+
+            background-image: url("{{ asset('images/Image.png') }}");
+            background-size: cover;
+            background-color: gray;
+            background-blend-mode: luminosity;
+        }
+
+    </style>
+
+{% endblock %}
+
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+    <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-center">Portail d’accès</h1>
+
+
+    <div class="flex justify-center items-center min-h-screen">
+
+        <div class="relative flex items-center justify-center bg-no-repeat bg-cover bg-center"
+             style="width: 720px; min-height: 500px; background-image: url('{{ asset('images/utilisateur.png') }}');">
+
+            <div class="absolute inset-0 flex items-center justify-center">
+
+                <form method="post" class="w-[80%]">
+
+
+
+                    {% if error %}
+
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+
+                    {% endif %}
+
+
+
+                    {% if app.user %}
+
+                        <div class="mb-3">
+
+                            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+
+                        </div>
+
+                    {% endif %}
+
+
+
+
+
+                    <div class="flex justify-center">
+
+                        <label for="inputEmail">Email</label>
+
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="bg-gray-100"
+
+                               autocomplete="email" required autofocus>
+
+                        <label for="inputUsername">Pseudo</label>
+                        <input type="text" name="username" id="inputUsername" class="input input-bordered" required>
+
+
+                    </div>
+
+
+
+
+
+                    <div class="flex justify-center ">
+
+                        <label for="inputPassword" class="text-mist-50">Rune secrete</label>
+
+                        <input type="password" name="password" id="inputPassword" class="bg-gray-100"
+
+                               autocomplete="current-password" required>
+
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+
+                               value="{{ csrf_token('authenticate') }}">
+
+                    </div>
+
+
+
+                    <div class=" flex justify-center checkbox mb-3 ">
+
+                        <label>
+
+                            <input type="checkbox" name="_remember_me text-mist-50 "> Remember me
+
+                        </label>
+
+                    </div>
+
+
+
+                    <div class="flex justify-center">
+
+                        <button class="btn btn-lg btn-primary  " type="submit">
+
+                            Franchir les portes
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+
+            </div>
+
         </div>
-    {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <form method="post">
-        <label for="inputEmail">Email</label>
-        <input type="email" name="email" id="inputEmail" class="input input-bordered" required autofocus>
-
-        <label for="inputUsername">Pseudo</label>
-        <input type="text" name="username" id="inputUsername" class="input input-bordered" required>
-
-        <label for="inputPassword">Mot de passe</label>
-        <input type="password" name="password" id="inputPassword" class="input input-bordered" required>
-
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-        <button class="btn btn-primary mt-4" type="submit">Se connecter</button>
-    </form>
 
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+
     </div>
 
-</form>
 {% endblock %}

@@ -3,3 +3,6 @@
 body {
     background-color: skyblue;
 }
+h1, h2 {
+    font-family: 'Pixelify Sans', sans-serif;
+}
