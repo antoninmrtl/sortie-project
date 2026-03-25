@@ -9,6 +9,7 @@
         <a class="ml-2 mr-2" href="{{ path('quest_index') }}">display quests</a>
         <a class="ml-2 mr-2" href="{{ path('quest_create') }}">create quests</a>
         {% if app.user %}
+            <a class="ml-2 mr-2" href="{{ path('user_profile') }}">Profile</a>
             <a class="ml-2 mr-2" href="{{ path('app_logout') }}">logout</a>
         {% else %}
             <a class="ml-2 mr-2" href="{{ path('app_login') }}">login</a>
