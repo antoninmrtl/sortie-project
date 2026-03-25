@@ -55,6 +55,9 @@ class Quest
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'quests')]
     private Collection $users;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $picture = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -199,6 +202,18 @@ class Quest
         if ($this->users->removeElement($user)) {
             $user->removeQuest($this);
         }
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): static
+    {
+        $this->picture = $picture;
 
         return $this;
     }

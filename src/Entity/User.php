@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -19,6 +20,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\Email(
+        message: 'The email {{ value }} is not a valid email.',
+    )]
     private ?string $email = null;
 
     /**
@@ -34,16 +40,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
     private ?string $phone = null;
-
-    #[ORM\Column(length: 50)]
-    private ?string $mail = null;
 
     #[ORM\Column]
     private ?bool $active = null;
@@ -53,6 +77,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'userss')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
     private ?Campus $campus = null;
 
     /**
@@ -60,6 +86,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\ManyToMany(targetEntity: Quest::class, inversedBy: 'users')]
     private Collection $quests;
+
+    #[ORM\Column(length: 50)]
+    #[Assert\Type('string')]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+    )]
+    private ?string $username = null;
 
     public function __construct()
     {
@@ -183,17 +221,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getMail(): ?string
-    {
-        return $this->mail;
-    }
-
-    public function setMail(string $mail): static
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
 
     public function isActive(): ?bool
     {
@@ -251,6 +278,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeQuest(Quest $quest): static
     {
         $this->quests->removeElement($quest);
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
 
         return $this;
     }

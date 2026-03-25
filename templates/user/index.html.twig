@@ -9,12 +9,10 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>PhoneNumber</th>
                 <th>Mail</th>
-                <th>Password</th>
                 <th>Actif</th>
                 <th>Role</th>
                 <th>ProfilePicture</th>
@@ -25,18 +23,15 @@
         {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
                 <td>{{ user.firstname }}</td>
                 <td>{{ user.lastname }}</td>
-                <td>{{ user.phoneNumber }}</td>
-                <td>{{ user.mail }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.actif ? 'Yes' : 'No' }}</td>
-                <td>{{ user.role }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.active ? 'Yes' : 'No' }}</td>
                 <td>{{ user.profilePicture }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
+                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -47,5 +42,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_new') }}">Create new</a>
+    <a href="{{ path('user_create') }}">Create new</a>
 {% endblock %}

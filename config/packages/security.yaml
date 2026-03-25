@@ -9,7 +9,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+#                property: email
 
     firewalls:
         dev:
@@ -23,7 +23,7 @@ security:
             logout:
                 path: app_logout
                 # where to redirect after logout
-                # target: app_any_route
+                # target: app_any_route //TODO
 
             remember_me:
                 secret: '%kernel.secret%'
