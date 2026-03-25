@@ -9,6 +9,7 @@
             font-weight: 400;
             font-style: normal;
         }
+
         body {
 
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
@@ -17,13 +18,21 @@
             background-repeat: no-repeat;
             min-height: 100vh;
         }
-        h3, a{
+
+        h3, a {
             font-family: "ABeeZee";
         }
     </style>
 {% endblock %}
 
 {% block body %}
+    <div class="text-white">
+        {{ form_start(questForm, {'method': 'GET'}) }}
+        {{ form_widget(questForm) }}
+        <button class="text-white" type="submit">Search</button>
+        {{ form_end(questForm) }}
+    </div>
+
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
@@ -70,13 +79,21 @@
 
                     <div class="text-sm">
                         Début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i') : 'N/A' }}<br>
-                        Fin Inscription : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i') : 'N/A' }}
+                        Fin Inscription
+                        : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i') : 'N/A' }}
                     </div>
                     <div class="mt-2 flex gap-4">
                         <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
-                        <a href="{{ path('quest_inscription', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">s'inscrire</a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('quest_edit', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Modifier</a>
+                        {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
+                            <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
+                               class="text-yellow-600 hover:underline">s'inscrire</a>
+                        {% endif %}
+
+                        {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('quest_edit', {'id': quest.id}) }}"
+                                   class="text-yellow-600 hover:underline">Modifier</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>

@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Quest;
+use App\Form\Model\QuestSearch;
+use App\Form\QuestSearchType;
 use App\Form\QuestType;
 use App\Repository\QuestRepository;
 use App\Repository\StatusRepository;
+use App\Services\QuestService;
 use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,10 +22,25 @@ use Symfony\Contracts\Service\Attribute\Required;
 final class  QuestController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(QuestRepository $questRepository): Response
+    public function index(QuestRepository $questRepository, Request $request): Response
     {
+
+        $questSearch = new QuestSearch();
+        $questForm = $this->createForm(QuestSearchType::class, $questSearch);
+        $questForm->handleRequest($request);
+
+
+
+        if ($questForm->isSubmitted() && $questForm->isValid()) {
+            $searchData = $questForm->getData();
+            $quests = $questRepository->findBySearch($searchData);
+        } else {
+            $quests = $questRepository->findAll();
+        }
+
         return $this->render('quest/index.html.twig', [
-            'quests' => $questRepository->findAll()
+            'quests' => $quests,
+            'questForm'=>$questForm
         ]);
     }
 
