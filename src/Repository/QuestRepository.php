@@ -35,7 +35,7 @@ class QuestRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findBySearch(QuestSearch $search, User $user)
+    public function findBySearch(QuestSearch $search, ?User $user)
     {
         $query = $this->createQueryBuilder('q');
         if ($search->getName()) {
@@ -43,18 +43,19 @@ class QuestRepository extends ServiceEntityRepository
                 ->andWhere('q.name LIKE :name')
                 ->setParameter('name', '%' . $search->getName() . '%');
         }
-        if ($search->isPromoter()) {
-
-            $query = $query
+        if ($user) {
+            if ($search->isPromoter()) {
+                $query = $query
                 ->andWhere('q.promoter = :user')
-                ->setParameter('user', $user);
-        }
+                    ->setParameter('user', $user);
+            }
 
-        if ($search->isRegistered()) {
-            $query = $query
+            if ($search->isRegistered()) {
+                $query = $query
                 ->innerJoin('q.users', 'u')
-                ->andWhere('u.id = :userId')
-                ->setParameter('userId', $user->getId());
+                    ->andWhere('u.id = :userId')
+                    ->setParameter('userId', $user->getId());
+            }
         }
 
         return $query->getQuery()->getResult();

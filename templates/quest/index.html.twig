@@ -28,8 +28,23 @@
 {% block body %}
     <div class="text-white">
         {{ form_start(questForm, {'method': 'GET'}) }}
-        {{ form_widget(questForm) }}
-        <button class="text-white" type="submit">Search</button>
+
+        {{ form_row(questForm.name) }}
+
+        {% if app.user %}
+            <div class="flex gap-4 my-2">
+                {{ form_row(questForm.isPromoter) }}
+                {{ form_row(questForm.isRegistered) }}
+            </div>
+        {% else %}
+            {% do questForm.isPromoter.setRendered() %}
+            {% do questForm.isRegistered.setRendered() %}
+        {% endif %}
+
+        <button type="submit" >
+            Rechercher
+        </button>
+
         {{ form_end(questForm) }}
     </div>
 
@@ -84,10 +99,14 @@
                     </div>
                     <div class="mt-2 flex gap-4">
                         <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
+
+
                         {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
                             <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
                                class="text-yellow-600 hover:underline">s'inscrire</a>
                         {% endif %}
+
+
 
                         {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
                             {% if is_granted('ROLE_ADMIN') %}

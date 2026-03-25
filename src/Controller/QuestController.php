@@ -26,8 +26,7 @@ final class  QuestController extends AbstractController
     {
 
         $questSearch = new QuestSearch();
-
-        /** @var \App\Entity\User $user */
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         $questForm = $this->createForm(QuestSearchType::class, $questSearch);
         $questForm->handleRequest($request);
@@ -107,6 +106,26 @@ final class  QuestController extends AbstractController
     #[Route('/inscription/{id}', name: 'inscription', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
     public function inscription(Quest $quest, EntityManagerInterface $entityManager): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime()) {
+            $this->addFlash('warning', 'Vous Ne pouvez pas vous inscrire à cette quête aventurier');
+        } else {
+            $quest = $quest->addUser($user);
+            $entityManager->persist($quest);
+            $entityManager->flush();
+            $this->addFlash('success', 'Bienvenue a l\'aventure');
+            return $this->redirectToRoute('quest_show', ['id' => $quest->getId()]);
+        }
+
+        return $this->redirectToRoute('quest_index');
+    }
+
+    #[Route('/desister/{id}', name: 'desister', methods: ['GET'])]
+    #[IsGranted("ROLE_USER")]
+    public function desister(Quest $quest, EntityManagerInterface $entityManager): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
