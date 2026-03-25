@@ -43,6 +43,15 @@
                 <th>ProfilePicture</th>
                 <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}" alt="">
             </tr>
+            <tr>
+                <th>Les quetes créee par le user</th>
+                {% for quest in user.quest %}
+                    <div>
+                        quesst : {{ quest.name }}
+                    </div>
+
+                {% endfor %}
+            </tr>
         </tbody>
     </table>
 

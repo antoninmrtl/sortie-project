@@ -20,14 +20,19 @@
         <div class="text-white">
             <p>Email: {{ app.user.email }}</p>
             <p> Pseudo : {{ app.user.username }}</p>
+            <p> Quetes créee :</p>
             {% for quest in app.user.quest %}
-                {{ quest.name }}
+                <div>
+                    quest : {{ quest.name }}
+                </div>
+
             {% endfor %}
 
         </div>
         <div>
             <a href="{{ path('user_edit', {'id': app.user.id}) }}">edit</a>
-            <form method="post" action="{{ path('user_delete', {'id': app.user.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+            <form method="post" action="{{ path('user_delete', {'id': app.user.id}) }}"
+                  onsubmit="return confirm('Are you sure you want to delete this item?');">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
                 <button class="btn">Delete</button>
             </form>
