@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Service\Attribute\Required;
 
 #[Route('/quest', name: 'quest_')]
 final class  QuestController extends AbstractController
@@ -20,7 +21,7 @@ final class  QuestController extends AbstractController
     public function index(QuestRepository $questRepository): Response
     {
         return $this->render('quest/index.html.twig', [
-            'quests' => $questRepository->findAll(),
+            'quests' => $questRepository->findAll()
         ]);
     }
 
@@ -38,8 +39,8 @@ final class  QuestController extends AbstractController
         $quest = new Quest();
         if($id !=null){
             $quest = $questRepository->find($id);
-            if($quest->getUsers() != $this->getUser()){
-                throw $this->createAccessDeniedException("Vas saboter la Quest d'autrui, malautru!");
+            if($quest->getPromoter() != $this->getUser()){
+                throw $this->createAccessDeniedException("Vas saboter la quête d'autrui, malautru!");
             }
         }
         $status = $statusRepository->findAll();
@@ -120,14 +121,25 @@ final class  QuestController extends AbstractController
             'quest' => $quest,
         ]);
     }
-    #[Route('/{id}', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Quest $quest, EntityManagerInterface $entityManager): Response
+    #[Route('/delete/{id}', name: 'delete', requirements:['id'=>'\d+'])]
+    public function delete(
+        Request $request,
+        Quest $quest,
+        EntityManagerInterface $entityManager,
+        QuestRepository $questRepository,
+        int $id): Response
     {
+        $quest = $questRepository->find($id);
+
         if ($this->isCsrfTokenValid('delete'.$quest->getId(), $request->getPayload()->getString('_token'))) {
+
+            if($quest->getPromoter() != $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+                throw $this->createAccessDeniedException("Ne destroies point la sortie qui n'est nulle la tienne!");
+            }
+
             $entityManager->remove($quest);
             $entityManager->flush();
         }
-
         return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
     }
 }

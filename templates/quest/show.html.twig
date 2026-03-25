@@ -46,6 +46,9 @@
                 Description : <br>
                 {{ quest.infoQuest }}
             </div>
+{#    <div>Participant : {{ quest.users.username }} </div>#}
+
+
 
                 <h1>image</h1>
                 <img src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
@@ -55,7 +58,10 @@
     {% else %}
 <button class="btn-quest-inscription">Inscription</button>
     {% endif %}
-        {% endfor %}
+{% endfor %}
+    {% if quest.users | length < quest.nbMaxInscription %}
+    <button class="btn-quest-inscription">Inscription</button>
+       {% endif %}
 
 
     <a href="{{ path('quest_index') }}">back to list</a>
