@@ -20,7 +20,8 @@ class QuestSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => QuestSearch::class,
-            'required' => false
+            'method' => 'GET',
+            'allow_extra_fields' => true
         ]);
     }
 }
