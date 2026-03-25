@@ -1,20 +1,22 @@
 <div class="flex justify-between text-white p-5">
     <div>
-        <h1>Quest.ENI</h1>
+        <h1 class="ml-2 mr-2 ">Quest.ENI</h1>
     </div>
     <div>
-        <a class="m-2" href="{{ path('main_home') }}">Home</a>
-        <a class="m-2" href="{{ path('user_create') }}">add User</a>
-        <a class="m-2" href="{{ path('user_index') }}">display user</a>
-        <a class="m-2" href="{{ path('quest_index') }}">display quests</a>
+        <a class="ml-2 mr-2" href="{{ path('user_create') }}">add User</a>
+        <a class="ml-2 mr-2" href="{{ path('user_index') }}">display user</a>
+        <a class="ml-2 mr-2 text-[1.5rem]" href="{{ path('main_home') }}">Home</a>
+        <a class="ml-2 mr-2" href="{{ path('quest_index') }}">display quests</a>
+        <a class="ml-2 mr-2" href="{{ path('quest_create') }}">create quests</a>
         {% if app.user %}
-            <a class="m-2" href="{{ path('app_logout') }}">logout</a>
+            <a class="ml-2 mr-2" href="{{ path('user_profile') }}">Profile</a>
+            <a class="ml-2 mr-2" href="{{ path('app_logout') }}">logout</a>
         {% else %}
-            <a class="m-2" href="{{ path('app_login') }}">login</a>
+            <a class="ml-2 mr-2" href="{{ path('app_login') }}">login</a>
         {% endif %}
 
     </div>
     <div>
     </div>
 </div>
-<div class="border-1 border-white"></div>
+<div class="border-1 border-yellow-500"></div>
