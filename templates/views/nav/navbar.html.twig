@@ -3,14 +3,14 @@
         <h1>Quest.ENI</h1>
     </div>
     <div>
-        <a href="{{ path('main_home') }}">Home</a>
-        <a href="{{ path('user_create') }}">add User</a>
-        <a href="{{ path('user_index') }}">display user</a>
-        <a href="{{ path('quest_index') }}">display quests</a>
+        <a class="m-2" href="{{ path('main_home') }}">Home</a>
+        <a class="m-2" href="{{ path('user_create') }}">add User</a>
+        <a class="m-2" href="{{ path('user_index') }}">display user</a>
+        <a class="m-2" href="{{ path('quest_index') }}">display quests</a>
         {% if app.user %}
-            <a href="{{ path('app_logout') }}">logout</a>
+            <a class="m-2" href="{{ path('app_logout') }}">logout</a>
         {% else %}
-            <a href="{{ path('app_login') }}">login</a>
+            <a class="m-2" href="{{ path('app_login') }}">login</a>
         {% endif %}
 
     </div>
