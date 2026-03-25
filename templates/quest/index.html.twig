@@ -41,7 +41,7 @@
             {% do questForm.isRegistered.setRendered() %}
         {% endif %}
 
-        <button type="submit" >
+        <button type="submit">
             Rechercher
         </button>
 
@@ -99,11 +99,14 @@
                     </div>
                     <div class="mt-2 flex gap-4">
                         <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
+                        {% if app.user and quest.users.contains(app.user) %}
+                            <a href="{{ path('quest_desister', {'id': quest.id}) }}">se desister</a>
+                        {% else %}
 
-
-                        {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
-                            <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
-                               class="text-yellow-600 hover:underline">s'inscrire</a>
+                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
+                                <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
+                                   class="text-yellow-600 hover:underline">s'inscrire</a>
+                            {% endif %}
                         {% endif %}
 
 
