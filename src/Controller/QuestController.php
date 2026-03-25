@@ -29,8 +29,6 @@ final class  QuestController extends AbstractController
         $questForm = $this->createForm(QuestSearchType::class, $questSearch);
         $questForm->handleRequest($request);
 
-
-
         if ($questForm->isSubmitted() && $questForm->isValid()) {
             $searchData = $questForm->getData();
             $quests = $questRepository->findBySearch($searchData);
@@ -40,7 +38,7 @@ final class  QuestController extends AbstractController
 
         return $this->render('quest/index.html.twig', [
             'quests' => $quests,
-            'questForm'=>$questForm
+            'questForm' => $questForm
         ]);
     }
 
@@ -58,7 +56,7 @@ final class  QuestController extends AbstractController
         $quest = new Quest();
         if ($id != null) {
             $quest = $questRepository->find($id);
-            if($quest->getPromoter() != $this->getUser()){
+            if ($quest->getPromoter() != $this->getUser()) {
                 throw $this->createAccessDeniedException("Vas saboter la quête d'autrui, malautru!");
             }
         }
@@ -108,39 +106,39 @@ final class  QuestController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user)) {
-            $this->addFlash('warning', 'Vous participez déjà à cette quête, aventurier ! ou la quête est déja pleine');
+        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime()) {
+            $this->addFlash('warning', 'Vous Ne pouvez pas vous inscrire à cette quête aventurier');
         } else {
             $quest = $quest->addUser($user);
             $entityManager->persist($quest);
             $entityManager->flush();
             $this->addFlash('success', 'Bienvenue a l\'aventure');
-            return $this->redirectToRoute('quest_show',['id' => $quest->getId()]);
+            return $this->redirectToRoute('quest_show', ['id' => $quest->getId()]);
         }
 
         return $this->redirectToRoute('quest_index');
     }
 
 
-    #[Route('/delete/{id}', name: 'delete', requirements:['id'=>'\d+'])]
+    #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(
-        Request $request,
-        Quest $quest,
+        Request                $request,
+        Quest                  $quest,
         EntityManagerInterface $entityManager,
-        QuestRepository $questRepository,
-        int $id): Response
+        QuestRepository        $questRepository,
+        int                    $id): Response
     {
         $quest = $questRepository->find($id);
 
-        if ($this->isCsrfTokenValid('delete'.$quest->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $quest->getId(), $request->getPayload()->getString('_token'))) {
 
-            if($quest->getPromoter() != $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+            if ($quest->getPromoter() != $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
                 throw $this->createAccessDeniedException("Ne destroies point la sortie qui n'est nulle la tienne!");
             }
 
             $entityManager->remove($quest);
             $entityManager->flush();
         }
-        return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('quest_index', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
     }
 }
