@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 25; $i++) {
             $city = new City();
             $city->setName($faker->text(25))
-                ->setPostalCode($faker->postcode());
+                ->setPostalCode($faker->randomNumber([0],[99999]));
             $manager->persist($city);
         }
 
@@ -77,7 +77,7 @@ class AppFixtures extends Fixture
                 $user,
                 'azerty'
             );
-            $user->setFirstname($faker->firstName($gender = null|'male'|'female'))
+            $user->setFirstname($faker->firstName('male'|'female'))
                 ->setUsername($faker->userName())
                 ->setLastname($faker->lastName())
                 ->setCampus($faker->randomElement($campus))
@@ -99,7 +99,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 50; $i++) {
             $quest = new Quest();
             $quest->setName($faker->text(25))
-                ->setDuration($faker->randomFloat([2], [0], [12]))
+                ->setDuration($faker->randomFloat([2], [1], [24])) //bug sur la duration
                 ->setInfoQuest($faker->text(200))
                 ->setStartDateTime($faker->dateTimeBetween('-5 years'));
             $quest->setInscriptionLimitDate($faker->dateTimeBetween($quest->getStartDateTime()))
