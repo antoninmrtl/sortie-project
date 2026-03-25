@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Quest;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,6 +16,20 @@ class QuestRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Quest::class);
     }
+
+        public function find6Last()
+        {
+            $qb = $this->createQueryBuilder('q');
+            $qb->addOrderBy('q.startDateTime', 'DESC');
+            //jointure + select
+            $qb->leftJoin('q.status', 'status');
+            $qb->addSelect('status');
+
+            $query = $qb->getQuery();
+            $query->setMaxResults(6);
+            //permet de gérer la pagination sur jointure
+            return $query->getResult();
+        }
 
     //    /**
     //     * @return Quest[] Returns an array of Quest objects
