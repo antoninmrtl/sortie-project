@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Quest;
+use App\Entity\User;
 use App\Form\Model\QuestSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -34,13 +35,26 @@ class QuestRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findBySearch(QuestSearch $search)
+    public function findBySearch(QuestSearch $search, User $user)
     {
         $query = $this->createQueryBuilder('q');
         if ($search->getName()) {
             $query = $query
                 ->andWhere('q.name LIKE :name')
                 ->setParameter('name', '%' . $search->getName() . '%');
+        }
+        if ($search->isPromoter()) {
+
+            $query = $query
+                ->andWhere('q.promoter = :user')
+                ->setParameter('user', $user);
+        }
+
+        if ($search->isRegistered()) {
+            $query = $query
+                ->innerJoin('q.users', 'u')
+                ->andWhere('u.id = :userId')
+                ->setParameter('userId', $user->getId());
         }
 
         return $query->getQuery()->getResult();

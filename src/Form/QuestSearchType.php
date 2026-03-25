@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Form\Model\QuestSearch;
@@ -13,6 +14,14 @@ class QuestSearchType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('isPromoter', CheckboxType::class, [
+                'label' => "Quêtes dont je suis l'organisateur",
+                'required' => false,
+            ])
+            ->add('isRegistered', CheckboxType::class, [
+                'label' => "Quêtes auxquelles je suis inscrit",
+                'required' => false,
+            ])
         ;
     }
 

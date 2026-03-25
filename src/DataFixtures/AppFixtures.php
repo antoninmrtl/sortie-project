@@ -101,8 +101,8 @@ class AppFixtures extends Fixture
             $quest->setName($faker->text(25))
                 ->setDuration($faker->randomFloat([2], [1], [24])) //bug sur la duration
                 ->setInfoQuest($faker->text(200))
-                ->setStartDateTime($faker->dateTimeBetween('-5 years'));
-            $quest->setInscriptionLimitDate($faker->dateTimeBetween($quest->getStartDateTime()))
+                ->setStartDateTime($faker->dateTimeBetween('-1 years'));
+            $quest->setInscriptionLimitDate($faker->dateTimeBetween($quest->getStartDateTime(), '+1 years'))
                 ->setStatus($faker->randomElement($status))
                 ->setNbMaxInscription($faker->numberBetween(5, 60))
                 ->setCampus($faker->randomElement($campus))

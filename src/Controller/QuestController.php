@@ -26,12 +26,15 @@ final class  QuestController extends AbstractController
     {
 
         $questSearch = new QuestSearch();
+
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
         $questForm = $this->createForm(QuestSearchType::class, $questSearch);
         $questForm->handleRequest($request);
 
         if ($questForm->isSubmitted() && $questForm->isValid()) {
             $searchData = $questForm->getData();
-            $quests = $questRepository->findBySearch($searchData);
+            $quests = $questRepository->findBySearch($searchData, $user);
         } else {
             $quests = $questRepository->findAll();
         }
@@ -63,6 +66,7 @@ final class  QuestController extends AbstractController
         $status = $statusRepository->findAll();
         $form = $this->createForm(QuestType::class, $quest);
         $form->handleRequest($request);
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -76,6 +80,7 @@ final class  QuestController extends AbstractController
             //$quest->setUsers($this->getUser()); Ya un probleme avec ça
             $quest->setStatus($status[1]);
             $quest->setPromoter($user);
+            $quest->addUser($user);
 
             $entityManager->persist($quest);
             $entityManager->flush();
