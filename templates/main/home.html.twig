@@ -4,13 +4,12 @@
 {% block extraStyle %}
     <style>
         body {
-            background-image: url("{{ asset('images/Image.png') }}");
-            /*background-size: cover;*/
+
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
+            background-color: #1A1A1A;
             background-size: contain;
             background-repeat: no-repeat;
-            background-color: gray;
-            background-blend-mode: luminosity;
-
+            min-height: 100vh;
         }
     </style>
 {% endblock %}
@@ -19,18 +18,61 @@
     <div class="p-5">
 
     <div class="flex justify-center">
-        <div class="border-4 border-yellow-500 bg-black text-white w-1/2">
-            <h1>Welcome</h1>
+        <div class="border-4 border-yellow-500 bg-black text-white w-5/6 h-auto p-5">
+            <h1 class="text-[3rem]">Bienvenue à l'auberge des quêtes !</h1>
+            <h2 class="text-[2rem]">Vivez l'aventure</h2>
         </div>
     </div>
 
-    {% for quest in quests %}
-        <div>
-            <h3 class="text-white">{{ quest.name }}</h3>
-            <h3 class="text-white">{{ quest.status.label }}</h3>
-        </div>
+        <article class="p-5">
+            <div>
 
-    {% endfor %}
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-20">
+                {% for quest in quests %}
+                    <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                        <div class="flex justify-between">
+                            <h1 class="font-bold text-xl">
+                                {{ quest.name }}
+                            </h1>
+                            <h2>{{ quest.status.label }}</h2>
+                        </div>
+
+
+                        {# Le flex-grow permet à la description de prendre tout l'espace libre,
+                       poussant ainsi les dates toujours tout en bas, même si le texte est court #}
+                        <h3 class="flex-grow">
+                            {{ quest.infoQuest }}
+                        </h3>
+
+                        <div>
+                            <h3>
+                                Places : {{ quest.nbMaxInscription }} |
+                                Durée : {{ quest.duration }}h
+                            </h3>
+                        </div>
+
+                        <hr class="border-yellow-500/30">
+
+                        <div class="text-sm">
+                            Début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i') : 'N/A' }}<br>
+                            Fin Inscription : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i') : 'N/A' }}
+                        </div>
+                        <div class="mt-2 flex gap-4">
+                            <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
+                            <a href="{{ path('quest_edit', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Modifier</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="col-span-full text-center text-xl">Aucune quête trouvée sur le tableau.</p>
+                {% endfor %}
+
+            </div>
+
+            <div class="mt-8">
+                <a href="{{ path('quest_create') }}" class="btn text-white">Créer une nouvelle quête</a>
+            </div>
+        </article>
     </div>
 
 {% endblock %}
