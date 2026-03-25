@@ -26,12 +26,14 @@
 
 
     <div class="flex justify-center items-center min-h-screen">
-
         <div class="relative flex items-center justify-center bg-no-repeat bg-cover bg-center"
              style="width: 720px; min-height: 500px; background-image: url('{{ asset('images/utilisateur.png') }}');">
-
             <div class="absolute inset-0 flex items-center justify-center">
+
                 <form method="post" class="w-[80%]">
+
+
+
                     {% if error %}
                         <div
                             class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -44,18 +46,16 @@
 
 
                     <div class="flex justify-center">
-                        <label for="inputEmail">Email ou Pseudo</label>
-                        <input type="text" value="{{ last_username }}" name="email" id="inputEmail" class="bg-gray-100"
-                               autocomplete="email" required autofocus>
-{#                        <label for="inputUsername">Pseudo</label>#}
-{#                        <input type="text" name="username" id="inputUsername" class="input input-bordered" required>#}
+                        <label for="inputEmail">Email</label>
+                        <input type="text" value="{{ last_username }}" name="email" id="inputEmail" class="bg-gray-100" autocomplete="email" required autofocus>
+
+
+
                     </div>
                     <div class="flex justify-center ">
                         <label for="inputPassword" class="text-mist-50">Rune secrete</label>
-                        <input type="password" name="password" id="inputPassword" class="bg-gray-100"
-                               autocomplete="current-password" required>
-                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-                               value="{{ csrf_token('authenticate') }}">
+                        <input type="password" name="password" id="inputPassword" class="bg-gray-100" autocomplete="current-password" required>
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"  value="{{ csrf_token('authenticate') }}">
                     </div>
                     <div class=" flex justify-center checkbox mb-3 ">
                         <label>
