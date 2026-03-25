@@ -31,6 +31,19 @@ class QuestRepository extends ServiceEntityRepository
             return $query->getResult();
         }
 
+//    public function findQuestByPromoter()
+//    {
+//        $qb = $this->createQueryBuilder('q');
+//        $qb->addOrderBy('q.promoter', 'DESC');
+//        //jointure + select
+//        $qb->leftJoin('q.status', 'status');
+//        $qb->addSelect('status');
+//
+//        $query = $qb->getQuery();
+//        //permet de gérer la pagination sur jointure
+//        return $query->getResult();
+//    }
+
     //    /**
     //     * @return Quest[] Returns an array of Quest objects
     //     */

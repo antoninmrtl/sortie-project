@@ -45,6 +45,7 @@ final class  QuestController extends AbstractController
         $status = $statusRepository->findAll();
         $form = $this->createForm(QuestType::class, $quest);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -56,6 +57,7 @@ final class  QuestController extends AbstractController
             }
             //$quest->setUsers($this->getUser()); Ya un probleme avec ça
             $quest->setStatus($status[1]);
+            $quest->setPromoter($user);
 
             $entityManager->persist($quest);
             $entityManager->flush();
