@@ -1,42 +1,51 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Quest{% endblock %}
+{% block extraStyle %}
+    <style>
+        .abeezee-regular {
+            font-family: "ABeeZee", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        body {
+
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
+            background-color: #1A1A1A;
+            background-size: contain;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+        h3, a{
+            font-family: "ABeeZee";
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Quest</h1>
+<article class="p-5">
+    <h1 class="text-[5rem]  text-amber-500">Quest</h1>
 
 
+<div class="  text-white">
+    {# PEUT-ETRE LE GARDER POUR L'ADMIN #}
+{#            <tr>#}
+{#                <th>Id</th>#}
+{#                <td>{{ quest.id }}</td>#}
+{#            </tr>#}
+            <div>{{ quest.name }}</div>
+            <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
+            <div>Durée : {{ quest.duration }} minutes</div>
+    <div>Date limite d'inscription : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
 
-            <tr>
-                <th>Id</th>
-                <td>{{ quest.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ quest.name }}</td>
-            </tr>
-            <tr>
-                <th>StartDateTime</th>
-                <td>{{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Duration</th>
-                <td>{{ quest.duration }}</td>
-            </tr>
-            <tr>
-                <th>InscriptionLimitDate</th>
-                <td>{{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>NbMaxInscription</th>
-                <td>{{ quest.nbMaxInscription }}</td>
-            </tr>
-            <tr>
-                <th>InfoQuest</th>
-                <td>{{ quest.infoQuest }}</td>
-                <th>promoter</th>
-                <td>{{ quest.promoter.username }}</td>
-            </tr>
+
+<div>Nombre d'inscription maximum : {{ quest.nbMaxInscription }}</div>
+<div>Nombre places restantes : {{ quest.nbMaxInscription - quest.users | length}}  </div>
+    <div>{{ quest.users | length }}</div>
+            <div>
+                Description : <br>
+                {{ quest.infoQuest }}
+            </div>
 
             <div>
                 nbr inscrit
@@ -62,11 +71,22 @@
 
                 <h1>image</h1>
                 <img src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
+{% for user in quest.users %}
+    {% if app.user.username == user.username %}
+    <button class="btn-quest-desister">Se désister</button>
+    {% else %}
+<button class="btn-quest-inscription">Inscription</button>
+    {% endif %}
+        {% endfor %}
 
 
     <a href="{{ path('quest_index') }}">back to list</a>
 
     <a href="{{ path('quest_edit', {'id': quest.id}) }}">edit</a>
 
+
     {{ include('quest/_delete_form.html.twig') }}
+    </div>
+</article>
 {% endblock %}
+
