@@ -17,14 +17,14 @@
 
         {% if app.user %}
             <a href="{{ path('user_profile') }}" class="hover:text-yellow-500 transition">Profile</a>
-        {% else %}
-            <a href="{{ path('app_login') }}" class="hover:text-yellow-500 transition">login</a>
         {% endif %}
     </div>
 
     <div class="flex justify-end">
         {% if app.user %}
             <a href="{{ path('app_logout') }}" class="hover:underline text-gray-300">logout</a>
+        {% else %}
+            <a href="{{ path('app_login') }}" class="hover:text-yellow-500 transition">login</a>
         {% endif %}
     </div>
 </nav>

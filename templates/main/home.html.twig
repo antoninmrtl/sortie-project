@@ -65,7 +65,9 @@
                         </div>
                         <div class="mt-2 flex gap-4">
                             <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
+                            {% if is_granted('ROLE_ADMIN') %}
                             <a href="{{ path('quest_edit', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Modifier</a>
+                            {% endif %}
                         </div>
                     </div>
                 {% else %}
