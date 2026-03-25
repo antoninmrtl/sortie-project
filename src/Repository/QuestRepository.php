@@ -24,6 +24,8 @@ class QuestRepository extends ServiceEntityRepository
             //jointure + select
             $qb->leftJoin('q.status', 'status');
             $qb->addSelect('status');
+            $qb->andWhere('status.label LIKE :label');
+            $qb->setParameter('label', 'Ouverte');
 
             $query = $qb->getQuery();
             $query->setMaxResults(6);
