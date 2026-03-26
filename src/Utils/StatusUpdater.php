@@ -22,18 +22,20 @@ class StatusUpdater
         $closedStatus = $this->statusRepository->findOneBy(['label' => 'Clôturée']);
         $openStatus = $this->statusRepository->findOneBy(['label' => 'Ouverte']);
         $passedStatus = $this->statusRepository->findOneBy(['label' => 'Passée']);
+        $archiveStatus = $this->statusRepository->findOneBy(['label' => 'Archive']);
+
 
         foreach ($quests as $quest){
-            if ($quest->getInscriptionLimitDate() <  new \DateTime()){
+            if ($quest->getStartDateTime()  < new \DateTime('-30 days')){
+                $quest->setStatus($archiveStatus);
+            } elseif ($quest->getInscriptionLimitDate() <  new \DateTime()){
                 $quest->setStatus($passedStatus);
-                $this->entityManager->persist($quest);
-            } elseif (count($quest->getUsers()) >= $quest->getNbMaxInscription()){
+            } elseif (count($quest->getUsers()) >= $quest->getNbMaxInscription() || $quest->getInscriptionLimitDate() < new \DateTime()){
                 $quest->setStatus($closedStatus);
-                $this->entityManager->persist($quest);
             }else{
                 $quest->setStatus($openStatus);
-                $this->entityManager->persist($quest);
             }
+            $this->entityManager->persist($quest);
         }
         $this->entityManager->flush();
     }

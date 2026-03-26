@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quest index{% endblock %}
+
+{% block extraStyle %}
+    <style>
+        .abeezee-regular {
+            font-family: "ABeeZee", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
+            background-color: #1A1A1A;
+            background-size: contain;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+
+        h3, a {
+            font-family: "ABeeZee";
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="p-4 mb-2 text-white font-bold bg-{{ label == 'success' ? 'green' : 'red' }}-500">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <article class="p-5">
+        <h1 class="text-[5rem]  text-white">Quest Archived display</h1>
+        <div>
+
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-20">
+            {% for quest in quests %}
+                <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                    <div class="flex justify-between">
+                        <h1 class="font-bold text-xl">
+                            {{ quest.name }}
+                        </h1>
+
+                        <h2>{{ quest.status.label }}</h2>
+
+                    </div>
+
+
+                    {# Le flex-grow permet à la description de prendre tout l'espace libre,
+                       poussant ainsi les dates toujours tout en bas, même si le texte est court #}
+                    <h3 class="flex-grow">
+                        {{ quest.infoQuest }}
+                    </h3>
+
+                    <div class="flex justify-between">
+                        <div>
+                            <h3>
+                                Places : {{ quest.nbMaxInscription }} |
+                                Durée : {{ quest.duration }}h
+                            </h3>
+                        </div>
+                        <div>
+                            {{ quest.promoter.username }}
+                        </div>
+                    </div>
+
+                    <hr class="border-yellow-500/30">
+
+                    <div class="text-sm">
+                        Début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i') : 'N/A' }}<br>
+                        Fin Inscription
+                        : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i') : 'N/A' }}
+                    </div>
+                    <div class="mt-2 flex gap-4">
+                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
+                        {% if app.user and quest.users.contains(app.user) %}
+                            <a href="{{ path('quest_desister', {'id': quest.id}) }}">se desister</a>
+                        {% else %}
+
+                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
+                                <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
+                                   class="text-yellow-600 hover:underline">s'inscrire</a>
+                            {% endif %}
+                        {% endif %}
+
+
+
+                        {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('quest_edit', {'id': quest.id}) }}"
+                                   class="text-yellow-600 hover:underline">Modifier</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="col-span-full text-center text-xl">Aucune quête trouvée sur le tableau.</p>
+            {% endfor %}
+
+        </div>
+
+        <div class="mt-8">
+            <a href="{{ path('quest_create') }}" class="btn text-white">Créer une nouvelle quête</a>
+        </div>
+    </article>
+{% endblock %}
