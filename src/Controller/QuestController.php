@@ -10,6 +10,7 @@ use App\Repository\QuestRepository;
 use App\Repository\StatusRepository;
 use App\Services\QuestService;
 use App\Utils\FileUploader;
+use App\Utils\StatusUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,8 +23,9 @@ use Symfony\Contracts\Service\Attribute\Required;
 final class  QuestController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(QuestRepository $questRepository, Request $request): Response
+    public function index(QuestRepository $questRepository, EntityManagerInterface $entityManager, StatusUpdater $statusUpdater, StatusRepository $statusRepository, Request $request): Response
     {
+        $statusUpdater->updateStatus();
 
         $questSearch = new QuestSearch();
         /** @var \App\Entity\User|null $user */
@@ -31,12 +33,9 @@ final class  QuestController extends AbstractController
         $questForm = $this->createForm(QuestSearchType::class, $questSearch);
         $questForm->handleRequest($request);
 
-        if ($questForm->isSubmitted() && $questForm->isValid()) {
-            $searchData = $questForm->getData();
-            $quests = $questRepository->findBySearch($searchData, $user);
-        } else {
-            $quests = $questRepository->findAll();
-        }
+
+        $quests = $questRepository->findBySearch($questSearch, $user);
+
 
         return $this->render('quest/index.html.twig', [
             'quests' => $quests,
@@ -53,12 +52,15 @@ final class  QuestController extends AbstractController
         StatusRepository       $statusRepository,
         QuestRepository        $questRepository,
         FileUploader           $fileUploader,
+        StatusUpdater          $statusUpdater,
         int                    $id = null): Response
     {
         $quest = new Quest();
         if ($id != null) {
             $quest = $questRepository->find($id);
-            if ($quest->getPromoter() != $this->getUser()) {
+
+            if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+
                 throw $this->createAccessDeniedException("Vas saboter la quête d'autrui, malautru!");
             }
         }
@@ -80,18 +82,7 @@ final class  QuestController extends AbstractController
             $quest->setPromoter($user);
             $quest->addUser($user);
 
-            //$quest->setUsers($this->getUser()); Ya un probleme avec ça
-            $closedStatus = $statusRepository->findOneBy(['label' => 'Clôturée']);
-            $openStatus = $statusRepository->findOneBy(['label' => 'Ouverte']);
-            $passedStatus = $statusRepository->findOneBy(['label' => 'Passée']);
-
-            if (count($quest->getUsers()) < $quest->getNbMaxInscription() && $quest->getInscriptionLimitDate() > new \DateTime()){
-                $quest->setStatus($openStatus);
-            } elseif ($quest->getInscriptionLimitDate() < new \DateTime() || count($quest->getUsers()) >= $quest->getNbMaxInscription()){
-                $quest->setStatus($closedStatus);
-            } else {
-                $quest->setStatus($passedStatus);
-            }
+            $quest = $statusUpdater->createStatus($quest, $statusRepository);
 
             $entityManager->persist($quest);
             $entityManager->flush();
@@ -114,6 +105,8 @@ final class  QuestController extends AbstractController
             'quest' => $quest,
         ]);
     }
+
+
 
     #[Route('/inscription/{id}', name: 'inscription', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
@@ -166,15 +159,19 @@ final class  QuestController extends AbstractController
     {
         $quest = $questRepository->find($id);
 
-        if ($this->isCsrfTokenValid('delete' . $quest->getId(), $request->getPayload()->getString('_token'))) {
 
-            if ($quest->getPromoter() != $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+
                 throw $this->createAccessDeniedException("Ne destroies point la sortie qui n'est nulle la tienne!");
             }
 
             $entityManager->remove($quest);
             $entityManager->flush();
+
+
+        return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
+
         }
-        return $this->redirectToRoute('quest_index', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
-    }
+
+    
 }

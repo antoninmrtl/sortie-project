@@ -1,4 +1,37 @@
-{{ form_start(form) }}
+{{ form_start(form)}}
+<div class="flex gap-4 p-4" >
+    <div class="justify-items-start border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
+        {{ form_row(form.picture) }}
+    </div>
+    <div class="justify-items-center">
+    <div>
+        {{ form_row(form.name)}}
+    </div>
+    <div>
+        {{ form_row(form.startDateTime)}}
+    </div>
+    <div>
+        {{ form_row(form.duration)}}
+    </div>
+    <div>
+        {{ form_row(form.inscriptionLimitDate) }}
+    </div>
+    <div>
+        {{ form_row(form.infoQuest) }}
+    </div>
+</div>
+<div class="justify-items-end">
+    <div>
+        {{ form_row(form.campus) }}
+    </div>
+    <div>
+        {{ form_row(form.place) }}
+    </div>
+    <div>
+        {{ form_row(form.nbMaxInscription) }}
+    </div>
+</div>
+</div>
     {{ form_widget(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
