@@ -147,6 +147,26 @@ final class  QuestController extends AbstractController
         return $this->redirectToRoute('quest_index');
     }
 
+    #[Route('/annulee/{id}', name: 'annuler', methods: ['GET'])]
+    #[IsGranted("ROLE_USER")]
+    #[IsGranted("ROLE_ADMIN")]
+    public function annuler(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        $verify = $questRegistrationService->aboveVerif($quest, $user);
+
+        if($verify){
+            $this->addFlash('success', 'Vous venez de vous annuler d\'une quête lâche ! ');
+            return $this->redirectToRoute('quest_annuler', ['id' => $quest->getId()]);
+        }else {
+            $this->addFlash('warning', 'Vous n\'avez pas pu vous annuler ');
+        }
+
+        return $this->redirectToRoute('quest_index');
+    }
+
 
     #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(

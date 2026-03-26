@@ -35,10 +35,10 @@
                 <form method="post" class="w-[80%]">
 
 
-
                     {% if error %}
 
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        <div
+                            class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 
                     {% endif %}
 
@@ -63,7 +63,6 @@
                     </div>
 
 
-
                     <div class="mt-2 flex justify-letf ">
                         <label for="inputPassword" class="text-mist-50">Rune secrete</label>
                         <input type="password" name="password" id="inputPassword"
@@ -78,7 +77,8 @@
 
                         <label class="mt-2">
 
-                            <input type="checkbox" name="_remember_me" class="text-mist-50  font-bold text-xl "> Rester connecté à la guilde
+                            <input type="checkbox" name="_remember_me" class="text-mist-50  font-bold text-xl "> Rester
+                            connecté à la guilde
                         </label>
 
                     </div>
@@ -97,11 +97,9 @@
                 </form>
 
 
-
             </div>
 
         </div>
-
 
 
     </div>

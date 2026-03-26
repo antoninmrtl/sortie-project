@@ -85,6 +85,12 @@
 
                     {#            {{ include('quest/_delete_form.html.twig') }}#}
                     <a href="{{ path('quest_delete', {'id': quest.id}) }}">delete</a>
+
+
+                    <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Confirmer l’annulation </a>
+
+
+
                 </div>
             </div>
         </div>
