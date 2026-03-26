@@ -58,7 +58,9 @@ final class  QuestController extends AbstractController
         $quest = new Quest();
         if ($id != null) {
             $quest = $questRepository->find($id);
-            if ($quest->getPromoter() != $this->getUser()) {
+
+            if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+
                 throw $this->createAccessDeniedException("Vas saboter la quête d'autrui, malautru!");
             }
         }
@@ -103,6 +105,8 @@ final class  QuestController extends AbstractController
             'quest' => $quest,
         ]);
     }
+
+
 
     #[Route('/inscription/{id}', name: 'inscription', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
@@ -155,15 +159,19 @@ final class  QuestController extends AbstractController
     {
         $quest = $questRepository->find($id);
 
-        if ($this->isCsrfTokenValid('delete' . $quest->getId(), $request->getPayload()->getString('_token'))) {
 
-            if ($quest->getPromoter() != $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
+            if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+
                 throw $this->createAccessDeniedException("Ne destroies point la sortie qui n'est nulle la tienne!");
             }
 
             $entityManager->remove($quest);
             $entityManager->flush();
+
+
+        return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
+
         }
-        return $this->redirectToRoute('quest_index', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
-    }
+
+    
 }
