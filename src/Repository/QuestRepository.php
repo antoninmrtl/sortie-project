@@ -23,9 +23,9 @@ class QuestRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('q');
         $qb->addOrderBy('q.startDateTime', 'DESC');
-        //jointure + select
-        $qb->leftJoin('q.status', 'status');
-        $qb->addSelect('status');
+        $qb->leftJoin('q.status', 'status')->addSelect('status');
+        $qb->leftJoin('q.promoter', 'p')->addSelect('p');
+        $qb->leftJoin('q.users', 'u')->addSelect('u');
         $qb->andWhere('status.label LIKE :label');
         $qb->setParameter('label', 'Ouverte');
 
@@ -57,8 +57,8 @@ class QuestRepository extends ServiceEntityRepository
 
             if ($search->isRegistered()) {
                 $query = $query
-                    ->innerJoin('q.users', 'u')
-                    ->andWhere('u.id = :userId')
+                    ->innerJoin('q.users', 'uu')
+                    ->andWhere('uu.id = :userId')
                     ->setParameter('userId', $user->getId());
             }
         }
