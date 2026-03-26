@@ -39,7 +39,7 @@ final class  QuestController extends AbstractController
         $quest = new Quest();
         if($id !=null){
             $quest = $questRepository->find($id);
-            if($quest->getPromoter() != $this->getUser()){
+            if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
                 throw $this->createAccessDeniedException("Vas saboter la quête d'autrui, malautru!");
             }
         }
