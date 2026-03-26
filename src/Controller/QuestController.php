@@ -10,6 +10,7 @@ use App\Repository\QuestRepository;
 use App\Repository\StatusRepository;
 use App\Services\QuestService;
 use App\Utils\FileUploader;
+use App\Utils\StatusUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 final class  QuestController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(QuestRepository $questRepository, Request $request): Response
+    public function index(QuestRepository $questRepository,EntityManagerInterface $entityManager,StatusUpdater $statusUpdater, StatusRepository $statusRepository,Request $request): Response
     {
 
         $questSearch = new QuestSearch();
@@ -35,7 +36,7 @@ final class  QuestController extends AbstractController
             $searchData = $questForm->getData();
             $quests = $questRepository->findBySearch($searchData, $user);
         } else {
-            $quests = $questRepository->findAll();
+            $quests = $statusUpdater->updateStatus($questRepository, $statusRepository,$entityManager );
         }
 
         return $this->render('quest/index.html.twig', [
