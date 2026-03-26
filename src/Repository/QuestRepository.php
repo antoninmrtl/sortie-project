@@ -14,7 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class QuestRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+
+    public function __construct(ManagerRegistry $registry, private StatusRepository $statusRepository)
     {
         parent::__construct($registry, Quest::class);
     }
@@ -31,17 +32,21 @@ class QuestRepository extends ServiceEntityRepository
 
         $query = $qb->getQuery();
         $query->setMaxResults(6);
-        //permet de gérer la pagination sur jointure
         return $query->getResult();
     }
 
     public function findBySearch(QuestSearch $search, ?User $user)
     {
 
+        $archiveStatus = $this->statusRepository->findOneBy(['label' => 'Archive']);
+
+
         $query = $this->createQueryBuilder('q')
             ->leftJoin('q.status', 's')->addSelect('s')
             ->leftJoin('q.promoter', 'p')->addSelect('p')
-            ->leftJoin('q.users', 'u')->addSelect('u');
+            ->leftJoin('q.users', 'u')->addSelect('u')
+            ->andWhere('s != :archive')
+            ->setParameter('archive', $archiveStatus);
 
         if ($search->getName()) {
             $query = $query
@@ -73,6 +78,24 @@ class QuestRepository extends ServiceEntityRepository
             ->leftJoin('q.status', 's')->addSelect('s')
             ->leftJoin('q.promoter', 'p')->addSelect('p')
             ->leftJoin('q.users', 'u')->addSelect('u');
+
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findAllArchive()
+    {
+
+        $archiveStatus = $this->statusRepository->findOneBy(['label' => 'Archive']);
+
+
+        $query = $this->createQueryBuilder('q')
+            ->leftJoin('q.status', 's')->addSelect('s')
+            ->leftJoin('q.promoter', 'p')->addSelect('p')
+            ->leftJoin('q.users', 'u')->addSelect('u')
+            ->andWhere('s = :archive')
+            ->setParameter('archive', $archiveStatus);
+
 
 
         return $query->getQuery()->getResult();

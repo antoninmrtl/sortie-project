@@ -46,6 +46,7 @@ final class  QuestController extends AbstractController
 
 //GET USERS AU PLURIEL PARCE QUE USER (ORGANISATEUR N'EXISTE PAS ENCORE
     #[Route('/create', name: 'create')]
+    #[IsGranted("ROLE_USER")]
     #[Route('/edit/{id}', name: 'edit', requirements: ['id' => '\d+'])]
     public function createOrEdit(
         Request                $request,
@@ -98,7 +99,7 @@ final class  QuestController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
     #[IsGranted("ROLE_USER")]
     public function show(Quest $quest): Response
     {
@@ -171,6 +172,17 @@ final class  QuestController extends AbstractController
         return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
 
         }
+
+    #[IsGranted("ROLE_ADMIN")]
+    #[Route('/archive',name: 'archive', methods: ['GET'])]
+    public function archive(QuestRepository $questRepository): Response
+    {
+        $quests = $questRepository->findAllArchive();
+
+        return $this->render('quest/archive.html.twig', [
+            'quests' => $quests,
+        ]);
+    }
 
 
 }
