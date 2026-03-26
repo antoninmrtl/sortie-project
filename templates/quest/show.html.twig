@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quest{% endblock %}
+{% block title %}Detail de la sortie{% endblock %}
 {% block extraStyle %}
     <style>
         .abeezee-regular {
@@ -8,6 +8,7 @@
             font-weight: 400;
             font-style: normal;
         }
+
         body {
 
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
@@ -16,61 +17,68 @@
             background-repeat: no-repeat;
             min-height: 100vh;
         }
-        h3, a{
+
+        h3, h2, a {
             font-family: "ABeeZee";
         }
     </style>
 {% endblock %}
 
 {% block body %}
-<article class="p-5">
-    <h1 class="text-[5rem]  text-amber-500">Quest</h1>
-
-
-<div class="  text-white">
-    {# PEUT-ETRE LE GARDER POUR L'ADMIN #}
-{#            <tr>#}
-{#                <th>Id</th>#}
-{#                <td>{{ quest.id }}</td>#}
-{#            </tr>#}
-            <div>{{ quest.name }}</div>
-            <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
-            <div>Durée : {{ quest.duration }} minutes</div>
-    <div>Date limite d'inscription : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
-
-
-<div>Nombre d'inscription maximum : {{ quest.nbMaxInscription }}</div>
-<div>Nombre places restantes : {{ quest.nbMaxInscription - quest.users | length}}  </div>
-    <div>{{ quest.users | length }}</div>
+    <article class="p-5 ">
+        <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
+        <h2 class="text-[5rem]  text-white">{{ quest.name }}</h2>
+        <div class="flex gap-4">
             <div>
-                Description : <br>
-                {{ quest.infoQuest }}
+                <img class=" border border-yellow-500 flex flex-col  bg-[#1A1A1A] text-white shadow-md tracking-tight" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
             </div>
-{#    <div>Participant : {{ quest.users.username }} </div>#}
+            <div>
+                <div class="  text-white">
+                    {# PEUT-ETRE LE GARDER POUR L'ADMIN #}
+                    {#            <tr> #}
+                    {#                <th>Id</th> #}
+                    {#                <td>{{ quest.id }}</td> #}
+                    {#            </tr> #}
+                    <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
+                    <div>Durée : {{ quest.duration }} minutes</div>
+                    <div>Date limite d'inscription
+                        : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
+
+
+                    <div>Nombre d'inscription maximum : {{ quest.nbMaxInscription }}</div>
+                    <div>Nombre places restantes : {{ quest.nbMaxInscription - quest.users | length }}  </div>
+                    <div>{{ quest.users | length }}</div>
+                    <div>
+                        Description : <br>
+                        {{ quest.infoQuest }}
+                    </div>
+                    {#    <div>Participant : {{ quest.users.username }} </div> #}
 
 
 
-                <h1>image</h1>
-                <img src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
-{% for user in quest.users %}
-    {% if app.user.username == user.username %}
-    <button class="btn-quest-desister">Se désister</button>
-    {% else %}
-<button class="btn-quest-inscription">Inscription</button>
-    {% endif %}
-{% endfor %}
-    {% if quest.users | length < quest.nbMaxInscription %}
-    <button class="btn-quest-inscription">Inscription</button>
-       {% endif %}
+                    {% for user in quest.users %}
+                        {% if app.user.username == user.username %}
+                            <button class="btn-quest-desister">Se désister</button>
+                        {% else %}
+                            <button class="btn-quest-inscription">Inscription</button>
+                        {% endif %}
+                    {% endfor %}
+                    {% if quest.users | length < quest.nbMaxInscription %}
+                        <button class="btn-quest-inscription">Inscription</button>
+                    {% endif %}
 
 
-    <a href="{{ path('quest_index') }}">back to list</a>
+                    <a href="{{ path('quest_index') }}">back to list</a>
 
-    <a href="{{ path('quest_edit', {'id': quest.id}) }}">edit</a>
+                    <a href="{{ path('quest_edit', {'id': quest.id}) }}">edit</a>
 
 
-    {{ include('quest/_delete_form.html.twig') }}
-    </div>
-</article>
+                    {#            {{ include('quest/_delete_form.html.twig') }}#}
+                    <a href="{{ path('quest_delete', {'id': quest.id}) }}">delete</a>
+                </div>
+            </div>
+        </div>
+
+    </article>
 {% endblock %}
 
