@@ -29,7 +29,7 @@
 
     <div class="flex justify-center items-center min-h-screen">
         <div class="relative flex items-center justify-center bg-no-repeat bg-cover bg-center"
-             style="width: 720px; min-height: 500px; background-image: url('{{ asset('images/utilisateur.png') }}');">
+             style="width: 820px; min-height: 500px; background-image: url('{{ asset('images/utilisateur.png') }}');">
             <div class="absolute inset-0 flex items-center justify-center">
 
                 <form method="post" class="w-[80%]">
@@ -55,48 +55,42 @@
                     {% endif %}
 
 
-
-
-
-                    <div class="flex justify-center">
-
+                    <div class="flex justify-feft">
                         <label for="inputEmail">Email</label>
-                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="bg-gray-100" autocomplete="email" required autofocus>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                               class="bg-gray-100"
+                               autocomplete="email" required autofocus>
+                    </div>
 
+                    <div  class="mt-2 flex justify-left">
                         <label for="inputUsername">Pseudo</label>
-                        <input type="text" name="username" id="inputUsername" class="input input-bordered" required>
-
-
+                        <input type="text" name="username" id="inputUsername"
+                               class=bg-gray-100" required>
                     </div>
 
-
-
-
-
-                    <div class="flex justify-center ">
-
+                    <div class="mt-2 flex justify-letf ">
                         <label for="inputPassword" class="text-mist-50">Rune secrete</label>
-                        <input type="password" name="password" id="inputPassword" class="bg-gray-100" autocomplete="current-password" required>
-                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"  value="{{ csrf_token('authenticate') }}">
+                        <input type="password" name="password" id="inputPassword"
+                               class="bg-gray-100"
+                               autocomplete="current-password" required>
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                               value="{{ csrf_token('authenticate') }}">
                     </div>
 
 
+                    <div class=" flex justify-left checkbox mb-3 ">
 
-                    <div class=" flex justify-center checkbox mb-3 ">
+                        <label class="mt-2">
 
-                        <label>
-
-                            <input type="checkbox" name="_remember_me text-mist-50 "> Remember me
-
+                            <input type="checkbox" name="_remember_me text-mist-50  font-bold text-xl "> Rester connecté à la guilde
                         </label>
 
                     </div>
 
 
+                    <div>
 
-                    <div class="flex justify-center">
-
-                        <button class="btn btn-lg btn-primary  " type="submit">
+                        <button class="btn btn-lg btn-primary  justify-end  text-white" type="submit">
 
                             Franchir les portes
 
