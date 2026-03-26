@@ -62,7 +62,7 @@ final class  QuestController extends AbstractController
                 throw $this->createAccessDeniedException("Vas saboter la quête d'autrui, malautru!");
             }
         }
-        $status = $statusRepository->findAll();
+
         $form = $this->createForm(QuestType::class, $quest);
         $form->handleRequest($request);
         /** @var \App\Entity\User $user */
@@ -76,10 +76,22 @@ final class  QuestController extends AbstractController
                     $fileUploader->upload($file, 'assets/images/pictureQuest', $quest->getName())
                 );
             }
-            //$quest->setUsers($this->getUser()); Ya un probleme avec ça
-            $quest->setStatus($status[1]);
+
             $quest->setPromoter($user);
             $quest->addUser($user);
+
+            //$quest->setUsers($this->getUser()); Ya un probleme avec ça
+            $closedStatus = $statusRepository->findOneBy(['label' => 'Clôturée']);
+            $openStatus = $statusRepository->findOneBy(['label' => 'Ouverte']);
+            $passedStatus = $statusRepository->findOneBy(['label' => 'Passée']);
+
+            if (count($quest->getUsers()) < $quest->getNbMaxInscription() && $quest->getInscriptionLimitDate() > new \DateTime()){
+                $quest->setStatus($openStatus);
+            } elseif ($quest->getInscriptionLimitDate() < new \DateTime() || count($quest->getUsers()) >= $quest->getNbMaxInscription()){
+                $quest->setStatus($closedStatus);
+            } else {
+                $quest->setStatus($passedStatus);
+            }
 
             $entityManager->persist($quest);
             $entityManager->flush();
@@ -130,7 +142,7 @@ final class  QuestController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ($quest->getUsers()->contains($user)){
+        if ($quest->getUsers()->contains($user)) {
             $quest = $quest->removeUser($user);
             $entityManager->persist($quest);
             $entityManager->flush();
