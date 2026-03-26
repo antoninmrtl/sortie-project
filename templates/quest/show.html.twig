@@ -35,11 +35,10 @@
         {% endfor %}
         <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
         <h2 class="text-[5rem]  text-white">{{ quest.name }}</h2>
-        <div class="flex gap-4">
-            <div>
-                <img class=" border border-yellow-500 flex flex-col  bg-[#1A1A1A] text-white shadow-md tracking-tight" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
-            </div>
-            <div>
+            <div class="flex gap-4">
+                <div>
+                    <img class="border border-yellow-500" style="width:300px" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}"  alt="" >
+                </div>
                 <div class="  text-white">
                     {# PEUT-ETRE LE GARDER POUR L'ADMIN #}
                     {#            <tr> #}
@@ -62,10 +61,14 @@
                         Description : <br>
                         {{ quest.infoQuest }}
                     </div>
-                    {#    <div>Participant : {{ quest.users.username }} </div> #}
+                </div>
+                        <div>Liste des participants inscrits: {{ quest.users | length }}
+                    {% for user in quest.users %}
+                        <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.username }}</a>
+                    {% endfor %}
+                    </div>
 
-
-
+                <div>
                     {% for user in quest.users %}
                         {% if app.user.username == user.username %}
                             <button class="btn-quest-desister">Se désister</button>
@@ -86,8 +89,6 @@
                     {#            {{ include('quest/_delete_form.html.twig') }}#}
                     <a href="{{ path('quest_delete', {'id': quest.id}) }}">delete</a>
                 </div>
-            </div>
-        </div>
 
     </article>
 {% endblock %}
