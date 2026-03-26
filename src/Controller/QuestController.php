@@ -121,6 +121,7 @@ final class  QuestController extends AbstractController
             'quest' => $quest,
         ]);
     }
+
     #[Route('/delete/{id}', name: 'delete', requirements:['id'=>'\d+'])]
     public function delete(
         Request $request,
@@ -133,9 +134,9 @@ final class  QuestController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete'.$quest->getId(), $request->getPayload()->getString('_token'))) {
 
-            if($quest->getPromoter() != $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
-                throw $this->createAccessDeniedException("Ne destroies point la sortie qui n'est nulle la tienne!");
-            }
+//             if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+//                 throw $this->createAccessDeniedException("Ne destroies point la sortie qui n'est nulle la tienne!");
+//             }
 
             $entityManager->remove($quest);
             $entityManager->flush();
