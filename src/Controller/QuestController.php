@@ -71,48 +71,7 @@ final class  QuestController extends AbstractController
             'form' => $form,
         ]);
     }
-//    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-//    public function new(Request $request, EntityManagerInterface $entityManager, StatusRepository $repository): Response
-//    {
-//        $quest = new Quest();
-//        $status = $repository->findAll();
-//        $form = $this->createForm(QuestType::class, $quest);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//
-//            $quest->setStatus($status[1]);
-//
-//            $entityManager->persist($quest);
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('quest_show', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
-//        }
-//
-//        return $this->render('quest/new.html.twig', [
-//            'quest' => $quest,
-//            'form' => $form,
-//        ]);
-//    }
-//
-//
-//    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-//    public function edit(Request $request, Quest $quest, EntityManagerInterface $entityManager): Response
-//    {
-//        $form = $this->createForm(QuestType::class, $quest);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('quest_show', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
-//        }
-//
-//        return $this->render('quest/edit.html.twig', [
-//            'quest' => $quest,
-//            'form' => $form,
-//        ]);
-//    }
+
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(Quest $quest): Response
