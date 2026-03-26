@@ -30,7 +30,7 @@ class QuestRegistrationService
 
     public function desisterVerif(Quest $quest, User $user){
 
-        if ($quest->getUsers()->contains($user)) {
+        if ($quest->getUsers()->contains($user) && $quest->getStartDateTime() > new \DateTime()) {
             $quest = $quest->removeUser($user);
             $this->entityManager->persist($quest);
             $this->entityManager->flush();
