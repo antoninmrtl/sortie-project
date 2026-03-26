@@ -130,14 +130,14 @@ final class  QuestController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime()) {
-            $this->addFlash('warning', 'Vous Ne pouvez pas vous inscrire à cette quête aventurier');
-        } else {
-            $quest = $quest->addUser($user);
+        if ($quest->getUsers()->contains($user)){
+            $quest = $quest->removeUser($user);
             $entityManager->persist($quest);
             $entityManager->flush();
-            $this->addFlash('success', 'Bienvenue a l\'aventure');
-            return $this->redirectToRoute('quest_show', ['id' => $quest->getId()]);
+            $this->addFlash('success', 'Vous venez de vous desister d\'une quête lâche ! ');
+            return $this->redirectToRoute('quest_index');
+        } else {
+            $this->addFlash('warning', 'Vous n\'avez pas pu vous désister ');
         }
 
         return $this->redirectToRoute('quest_index');
