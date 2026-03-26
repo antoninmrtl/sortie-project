@@ -10,6 +10,7 @@ use App\Repository\QuestRepository;
 use App\Repository\StatusRepository;
 use App\Services\QuestService;
 use App\Utils\FileUploader;
+use App\Utils\StatusUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,8 +23,9 @@ use Symfony\Contracts\Service\Attribute\Required;
 final class  QuestController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(QuestRepository $questRepository, Request $request): Response
+    public function index(QuestRepository $questRepository, EntityManagerInterface $entityManager, StatusUpdater $statusUpdater, StatusRepository $statusRepository, Request $request): Response
     {
+        $statusUpdater->updateStatus();
 
         $questSearch = new QuestSearch();
         /** @var \App\Entity\User|null $user */
@@ -31,12 +33,9 @@ final class  QuestController extends AbstractController
         $questForm = $this->createForm(QuestSearchType::class, $questSearch);
         $questForm->handleRequest($request);
 
-        if ($questForm->isSubmitted() && $questForm->isValid()) {
-            $searchData = $questForm->getData();
-            $quests = $questRepository->findBySearch($searchData, $user);
-        } else {
-            $quests = $questRepository->findAll();
-        }
+
+        $quests = $questRepository->findBySearch($questSearch, $user);
+
 
         return $this->render('quest/index.html.twig', [
             'quests' => $quests,
@@ -53,6 +52,7 @@ final class  QuestController extends AbstractController
         StatusRepository       $statusRepository,
         QuestRepository        $questRepository,
         FileUploader           $fileUploader,
+        StatusUpdater          $statusUpdater,
         int                    $id = null): Response
     {
         $quest = new Quest();
@@ -80,18 +80,7 @@ final class  QuestController extends AbstractController
             $quest->setPromoter($user);
             $quest->addUser($user);
 
-            //$quest->setUsers($this->getUser()); Ya un probleme avec ça
-            $closedStatus = $statusRepository->findOneBy(['label' => 'Clôturée']);
-            $openStatus = $statusRepository->findOneBy(['label' => 'Ouverte']);
-            $passedStatus = $statusRepository->findOneBy(['label' => 'Passée']);
-
-            if (count($quest->getUsers()) < $quest->getNbMaxInscription() && $quest->getInscriptionLimitDate() > new \DateTime()){
-                $quest->setStatus($openStatus);
-            } elseif ($quest->getInscriptionLimitDate() < new \DateTime() || count($quest->getUsers()) >= $quest->getNbMaxInscription()){
-                $quest->setStatus($closedStatus);
-            } else {
-                $quest->setStatus($passedStatus);
-            }
+            $quest = $statusUpdater->createStatus($quest, $statusRepository);
 
             $entityManager->persist($quest);
             $entityManager->flush();
