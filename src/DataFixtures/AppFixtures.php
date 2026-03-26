@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
 
         $faker = Factory::create('fr-FR');
 
-        foreach ([' Créee', 'Ouverte', 'Cloturée', 'En cours', 'Passée', ' Annulée'] as $value) {
+        foreach (['Créee', 'Ouverte', 'Cloturée', 'En cours', 'Passée', 'Annulée'] as $value) {
             $status = new Status();
             $status->setLabel($value);
             $manager->persist($status);
@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 25; $i++) {
             $city = new City();
             $city->setName($faker->text(25))
-                ->setPostalCode($faker->numberBetween(1000, 9999));
+                ->setPostalCode($faker->randomNumber([0],[99999]));
             $manager->persist($city);
         }
 
@@ -57,11 +57,11 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 15; $i++) {
             $place = new Place();
-            $place->setName($faker->text(25))
+            $place->setName($faker->domainWord())
                 ->setCity($faker->randomElement($city))
-                ->setLatitude($faker->randomFloat([2], [0], [10000]))
-                ->setLongitude($faker->randomFloat([2], [0], [10000]))
-                ->setStreet($faker->text(100));
+                ->setLatitude($faker->latitude($min = -90, $max = 90))
+                ->setLongitude($faker->longitude($min = -180, $max = 180))
+                ->setStreet($faker->streetAddress());
             $manager->persist($place);
         }
 
@@ -77,16 +77,16 @@ class AppFixtures extends Fixture
                 $user,
                 'azerty'
             );
-            $user->setFirstname($faker->text(25))
-                ->setUsername($faker->text(15))
-                ->setLastname($faker->text(25))
+            $user->setFirstname($faker->firstName('male'|'female'))
+                ->setUsername($faker->userName())
+                ->setLastname($faker->lastName())
                 ->setCampus($faker->randomElement($campus))
                 ->setRoles($faker->randomElements(['ROLE_USER', 'ROLE_ADMIN']))
                 ->setActive($faker->boolean(75))
                 ->setEmail($faker->email())
                 ->setPassword($hashedPassword)
                 ->setProfilePicture($faker->text(35))
-                ->setPhone($faker->text(25));
+                ->setPhone($faker->e164PhoneNumber());
 
             $manager->persist($user);
 
@@ -99,10 +99,10 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 50; $i++) {
             $quest = new Quest();
             $quest->setName($faker->text(25))
-                ->setDuration($faker->randomFloat([2], [0], [12]))
+                ->setDuration($faker->randomFloat([2], [1], [24])) //bug sur la duration
                 ->setInfoQuest($faker->text(200))
-                ->setStartDateTime($faker->dateTimeBetween('-5 years'));
-            $quest->setInscriptionLimitDate($faker->dateTimeBetween($quest->getStartDateTime()))
+                ->setStartDateTime($faker->dateTimeBetween('-1 years'));
+            $quest->setInscriptionLimitDate($faker->dateTimeBetween($quest->getStartDateTime(), '+1 years'))
                 ->setStatus($faker->randomElement($status))
                 ->setNbMaxInscription($faker->numberBetween(5, 60))
                 ->setCampus($faker->randomElement($campus))

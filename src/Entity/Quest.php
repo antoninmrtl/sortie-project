@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuestRepository::class)]
 class Quest
@@ -20,12 +21,17 @@ class Quest
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\GreaterThanOrEqual('today', message: "La quête ne peut pas débuter dans le passé !")]
     private ?\DateTime $startDateTime = null;
 
     #[ORM\Column]
     private ?float $duration = null;
 
     #[ORM\Column]
+    #[Assert\LessThanOrEqual(
+        propertyPath: "startDateTime",
+        message: "La date limite d'inscription doit être avant le début de la quête"
+    )]
     private ?\DateTime $inscriptionLimitDate = null;
 
     #[ORM\Column]
@@ -90,6 +96,7 @@ class Quest
     {
         return $this->startDateTime;
     }
+
 
     public function setStartDateTime(\DateTime $startDateTime): static
     {
