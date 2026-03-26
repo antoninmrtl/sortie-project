@@ -20,8 +20,8 @@
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
-        <div
-            class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
+        <div class="flex justify-center">
+            <div class=" flex border border-yellow-500 bg-[#1A1A1A] text-white w-5/6 h-auto p-5 gap-4">
 
             <div>
                 <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
@@ -30,24 +30,17 @@
                      alt="{{ app.user.username }}">
             </div>
 
-
             <div class="flex flex-col gap-y-2">
                 <p>Email: {{ app.user.email }}</p>
                 <p>Pseudo: {{ app.user.username }}</p>
                 <p>Nom: {{ app.user.firstname }}</p>
                 <p>Prénom: {{ app.user.lastname }}</p>
                 <p>Teléphone: {{ app.user.phone }}</p>
-
-
-
-
-
             </div>
-
 
         </div>
 
-
+</div>
         <div>
 
 
