@@ -30,28 +30,26 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         // 1. On récupère les 3 infos avec la syntaxe moderne de Symfony
-        $email = $request->getPayload()->getString('email');
-        $username = $request->getPayload()->getString('username');
+        $identifier = $request->getPayload()->getString('email');
         $password = $request->getPayload()->getString('password');
         $csrfToken = $request->getPayload()->getString('_csrf_token');
 
-        // On sauvegarde l'email en session pour pré-remplir le champ en cas d'erreur
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $identifier);
 
-        // 2. On crée le "Passeport" avec la vérification stricte
         return new Passport(
-            new UserBadge($email, function ($userIdentifier) use ($username) {
+            new UserBadge($identifier, function ($userIdentifier) {
 
-                // $userIdentifier correspond ici à l'email.
-                // On exige que le Repository trouve un Aventurier avec CET email ET CE pseudo !
-                return $this->userRepository->findOneBy([
-                    'email' => $userIdentifier,
-                    'username' => $username
-                ]);
+                return $this->userRepository->createQueryBuilder('u')
+                    ->where('u.email = :identifier')
+                    ->orWhere('u.username = :identifier')
+                    ->setParameter('identifier', $userIdentifier)
+                    ->getQuery()
+                    ->getOneOrNullResult();
             }),
             new PasswordCredentials($password),
             [
                 new CsrfTokenBadge('authenticate', $csrfToken),
+                new RememberMeBadge(),
             ]
         );
     }
@@ -62,9 +60,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
          return new RedirectResponse($this->urlGenerator->generate('user_index'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl(Request $request): string
