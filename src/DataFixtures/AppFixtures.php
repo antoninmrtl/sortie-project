@@ -55,7 +55,7 @@ class AppFixtures extends Fixture
 
         $city = $manager->getRepository(City::class)->findAll();
 
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $place = new Place();
             $place->setName($faker->domainWord())
                 ->setCity($faker->randomElement($city))

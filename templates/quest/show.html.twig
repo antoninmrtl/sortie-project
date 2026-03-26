@@ -26,6 +26,13 @@
 
 {% block body %}
     <article class="p-5 ">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="p-4 mb-2 text-white font-bold bg-{{ label == 'success' ? 'green' : 'red' }}-500">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
         <h2 class="text-[5rem]  text-white">{{ quest.name }}</h2>
         <div class="flex gap-4">
@@ -48,6 +55,9 @@
                     <div>Nombre d'inscription maximum : {{ quest.nbMaxInscription }}</div>
                     <div>Nombre places restantes : {{ quest.nbMaxInscription - quest.users | length }}  </div>
                     <div>{{ quest.users | length }}</div>
+                    {% for user in quest.users %}
+                        {{ user.username }}
+                    {% endfor %}
                     <div>
                         Description : <br>
                         {{ quest.infoQuest }}

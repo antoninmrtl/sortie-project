@@ -10,6 +10,7 @@ use App\Repository\QuestRepository;
 use App\Repository\StatusRepository;
 use App\Services\QuestService;
 use App\Utils\FileUploader;
+use App\Utils\QuestRegistrationService;
 use App\Utils\StatusUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -110,19 +111,18 @@ final class  QuestController extends AbstractController
 
     #[Route('/inscription/{id}', name: 'inscription', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
-    public function inscription(Quest $quest, EntityManagerInterface $entityManager): Response
+    public function inscription(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime()) {
-            $this->addFlash('warning', 'Vous Ne pouvez pas vous inscrire à cette quête aventurier');
-        } else {
-            $quest = $quest->addUser($user);
-            $entityManager->persist($quest);
-            $entityManager->flush();
+        $verify = $questRegistrationService->inscriptionVerif($quest, $user);
+
+        if($verify){
             $this->addFlash('success', 'Bienvenue a l\'aventure');
             return $this->redirectToRoute('quest_show', ['id' => $quest->getId()]);
+        }else {
+            $this->addFlash('warning', 'Vous Ne pouvez pas vous inscrire à cette quête aventurier');
         }
 
         return $this->redirectToRoute('quest_index');
@@ -130,18 +130,17 @@ final class  QuestController extends AbstractController
 
     #[Route('/desister/{id}', name: 'desister', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
-    public function desister(Quest $quest, EntityManagerInterface $entityManager): Response
+    public function desister(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ($quest->getUsers()->contains($user)) {
-            $quest = $quest->removeUser($user);
-            $entityManager->persist($quest);
-            $entityManager->flush();
+        $verify = $questRegistrationService->desisterVerif($quest, $user);
+
+        if($verify){
             $this->addFlash('success', 'Vous venez de vous desister d\'une quête lâche ! ');
             return $this->redirectToRoute('quest_index');
-        } else {
+        }else {
             $this->addFlash('warning', 'Vous n\'avez pas pu vous désister ');
         }
 
@@ -173,5 +172,5 @@ final class  QuestController extends AbstractController
 
         }
 
-    
+
 }
