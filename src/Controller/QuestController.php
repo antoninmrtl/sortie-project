@@ -160,6 +160,7 @@ final class  QuestController extends AbstractController
     }
 
 
+
     #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(
         Request                $request,
@@ -184,5 +185,5 @@ final class  QuestController extends AbstractController
 
         }
 
-    
+
 }
