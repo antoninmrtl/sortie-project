@@ -148,8 +148,7 @@ final class  QuestController extends AbstractController
         return $this->redirectToRoute('quest_index');
     }
 
-    #[Route('/annulee/{id}', name: 'annuler', methods: ['GET'])]
-    #[IsGranted("ROLE_USER")]
+    #[Route('/annuler/{id}', name: 'annuler', methods: ['GET'])]
     #[IsGranted("ROLE_ADMIN")]
     public function annuler(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
     {
@@ -166,6 +165,7 @@ final class  QuestController extends AbstractController
         }
 
         return $this->redirectToRoute('quest_index');
+
     }
 
 

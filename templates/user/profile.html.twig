@@ -41,15 +41,13 @@
             </div>
 
                 <div>
-                    <div class="text-white ">
+                    <div class="text-white  ">
                         <a href="{{ path('user_edit', {'id': app.user.id}) }}">Modifier</a>
                         <form method="post" action="{{ path('user_delete', {'id': app.user.id}) }}"
 
-
-
                               onsubmit="return confirm('Are you sure you want to delete this item?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
-                            <button class="btn bg-[#1A1A1A]  text-white px-4 py-2 border-yellow-500  border border-yellow-500 " >Delete</button>
+                            <button class="btn bg-[#1A1A1A]  text-white px-4 py-2 place-items-end border border-yellow-500 " >Delete</button>
 
                         </form>
                     </div>
@@ -61,12 +59,8 @@
 
 
 </div>
-        <div>
-
-
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-20">
+        <div >
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-20 ">
             <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
                 <h2 class="text-amber-500"> Quêtes inscrits </h2>
                 {% for quest in app.user.quest %}
@@ -79,7 +73,6 @@
                 {% else %}
                     <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
                 {% endfor %}
-
                 </div>
 
 
@@ -99,7 +92,7 @@
             </div>
 
         </div>
-
+        </div>
 
     {% endif %}
 
