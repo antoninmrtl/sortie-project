@@ -63,7 +63,11 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-20">
             {% for quest in quests %}
-                <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                {% if quest.status.label == 'Annulée' %}
+            <div class=" grayscale border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                {% else %}
+                    <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                {% endif %}
                     <div class="flex justify-between">
                         <h1 class="font-bold text-xl">
                             {{ quest.name }}
@@ -101,11 +105,11 @@
                     </div>
                     <div class="mt-2 flex gap-4">
                         <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
-                        {% if app.user and quest.users.contains(app.user) %}
+                        {% if app.user and quest.users.contains(app.user) and quest.status.label !== 'Annulée'%}
                             <a href="{{ path('quest_desister', {'id': quest.id}) }}">se desister</a>
                         {% else %}
 
-                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
+                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' and  quest.status.label !== 'Annulée' %}
                                 <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
                                    class="text-yellow-600 hover:underline">s'inscrire</a>
                             {% endif %}
@@ -129,6 +133,7 @@
 
         <div class="mt-8">
             <a href="{{ path('quest_create') }}" class="btn text-white">Créer une nouvelle quête</a>
+        </div>
         </div>
     </article>
 {% endblock %}

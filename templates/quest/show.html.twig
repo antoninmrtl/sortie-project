@@ -21,9 +21,6 @@
         h3, h2, a {
             font-family: "ABeeZee";
         }
-        h4{
-            font-family: 'Pixelify Sans', sans-serif;
-        }
     </style>
 {% endblock %}
 
@@ -44,7 +41,7 @@
                 <div>
                     <img class="border border-yellow-500" style="width:400px" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}"  alt="" >
                 </div>
-                <div class="  text-white">
+                <div class=" text-white">
                     {# PEUT-ETRE LE GARDER POUR L'ADMIN #}
                     {#            <tr> #}
                     {#                <th>Id</th> #}
@@ -53,6 +50,7 @@
                     <div>Campus : {{ quest.campus.name }}</div>
                     <div>Lieu : {{ quest.place.name }}</div>
                     <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
+                    <div>Durée : {{ quest.duration }} minutes</div>
                     <div>Date limite d'inscription
                         : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
 
@@ -116,9 +114,18 @@
                     </div>
                         </div>
 
+                <div class="text-white">
+                    {% for user in quest.users %}
+                        {% if app.user.username == user.username %}
+                            <button class="btn-quest-desister">Se désister</button>
+                        {% else %}
+                            <button class="btn-quest-inscription">Inscription</button>
+                        {% endif %}
+                    {% endfor %}
+                    {% if quest.users | length < quest.nbMaxInscription %}
+                        <button class="btn-quest-inscription">Inscription</button>
+                    {% endif %}
 
-                <div>
-{#
 
                     <a href="{{ path('quest_index') }}">back to list</a>
 
@@ -129,7 +136,11 @@
                     <a href="{{ path('quest_delete', {'id': quest.id}) }}">delete</a>
 
 
-                    <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Confirmer l’annulation </a>
+                    {% if quest.status.label != 'Annulée' and (quest.promoter.username == app.user.username or is_granted('ROLE_ADMIN'))  %}
+                        <a  href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
+                    {% endif %}
+
+
 
 
 

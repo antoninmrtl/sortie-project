@@ -1,11 +1,8 @@
 {{ form_start(form)}}
-<div class="flex gap-4 p-4 scheme-light" >
-    <div>
-    <div class="  justify-items-start border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
+<div class="flex gap-4 p-4" >
+    <div class="justify-items-start border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
         {{ form_row(form.picture) }}
     </div>
-    <h3 class="font-(family-name:--Pixelify)">Charger une image</h3>
-</div>
     <div class="justify-items-start">
     <div>
         <div class="mb-4">    {{ form_label(form.name, null, {'label_attr': {'class': 'text-black mb-1'}}) }}
@@ -39,5 +36,11 @@
 </div>
 </div>
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<button type="submit" name="save_action" value="save" class="">
+    Enregistrer le brouillon
+</button>
+
+<button type="submit" name="save_action" value="publish" class="">
+    Publier la quête
+</button>
 {{ form_end(form) }}

@@ -107,7 +107,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Quest::class, mappedBy: 'promoter', cascade: ['remove'], orphanRemoval: true)]
     private Collection $quest;
-
     public function __construct()
     {
         $this->quests = new ArrayCollection();
