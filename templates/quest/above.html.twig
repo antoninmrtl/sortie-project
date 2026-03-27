@@ -27,5 +27,31 @@
 {% block body %}
 
     <h1 class="text-[3rem]  text-amber-500">Annuler une sortie</h1>
+    <h2 class="text-[5rem]  text-white">{{ quest.name }}</h2>
+
+<div class="flex gap-4">
+    <div>
+        <img class="border border-yellow-500" style="width:300px" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}"  alt="" >
+    </div>
+
+
+    <div class="text-white">
+        {{ include('quest/_form.html.twig') }}
+        <a href="{{ path('quest_index') }}">back to list</a>
+    </div>
+
+
+    <form method="post" action="{{ path('quest_annuler', {'id': quest.id}) }}"
+          onsubmit="return confirm('Are you sure you want to cancel this quest?');">
+
+        <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ app.user.id) }}">
+
+        <button class="btn bg-[#1A1A1A] text-white px-4 py-2 border-yellow-500 border">
+            Confirmer l’annulation
+        </button>
+
+    </form>
+
+</div>
 
 {% endblock %}

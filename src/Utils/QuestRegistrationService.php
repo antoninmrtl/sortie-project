@@ -44,7 +44,7 @@ class QuestRegistrationService
     public function aboveVerif(Quest $quest, User $user){
 
 
-        if ($quest->getUsers()->contains($user) && $quest->getStartDateTime() < new \DateTime()) {
+        if ($quest->getUsers()->contains($user) && $quest->getStartDateTime() < (new \DateTime())->modify('+1 days')) {
 
             $quest = $quest->removeUser($user);
             $this->entityManager->persist($quest);
