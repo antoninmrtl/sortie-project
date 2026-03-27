@@ -74,19 +74,30 @@ final class  QuestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $action = $request->request->get('save_action');
+
+
             $file = $form->get('picture')->getData();
             if ($file) {
                 $quest->setPicture(
                     $fileUploader->upload($file, 'assets/images/pictureQuest', $quest->getName())
                 );
             }
-
             $quest->setPromoter($user);
             $quest->addUser($user);
 
-            $quest = $statusUpdater->createStatus($quest, $statusRepository);
+            $enCreationStatus = $statusRepository->findOneBy(['label' => 'En création']);
 
-            $entityManager->persist($quest);
+            if($action === 'save') {
+                $quest->setStatus($enCreationStatus);
+                $quest = $statusUpdater->createStatus($quest);
+                $entityManager->persist($quest);
+
+            } else{
+                $quest = $statusUpdater->createStatus($quest);
+                $entityManager->persist($quest);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('quest_show', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);

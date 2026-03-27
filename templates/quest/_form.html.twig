@@ -34,5 +34,11 @@
 </div>
 </div>
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<button type="submit" name="save_action" value="save" class="">
+    Enregistrer le brouillon
+</button>
+
+<button type="submit" name="save_action" value="publish" class="">
+    Publier la quête
+</button>
 {{ form_end(form) }}

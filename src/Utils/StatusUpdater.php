@@ -25,6 +25,8 @@ class StatusUpdater
         $annuledStatus = $this->statusRepository->findOneBy(['label' => 'Annulée']);
         $archiveStatus = $this->statusRepository->findOneBy(['label' => 'Archive']);
         $enCoursStatus = $this->statusRepository->findOneBy(['label' => 'En cours']);
+        $enCreationStatus = $this->statusRepository->findOneBy(['label' => 'En création']);
+
 
 
         foreach ($quests as $quest){
@@ -37,6 +39,9 @@ class StatusUpdater
                 $quest->setStatus($archiveStatus);
             }elseif ($quest->getStatus() === $annuledStatus){
                 $quest->setStatus($annuledStatus);
+                continue;
+            }elseif ($quest->getStatus() === $enCreationStatus) {
+                $quest->setStatus($enCreationStatus);
                 continue;
             } elseif ($endDateTime <  new \DateTime()){
                 $quest->setStatus($passedStatus);

@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
 
         $faker = Factory::create('fr-FR');
 
-        foreach (['Créee', 'Ouverte', 'Cloturée', 'En cours', 'Passée', 'Annulée', 'Archive'] as $value) {
+        foreach (['Créee', 'Ouverte', 'Cloturée', 'En cours', 'Passée', 'Annulée', 'Archive', 'En création'] as $value) {
             $status = new Status();
             $status->setLabel($value);
             $manager->persist($status);
