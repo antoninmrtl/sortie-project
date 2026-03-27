@@ -92,6 +92,31 @@ class AppFixtures extends Fixture
 
         }
 
+        $admins = [
+            ['vanina', 'van@gmail.com'],
+            ['antonin', 'anto@gmail.com'],
+            ['sylvain', 'syl@gmail.com'],
+            ['silvia', 'sia@gmail.com'],
+        ];
+
+        foreach ($admins as $adminData) {
+            $admin = new User();
+            $admin->setUsername($adminData[0])
+                ->setFirstname($adminData[0])
+                ->setLastname($adminData[0])
+                ->setEmail($adminData[1])
+                ->setPhone('0601020304')
+                ->setRoles(['ROLE_ADMIN'])
+                ->setActive(true)
+                ->setCampus($campus[0])
+                ->setProfilePicture('profilepicture');
+            $admin->setPassword(
+                $this->passwordHasher->hashPassword($admin, 'azerty')
+            );
+
+            $manager->persist($admin);
+        }
+
         $manager->flush();
 
         $user = $manager->getRepository(User::class)->findAll();
