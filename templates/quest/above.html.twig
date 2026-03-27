@@ -47,12 +47,17 @@
 {#    </div>#}
 
 
-    <form method="post" action="{{ path('quest_confirmAnnuler', {'id': quest.id}) }}"
+    <form class="text-white" method="post" action="{{ path('quest_confirmAnnuler', {'id': quest.id}) }}"
           onsubmit="return confirm('Are you sure you want to cancel this quest?');">
+        <div>
+            <label for="motif">Motif</label>
+            <textarea  name="motif" id="motif" required> </textarea>
+        </div>
+
 
         <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ app.user.id) }}">
 
-        <button class="btn bg-[#1A1A1A] text-white px-4 py-2 border-yellow-500 border">
+        <button class="btn bg-[#1A1A1A] text-white px-4 py-2 border-yellow-500 border" type="submit">
             Confirmer l’annulation
         </button>
 

@@ -171,16 +171,19 @@ final class  QuestController extends AbstractController
 
     #[Route('/confirmAnnuler/{id}', name: 'confirmAnnuler')]
     //  #[IsGranted("ROLE_ADMIN")]
-    public function confirmAnnuler(Quest $quest,StatusRepository $statusRepository, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    public function confirmAnnuler(Request $request,Quest $quest,StatusRepository $statusRepository, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
+
+        $motif = $request->request->get('motif');
 
         //$verify = $questRegistrationService->aboveConfirmVerif($quest, $user);
 
         $annuledStatus = $statusRepository->findOneBy(['label' => 'Annulée']);
 
         $quest->setStatus($annuledStatus);
+        $quest->setInfoQuest($quest->getInfoQuest() . ' Raison de l\'annulation : ' . $motif);
         $entityManager->persist($quest);
         $entityManager->flush();
         $this->addFlash('success', 'Vous venez d\'annuler votre quête');

@@ -18,7 +18,7 @@ class QuestRegistrationService
 
     public function inscriptionVerif(Quest $quest, User $user){
 
-        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime()) {
+        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime() ) {
             return false;
         } else {
             $quest = $quest->addUser($user);
