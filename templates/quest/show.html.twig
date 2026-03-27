@@ -34,7 +34,7 @@
             {% endfor %}
         {% endfor %}
         <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
-        <h2 class="text-[5rem]  text-white">{{ quest.name }}</h2>
+        <h2 class="text-[5rem]  ">{{ quest.name }}</h2>
             <div class="flex gap-4">
                 <div>
                     <img class="border border-yellow-500" style="width:300px" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}"  alt="" >
@@ -87,13 +87,16 @@
                     <a href="{{ path('quest_delete', {'id': quest.id}) }}">delete</a>
 
 
-                    <a  href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
+                    {% if quest.status.label != 'Annulée' and (quest.promoter.username == app.user.username or is_granted('ROLE_ADMIN'))  %}
+                        <a  href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
+                    {% endif %}
 
 
 
 
 
                 </div>
+            </div>
 
     </article>
 {% endblock %}

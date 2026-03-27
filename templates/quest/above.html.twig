@@ -25,7 +25,13 @@
 {% endblock %}
 
 {% block body %}
-
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="p-4 mb-2 text-white font-bold bg-{{ label == 'success' ? 'green' : 'red' }}-500">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
     <h1 class="text-[3rem]  text-amber-500">Annuler une sortie</h1>
     <h2 class="text-[5rem]  text-white">{{ quest.name }}</h2>
 
@@ -35,13 +41,13 @@
     </div>
 
 
-    <div class="text-white">
-        {{ include('quest/_form.html.twig') }}
-        <a href="{{ path('quest_index') }}">back to list</a>
-    </div>
+{#    <div class="text-white">#}
+{#        {{ include('quest/_form.html.twig') }}#}
+{#        <a href="{{ path('quest_index') }}">back to list</a>#}
+{#    </div>#}
 
 
-    <form method="post" action="{{ path('quest_annuler', {'id': quest.id}) }}"
+    <form method="post" action="{{ path('quest_confirmAnnuler', {'id': quest.id}) }}"
           onsubmit="return confirm('Are you sure you want to cancel this quest?');">
 
         <input type="hidden" name="_token" value="{{ csrf_token('annuler' ~ app.user.id) }}">

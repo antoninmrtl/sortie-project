@@ -149,8 +149,8 @@ final class  QuestController extends AbstractController
     }
 
     #[Route('/annuler/{id}', name: 'annuler', methods: ['GET'])]
-    #[IsGranted("ROLE_ADMIN")]
-    public function annuler(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+  //  #[IsGranted("ROLE_ADMIN")]
+    public function annuler(Quest $quest, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -158,11 +158,40 @@ final class  QuestController extends AbstractController
         $verify = $questRegistrationService->aboveVerif($quest, $user);
 
         if($verify){
-            $this->addFlash('success', 'Vous venez de vous annuler d\'une quête lâche ! ');
-            return $this->redirectToRoute('quest_annuler', ['id' => $quest->getId()]);
+            $this->addFlash('success', 'Vous êtes bien propriétaire de cette quest !');
+            return $this->render('quest/above.html.twig', ['id' => $quest->getId(),
+                'quest'=>$quest]);
         }else {
-            $this->addFlash('warning', 'Vous n\'avez pas pu vous annuler ');
+            $this->addFlash('warning', 'Vous n\'avez pas pu annuler la quête ');
         }
+
+        return $this->redirectToRoute('quest_show', ['id' => $quest->getId()]);
+
+    }
+
+    #[Route('/confirmAnnuler/{id}', name: 'confirmAnnuler')]
+    //  #[IsGranted("ROLE_ADMIN")]
+    public function confirmAnnuler(Quest $quest,StatusRepository $statusRepository, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        //$verify = $questRegistrationService->aboveConfirmVerif($quest, $user);
+
+        $annuledStatus = $statusRepository->findOneBy(['label' => 'Annulée']);
+
+        $quest->setStatus($annuledStatus);
+        $entityManager->persist($quest);
+        $entityManager->flush();
+        $this->addFlash('success', 'Vous venez d\'annuler votre quête');
+
+//        if($verify){
+//            $this->addFlash('success', 'Vous êtes bien propriétaire de cette quest !');
+//            return $this->render('quest/above.html.twig', ['id' => $quest->getId(),
+//                'quest'=>$quest]);
+//        }else {
+//            $this->addFlash('warning', 'Vous n\'avez pas pu annuler la quête ');
+//        }
 
         return $this->redirectToRoute('quest_index');
 
