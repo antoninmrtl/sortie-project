@@ -18,13 +18,19 @@ class Quest
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotBlank(message: 'Ne peut pas être nul')]
     private ?string $name = null;
 
     #[ORM\Column]
     #[Assert\GreaterThanOrEqual('today', message: "La quête ne peut pas débuter dans le passé !")]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotBlank(message: 'Ne peut pas être nul')]
     private ?\DateTime $startDateTime = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotBlank(message: 'Ne peut pas être nul')]
     private ?float $duration = null;
 
     #[ORM\Column]
