@@ -39,14 +39,15 @@ class QuestRepository extends ServiceEntityRepository
     {
 
         $archiveStatus = $this->statusRepository->findOneBy(['label' => 'Archive']);
-
+        $creationStatus = $this->statusRepository->findOneBy(['label' => 'En création']);
 
         $query = $this->createQueryBuilder('q')
             ->leftJoin('q.status', 's')->addSelect('s')
             ->leftJoin('q.promoter', 'p')->addSelect('p')
             ->leftJoin('q.users', 'u')->addSelect('u')
-            ->andWhere('s != :archive')
-            ->setParameter('archive', $archiveStatus);
+            ->andWhere('s != :archive and s != :creation')
+            ->setParameter('archive', $archiveStatus)
+            ->setParameter('creation', $creationStatus);
 
         if ($search->getName()) {
             $query = $query
@@ -95,6 +96,26 @@ class QuestRepository extends ServiceEntityRepository
             ->leftJoin('q.users', 'u')->addSelect('u')
             ->andWhere('s = :archive')
             ->setParameter('archive', $archiveStatus);
+
+
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findAllCreateByPromoter(User $user)
+    {
+
+        $creationStatus = $this->statusRepository->findOneBy(['label' => 'En création']);
+
+
+        $query = $this->createQueryBuilder('q')
+            ->leftJoin('q.status', 's')->addSelect('s')
+            ->leftJoin('q.promoter', 'p')->addSelect('p')
+            ->leftJoin('q.users', 'u')->addSelect('u')
+            ->andWhere('s = :creation')
+            ->setParameter('creation', $creationStatus)
+            ->andWhere('q.promoter = :promoter')
+            ->setParameter('promoter', $user);
 
 
 

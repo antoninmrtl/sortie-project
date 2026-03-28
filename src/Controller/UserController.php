@@ -115,7 +115,13 @@ final class                   UserController extends AbstractController
     #[Route('/profile', name: 'profile', methods: ['GET'])]
     public function profile(#[CurrentUser] User $user, QuestRepository $questRepository): Response
     {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
 
-        return $this->render('user/profile.html.twig');
+        $questCreate = $questRepository->findAllCreateByPromoter($user);
+
+        return $this->render('user/profile.html.twig', [
+            'questCreate'=>$questCreate,
+        ]);
     }
 }

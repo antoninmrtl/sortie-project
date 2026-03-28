@@ -73,6 +73,7 @@ final class  QuestController extends AbstractController
 
             $action = $request->request->get('save_action');
 
+
             $file = $form->get('picture')->getData();
             if ($file) {
                 $quest->setPicture(
@@ -87,6 +88,7 @@ final class  QuestController extends AbstractController
             if ($action === 'save') {
                 $quest->setStatus($enCreationStatus);
                 $quest = $statusUpdater->createStatus($quest);
+
             } else {
                 $quest = $statusUpdater->createStatus($quest);
             }

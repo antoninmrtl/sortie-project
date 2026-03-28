@@ -39,12 +39,12 @@ final class QuestVoter extends Voter
         switch ($attribute) {
             case self::EDIT:
 
-                if (in_array('ROLE_ADMIN', $user->getRoles())) {
-                    return $quest->getStatus()->getLabel() !== 'Archive';
-                }
-
                 if (null === $quest->getId()) {
                     return true;
+                }
+
+                if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                    return $quest->getStatus()->getLabel() !== 'Archive';
                 }
 
                 if ($user === $quest->getPromoter()) {
