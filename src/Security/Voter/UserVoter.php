@@ -10,10 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class UserVoter extends Voter
 {
     public const EDIT = 'USER_EDIT';
+    public const DELETE = 'USER_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT])
+        return in_array($attribute, [self::EDIT, self::DELETE])
             && $subject instanceof \App\Entity\User;
     }
 
@@ -27,6 +28,7 @@ final class UserVoter extends Voter
         }
 
         switch ($attribute) {
+            case self::DELETE:
             case self::EDIT:
                 return $user === $subject || in_array('ROLE_ADMIN', $user->getRoles());
 
