@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/user', name: 'user_')]
 final class                   UserController extends AbstractController
 {
-    #[Route('',name: 'index', methods: ['GET'])]
+    #[Route('', name: 'index', methods: ['GET'])]
     public function displayAll(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
@@ -66,7 +66,7 @@ final class                   UserController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'show', requirements: ['id'=>'\d+'],methods: ['GET'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
@@ -97,19 +97,18 @@ final class                   UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
 
         $this->denyAccessUnlessGranted('USER_DELETE', $user, 'Vous ne pouvez pas supprimer cet utilisateur');
 
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
+        $entityManager->remove($user);
+        $entityManager->flush();
+        $request->getSession()->invalidate();
 
-        return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
     }
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
