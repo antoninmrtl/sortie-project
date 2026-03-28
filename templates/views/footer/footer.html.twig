@@ -1,0 +1,22 @@
+<footer class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-yellow-500/30 z-50">
+    <div class="flex items-center p-4 gap-x-4 text-white">
+
+        {% if app.user %}
+            <div class="flex-shrink-0">
+                <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
+                     class="border border-yellow-500 rounded shadow-md"
+                     style="width:50px; height:50px; object-fit: cover;"
+                     alt="{{ app.user.username }}">
+            </div>
+            <div class="font-abeezee">
+                <h3 class="text-sm text-gray-400">Connecté en tant que :</h3>
+                <p class="font-bold text-yellow-500">{{ app.user.username }}</p>
+            </div>
+        {% else %}
+            <div class="font-abeezee">
+                <a href="{{ path('app_login') }}" class="text-yellow-500 hover:underline">Connexion requise pour voir votre profil</a>
+            </div>
+        {% endif %}
+
+    </div>
+</footer>
