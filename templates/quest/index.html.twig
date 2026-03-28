@@ -44,10 +44,8 @@
         <button type="submit">
             Rechercher
         </button>
-
         {{ form_end(questForm) }}
     </div>
-
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
@@ -56,6 +54,7 @@
             </div>
         {% endfor %}
     {% endfor %}
+
     <article class="p-5">
         <h1 class="text-[5rem]  text-white">Quest display</h1>
         <div>
@@ -72,12 +71,8 @@
                         <h1 class="font-bold text-xl">
                             {{ quest.name }}
                         </h1>
-
                         <h2>{{ quest.status.label }}</h2>
-
                     </div>
-
-
                     {# Le flex-grow permet à la description de prendre tout l'espace libre,
                        poussant ainsi les dates toujours tout en bas, même si le texte est court #}
                     <h3 class="flex-grow">
@@ -105,23 +100,17 @@
                     </div>
                     <div class="mt-2 flex gap-4">
                         <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
-                        {% if app.user and quest.users.contains(app.user) and quest.status.label !== 'Annulée'%}
-                            <a href="{{ path('quest_desister', {'id': quest.id}) }}">se desister</a>
-                        {% else %}
 
-                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' and  quest.status.label !== 'Annulée' %}
-                                <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
-                                   class="text-yellow-600 hover:underline">s'inscrire</a>
-                            {% endif %}
+                        {% if is_granted('QUEST_UNREGISTER', quest) %}
+                            <a href="{{ path('quest_desister', {'id': quest.id}) }}">Se désister</a>
                         {% endif %}
 
+                        {% if is_granted('QUEST_REGISTER', quest) %}
+                            <a href="{{ path('quest_inscription', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">S'inscrire</a>
+                        {% endif %}
 
-
-                        {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('quest_edit', {'id': quest.id}) }}"
-                                   class="text-yellow-600 hover:underline">Modifier</a>
-                            {% endif %}
+                        {% if is_granted('QUEST_EDIT', quest) %}
+                            <a href="{{ path('quest_edit', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Modifier</a>
                         {% endif %}
                     </div>
                 </div>

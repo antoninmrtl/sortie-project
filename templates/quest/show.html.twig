@@ -35,68 +35,56 @@
         {% endfor %}
         <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
         <h2 class="text-[5rem]  ">{{ quest.name }}</h2>
-            <div class="flex gap-4">
-                <div>
-                    <img class="border border-yellow-500" style="width:300px" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}"  alt="" >
-                </div>
-                <div class=" text-white">
-                    {# PEUT-ETRE LE GARDER POUR L'ADMIN #}
-                    {#            <tr> #}
-                    {#                <th>Id</th> #}
-                    {#                <td>{{ quest.id }}</td> #}
-                    {#            </tr> #}
-                    <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
-                    <div>Durée : {{ quest.duration }} minutes</div>
-                    <div>Date limite d'inscription
-                        : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
+        <div class="flex gap-4">
 
-
-                    <div>Nombre d'inscription maximum : {{ quest.nbMaxInscription }}</div>
-                    <div>Nombre places restantes : {{ quest.nbMaxInscription - quest.users | length }}  </div>
-                    <div>{{ quest.users | length }}</div>
-                    <div>
-                        Description : <br>
-                        {{ quest.infoQuest }}
-                    </div>
-                </div>
-                        <div>Liste des participants inscrits: {{ quest.users | length }}
-                    {% for user in quest.users %}
-                        <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.username }}</a>
-                    {% endfor %}
-                    </div>
-
-                <div class="text-white">
-                    {% for user in quest.users %}
-                        {% if app.user.username == user.username %}
-                            <button class="btn-quest-desister">Se désister</button>
-                        {% else %}
-                            <button class="btn-quest-inscription">Inscription</button>
-                        {% endif %}
-                    {% endfor %}
-                    {% if quest.users | length < quest.nbMaxInscription %}
-                        <button class="btn-quest-inscription">Inscription</button>
-                    {% endif %}
-
-
-                    <a href="{{ path('quest_index') }}">back to list</a>
-
-                    <a href="{{ path('quest_edit', {'id': quest.id}) }}">edit</a>
-
-
-                    {#            {{ include('quest/_delete_form.html.twig') }}#}
-                    <a href="{{ path('quest_delete', {'id': quest.id}) }}">delete</a>
-
-
-                    {% if quest.status.label != 'Annulée' and (quest.promoter.username == app.user.username or is_granted('ROLE_ADMIN'))  %}
-                        <a  href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
-                    {% endif %}
-
-
-
-
-
-                </div>
+            <div>
+                <img class="border border-yellow-500" style="width:300px"
+                     src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
             </div>
+
+            <div class=" text-white">
+                <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
+                <div>Durée : {{ quest.duration }} minutes</div>
+                <div>Date limite d'inscription
+                    : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
+                <div>Nombre d'inscription maximum : {{ quest.nbMaxInscription }}</div>
+                <div>Nombre places restantes : {{ quest.nbMaxInscription - quest.users | length }}  </div>
+                <div>{{ quest.users | length }}</div>
+                <div>Description : <br>{{ quest.infoQuest }}</div>
+            </div>
+
+            <div>Liste des participants inscrits: {{ quest.users | length }}
+                {% for user in quest.users %}
+                    <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.username }}</a>
+                {% endfor %}
+            </div>
+            <div class="text-white">
+
+                {% if is_granted('QUEST_UNREGISTER', quest) %}
+                    <button class="btn-quest-desister">Se désister</button>
+                {% elseif is_granted('QUEST_REGISTER', quest) %}
+                    <button class="btn-quest-inscription">Inscription</button>
+                {% endif %}
+
+
+                <a href="{{ path('quest_index') }}">back to list</a>
+
+                {% if is_granted('QUEST_EDIT', quest) %}
+                    <a href="{{ path('quest_edit', {'id': quest.id}) }}" >Modifier</a>
+                {% endif %}
+{#                {% if is_granted('QUEST_DELETE', quest) %}#}
+{#                    <a href="{{ path('quest_delete', {'id': quest.id}) }}"#}
+{#                       onclick="return confirm('Confirmer la suppression définitive ?')">Supprimer</a>#}
+{#                {% endif %}#}
+
+
+                {% if quest.status.label != 'Annulée' and (quest.promoter.username == app.user.username or is_granted('ROLE_ADMIN')) %}
+                    <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
+                {% endif %}
+
+
+            </div>
+        </div>
 
     </article>
 {% endblock %}

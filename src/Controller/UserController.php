@@ -79,6 +79,9 @@ final class                   UserController extends AbstractController
     public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
+
+        $this->denyAccessUnlessGranted('USER_EDIT', $user, 'Vous ne pouvez pas modifer cet utilisateur');
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
