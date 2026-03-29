@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class StatusUpdater
 {
 
-    public function __construct(private StatusRepository $statusRepository, private QuestRepository $questRepository, private EntityManagerInterface $entityManager)
+    public function __construct(private ExperienceService $experienceService ,private StatusRepository $statusRepository, private QuestRepository $questRepository, private EntityManagerInterface $entityManager)
     {
     }
 
@@ -46,6 +46,7 @@ class StatusUpdater
                 continue;
             } elseif ($endDateTime <  new \DateTime()){
                 $quest->setStatus($passedStatus);
+                $this->experienceService->awardExperienceForQuest($quest);
             }elseif ($quest->getStartDateTime() < new \DateTime() && $endDateTime > new \DateTime()) {
                 $quest->setStatus($enCoursStatus);
             } elseif (count($quest->getUsers()) >= $quest->getNbMaxInscription() || $quest->getInscriptionLimitDate() < new \DateTime()){

@@ -12,11 +12,23 @@
                 <h3 class="text-sm text-gray-400">Connecté en tant que :</h3>
                 <p class="font-bold text-yellow-500">{{ app.user.username }}</p>
             </div>
-        {% else %}
+            <div class="flex flex-col gap-2">
+                <div class="flex justify-between text-xs text-amber-500 font-bold">
+                    <span>NIVEAU {{ exp_service.calculateLevel(app.user.experience) }}</span>
+                    <span>{{ app.user.experience }} XP</span>
+                </div>
+
+                <div class="w-48 bg-gray-800 rounded-full h-2.5 border border-gray-700 overflow-hidden">
+                    <div class="bg-gradient-to-r from-yellow-600 to-yellow-300 h-full transition-all"
+                         style="width: {{ exp_service.calculatePercentage(app.user.experience) }}%">
+                    </div>
+                </div>
+            </div>   {% else %}
             <div class="font-abeezee">
                 <a href="{{ path('app_login') }}" class="text-yellow-500 hover:underline">Connexion requise pour voir votre profil</a>
             </div>
         {% endif %}
+
 
     </div>
 </footer>
