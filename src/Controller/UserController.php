@@ -104,11 +104,21 @@ final class                   UserController extends AbstractController
 
         $this->denyAccessUnlessGranted('USER_DELETE', $user, 'Vous ne pouvez pas supprimer cet utilisateur');
 
+        $currentUser = $this->getUser();
+        $isSelfDelete = ($currentUser === $user);
         $entityManager->remove($user);
         $entityManager->flush();
-        $request->getSession()->invalidate();
 
-        return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
+        if ($isSelfDelete) {
+            $request->getSession()->invalidate();
+            $this->container->get('security.token_storage')->setToken(null);
+
+            $this->addFlash('success', 'Votre compte a été définitivement supprimé.');
+            return $this->redirectToRoute('app_login');
+        }
+
+        $this->addFlash('success', "L'utilisateur {$user->getUsername()} a été supprimé.");
+        return $this->redirectToRoute('user_index');
     }
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
