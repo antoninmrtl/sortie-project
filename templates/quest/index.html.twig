@@ -40,6 +40,10 @@
             {% do questForm.isPromoter.setRendered() %}
             {% do questForm.isRegistered.setRendered() %}
         {% endif %}
+        <div class="flex gap-4 items-end">
+            {{ form_row(questForm.startDate) }}
+            {{ form_row(questForm.endDate) }}
+        </div>
 
         <button type="submit">
             Rechercher

@@ -67,6 +67,16 @@ class QuestRepository extends ServiceEntityRepository
                     ->andWhere('uu.id = :userId')
                     ->setParameter('userId', $user->getId());
             }
+
+            if ($search->startDate) {
+                $query->andWhere('q.startDateTime >= :start')
+                    ->setParameter('start', $search->startDate);
+            }
+
+            if ($search->endDate) {
+                $query->andWhere('q.startDateTime <= :end')
+                    ->setParameter('end', $search->endDate);
+            }
         }
 
         return $query->getQuery()->getResult();
