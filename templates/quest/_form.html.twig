@@ -11,6 +11,7 @@
         <div class="mb-4">    {{ form_label(form.name, null, {'label_attr': {'class': 'text-black mb-1'}}) }}
             {{ form_widget(form.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full'}}) }} {{ form_errors(form.name) }}</div>
         {#        {{ form_row(form.name)}}#}
+        {{ form_row(form.name)  }}
     </div>
     <div>
         {{ form_row(form.startDateTime)}}
@@ -39,5 +40,11 @@
 </div>
 </div>
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<button type="submit" name="save_action" value="save" class="">
+    Enregistrer le brouillon
+</button>
+
+<button type="submit" name="save_action" value="publish" class="">
+    Publier la quête
+</button>
 {{ form_end(form) }}

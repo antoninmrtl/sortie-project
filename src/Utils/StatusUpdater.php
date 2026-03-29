@@ -22,17 +22,34 @@ class StatusUpdater
         $closedStatus = $this->statusRepository->findOneBy(['label' => 'Clôturée']);
         $openStatus = $this->statusRepository->findOneBy(['label' => 'Ouverte']);
         $passedStatus = $this->statusRepository->findOneBy(['label' => 'Passée']);
+        $annuledStatus = $this->statusRepository->findOneBy(['label' => 'Annulée']);
         $archiveStatus = $this->statusRepository->findOneBy(['label' => 'Archive']);
+        $enCoursStatus = $this->statusRepository->findOneBy(['label' => 'En cours']);
+        $enCreationStatus = $this->statusRepository->findOneBy(['label' => 'En création']);
+
 
 
         foreach ($quests as $quest){
+
+            $endDateTime = clone $quest->getStartDateTime();
+            $minutesToAdd = (int)($quest->getDuration() * 60);
+            $endDateTime->modify("+$minutesToAdd minutes");
+
             if ($quest->getStartDateTime()  < new \DateTime('-30 days')){
                 $quest->setStatus($archiveStatus);
-            } elseif ($quest->getInscriptionLimitDate() <  new \DateTime()){
+            }elseif ($quest->getStatus() === $annuledStatus){
+                $quest->setStatus($annuledStatus);
+                continue;
+            }elseif ($quest->getStatus() === $enCreationStatus) {
+                $quest->setStatus($enCreationStatus);
+                continue;
+            } elseif ($endDateTime <  new \DateTime()){
                 $quest->setStatus($passedStatus);
+            }elseif ($quest->getStartDateTime() < new \DateTime() && $endDateTime > new \DateTime()) {
+                $quest->setStatus($enCoursStatus);
             } elseif (count($quest->getUsers()) >= $quest->getNbMaxInscription() || $quest->getInscriptionLimitDate() < new \DateTime()){
                 $quest->setStatus($closedStatus);
-            }else{
+            } else{
                 $quest->setStatus($openStatus);
             }
             $this->entityManager->persist($quest);
