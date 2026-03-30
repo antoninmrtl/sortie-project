@@ -14,7 +14,32 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 
-    {% block extraStyle %}{% endblock %}
+    {% block extraStyle %}
+        <style>
+        .abeezee-regular {
+            font-family: "ABeeZee", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
+            background-color: #1A1A1A;
+            background-size: contain;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            cursor: url("{{ asset('assets/images/cursor/Dark souls 3.cur') }}"), auto;
+        }
+
+        a, [role="button"], .cursor-pointer {
+            cursor: url("{{ asset('assets/images/cursor/Darksign (Link).cur') }}"), auto;
+        }
+
+        h3 {
+            font-family: "ABeeZee";
+        }
+        </style>{% endblock %}
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,5 +53,8 @@
 <main>
     {% block body %}{% endblock %}
 </main>
+<footer>
+    {% include '/views/footer/footer.html.twig' %}
+</footer>
 </body>
 </html>

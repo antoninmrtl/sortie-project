@@ -2,29 +2,7 @@
 
 {% block title %}Detail de la sortie{% endblock %}
 {% block extraStyle %}
-    <style>
-        .abeezee-regular {
-            font-family: "ABeeZee", sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        body {
-
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
-            background-color: #1A1A1A;
-            background-size: contain;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-
-        h3, h2, a {
-            font-family: "ABeeZee";
-        }
-        h4{
-            font-family: 'Pixelify Sans', sans-serif;
-        }
-    </style>
+    {{ parent() }}
 {% endblock %}
 
 {% block body %}
@@ -37,104 +15,85 @@
             {% endfor %}
         {% endfor %}
         <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
-        <h2 class="text-[5rem]  text-white">{{ quest.name }}</h2>
-{#            <div class="flex gap-4 ">#}
+        <h2 class="text-[5rem]  ">{{ quest.name }}</h2>
+
         <div class="flex-col">
-            <div class="flex gap-4 text-white">
-                <div>
-                    <img class="border border-yellow-500" style="width:400px" src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}"  alt="" >
-                </div>
-                <div class="  text-white">
-                    {# PEUT-ETRE LE GARDER POUR L'ADMIN #}
-                    {#            <tr> #}
-                    {#                <th>Id</th> #}
-                    {#                <td>{{ quest.id }}</td> #}
-                    {#            </tr> #}
-                    <div>Campus : {{ quest.campus.name }}</div>
-                    <div>Lieu : {{ quest.place.name }}</div>
-                    <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
-                    <div>Date limite d'inscription
-                        : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
+        <div class="flex gap-4 text-white">
 
-                    <div>Durée : {{ quest.duration }} minutes</div>
-                    Description : <br>
-                    <div>{{ quest.infoQuest }} </div>
-                </div>
-                <div class="mt-10 ml-10 place-content-end justify-items-end">
-                    <div>Places disponibles : {{ quest.nbMaxInscription - quest.users | length }}  </div>
+            <div class="border border-yellow-500 overflow-hidden" style="width:400px; aspect-ratio:1/1;">
+                <img class="w-full h-full object-cover object-top"
+                     src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
+            </div>
 
-                    <div class="mt-2 flex gap-4">
-                        {% if app.user and quest.users.contains(app.user) %}
-                            <a class="border border-yellow-500" href="{{ path('quest_desister', {'id': quest.id}) }}">se desister</a>
-                        {% else %}
+            <div class="  ml">
+                <div>Campus : {{ quest.campus.name }} </div>
+                <div>Place : {{ quest.place.name }}</div>
+                <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
+                <div>Durée : {{ quest.duration }} minutes</div>
+                <div>Description : <br>{{ quest.infoQuest }}</div>
 
-                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
-                                <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
-                                   class="border border-yellow-500">s'inscrire</a>
-                            {% endif %}
-                        {% endif %}
+                <div>Date limite d'inscription
+                    : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
 
+            </div>
+            <div class="mt-10 ml-10 place-content-end justify-items-end">
+                <div>Places disponibles : {{ quest.nbMaxInscription - quest.users | length }}  </div>
 
+                <div class="mt-2 flex gap-4">
+                    {% if is_granted('QUEST_UNREGISTER', quest) %}
+                    <a href="{{ path('quest_desister', {'id': quest.id}) }}">se désister</a>
+                    {% elseif is_granted('QUEST_REGISTER', quest) %}
+                        <a href="{{ path('quest_inscription', {'id': quest.id}) }}">Inscription</a>
+                    {% endif %}
+            </div>
+            </div>
 
-                        {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('quest_edit', {'id': quest.id}) }}"
-                                   class="text-yellow-600 hover:underline">Modifier</a>
-                            {% endif %}
-                        {% endif %}
+            <div class="block relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center">
+                <div class=" text-center mt-10"><h4 class="text-[2rem]  text-amber-500">Liste des participants inscrits: </h4>
+                    {#                            {{ quest.users | length }}#}
+                    <div class="relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center"
+                         style="width: 720px; min-height: 700px; background-image: url('{{ asset('images/parchemin.png') }}');">
+                        <table class="place-items-startt border-spacing-3 text-taupe-950  w-1/3 gap-[3px] p-3 ">
+                            <thead>
+                            <tr class=" ">
+                                <th class="">Titre de quêteur</th>
+                                <th>Prenom</th>
+                            </tr>
+                            </thead>
+                            <tbody class="">
+                            {% for user in quest.users %}
+                            <tr>
+                                <td><a href="{{ path('user_show', {'id': user.id}) }}" >{{ user.username }}</a>
+                                </td>
+                                <td><a href="{{ path('user_show', {'id': user.id}) }}" >{{ user.firstname }}</a>
+                                    {% endfor %} </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+
                     </div>
-                </div>
-                </div>
+
+
+
+                <a href="{{ path('quest_index') }}">back to list</a>
+
+                {% if is_granted('QUEST_EDIT', quest) %}
+                    <a href="{{ path('quest_edit', {'id': quest.id}) }}" >Modifier</a>
+                {% endif %}
+{#                {% if is_granted('QUEST_DELETE', quest) %}#}
+{#                    <a href="{{ path('quest_delete', {'id': quest.id}) }}"#}
+{#                       onclick="return confirm('Confirmer la suppression définitive ?')">Supprimer</a>#}
+{#                {% endif %}#}
+
+
+                {% if quest.status.label != 'Annulée' and (quest.promoter.username == app.user.username or is_granted('ROLE_ADMIN')) %}
+                    <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
+                {% endif %}
 
 
             </div>
-                <div class="block relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center">
-                        <div class=" text-center mt-10"><h4 class="text-[2rem]  text-amber-500">Liste des participants inscrits: </h4>
-{#                            {{ quest.users | length }}#}
-                                <div class="relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center"
-                                     style="width: 720px; min-height: 700px; background-image: url('{{ asset('images/parchemin.png') }}');">
-                                    <table class="place-items-startt border-spacing-3 text-taupe-950  w-1/3 gap-[3px] p-3 ">
-                                        <thead>
-                                        <tr class=" ">
-                                            <th class="">Titre de quêteur</th>
-                                            <th>Prenom</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody class="">
-                                       {% for user in quest.users %}
-                                        <tr>
-                                            <td><a href="{{ path('user_show', {'id': user.id}) }}" >{{ user.username }}</a>
-                                                            </td>
-                                            <td><a href="{{ path('user_show', {'id': user.id}) }}" >{{ user.firstname }}</a>
-                                                                    {% endfor %} </td>
-
-                                        </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                    </div>
-                        </div>
-
-
-                <div>
-{#
-
-                    <a href="{{ path('quest_index') }}">back to list</a>
-
-                    <a href="{{ path('quest_edit', {'id': quest.id}) }}">edit</a>
-
-
-                    {#            {{ include('quest/_delete_form.html.twig') }}#}
-                    <a href="{{ path('quest_delete', {'id': quest.id}) }}">delete</a>
-
-
-                    <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Confirmer l’annulation </a>
-
-
-
-                </div>
-            </div>
+        </div>
 
 
 

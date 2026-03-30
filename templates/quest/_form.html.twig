@@ -1,33 +1,31 @@
-{{ form_start(form)}}
-<div class="flex gap-4 p-4 scheme-light" >
-    <div>
-    <div class="  justify-items-start border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
+{{ form_start(form) }}
+<div class="flex gap-4 p-4">
+    <div
+        class="justify-items-start border border-yellow-500 flex flex-col p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight overflow-hidden" style="width:400px; aspect-ratio:1/1;">
         {{ form_row(form.picture) }}
     </div>
-    <h3 class="font-(family-name:--Pixelify)">Charger une image</h3>
-</div>
-    <div class="justify-items-start">
+    <div >
     <div>
         <div class="mb-4">
             {{ form_label(form.name, null, {'label_attr': {'class': 'text-white mb-1 text-black'}}) }}
-            {{ form_widget(form.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full'}}) }} {{ form_errors(form.name) }}</div>
+            {{ form_widget(form.name, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }} {{ form_errors(form.name) }}</div>
         {#        {{ form_row(form.name)}}#}
 
     </div>
         <div class="mb-4">
             {{ form_label(form.startDateTime, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
-            {{ form_widget(form.startDateTime, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+            {{ form_widget(form.startDateTime, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
             {{ form_errors(form.startDateTime) }}
         </div>
     <div class="mb-4">
       {{ form_label(form.duration, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
-        {{ form_widget(form.duration, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_widget(form.duration, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
         {{ form_errors(form.duration) }}
 {#        {{ form_row(form.duration)}}#}
     </div>
     <div class="mb-4">
         {{ form_label(form.inscriptionLimitDate, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
-        {{ form_widget(form.inscriptionLimitDate, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_widget(form.inscriptionLimitDate, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
         {{ form_errors(form.inscriptionLimitDate) }}
     </div>
 
@@ -35,30 +33,32 @@
 <div class="justify-items-start">
     <div class="mb-4">
         {{ form_label(form.infoQuest, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
-        {{ form_widget(form.infoQuest, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_widget(form.infoQuest, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
         {{ form_errors(form.infoQuest) }}
 {#        {{ form_row(form.infoQuest) }}#}
     </div>
     <div class="mb-4">
         {{ form_label(form.campus, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
-        {{ form_widget(form.campus, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_widget(form.campus, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
         {{ form_errors(form.campus) }}
 {#        {{ form_row(form.campus) }}#}
     </div>
-    <div class="flex mb-4">
+    <div class=" mb-4 flex-col">
         {{ form_label(form.place, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
-        {{ form_widget(form.place, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        <div class="flex">
+        {{ form_widget(form.place, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
         {{ form_errors(form.place) }}
-        <a            class="flex items-center justify-center border-2 border-yellow-600 rounded-full w-8 h-8 ml-8 text-yellow-600 hover:bg-yellow-600 hover:text-white transition-all font-bold text-[1rem]" href="{{ path('quest_index') }}">+</a>
+        <a            class="flex items-center justify-center border-2 border-yellow-600 rounded-full w-8 h-8 ml-4 text-yellow-600 hover:bg-yellow-600 hover:text-white transition-all font-bold text-[1rem]" href="{{ path('place_add') }}">+</a>
     </div>
-    <div class="flex mb-4">
+    </div>
+    <div class="flex mb-4 flex-col">
         {{ form_label(form.nbMaxInscription, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
-        {{ form_widget(form.nbMaxInscription, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_widget(form.nbMaxInscription, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
         {{ form_errors(form.nbMaxInscription) }}
     </div>
 </div>
 </div>
-    {{ form_widget(form) }}
+{{ form_widget(form) }}
 <button type="submit" name="save_action" value="save" class="">
     Enregistrer le brouillon
 </button>

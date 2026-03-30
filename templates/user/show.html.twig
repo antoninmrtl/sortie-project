@@ -5,132 +5,68 @@
 {% block body %}
     <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-left">{{ user.username }}</h1>
 
-{#    <table class="table">#}
-{#        <tbody>#}
-{#            <tr>#}
-{#                <th>Id</th>#}
-{#                <td>{{ user.id }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>Firstname</th>#}
-{#                <td>{{ user.firstname }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>Lastname</th>#}
-{#                <td>{{ user.lastname }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>PhoneNumber</th>#}
-{#                <td>{{ user.phone }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>Mail</th>#}
-{#                <td>{{ user.email }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>Password</th>#}
-{#                <td>{{ user.password }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>Actif</th>#}
-{#                <td>{{ user.active ? 'Yes' : 'No' }}</td>#}
-{#            </tr>#}
-            <div class=" border border-yellow-500 flex gap-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
+<div class=" border border-yellow-500 flex gap-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
 
-                <div>
-                    <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}"
-                         class="border border-yellow-500"
-                         style="width:120px;"
-                         alt="{{ user.username }}">
-                </div>
+    <div>
+        <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}"
+             class="border border-yellow-500"
+             style="width:120px;"
+             alt="{{ user.username }}">
+    </div>
 
 
-                <div class="flex flex-col gap-y-2">
-                    <p>Email: {{ user.email }}</p>
-                    <p>Pseudo: {{ user.username }}</p>
-                    <p>Nom: {{ user.firstname }}</p>
-                    <p>Prénom: {{ user.lastname }}</p>
-{#                    <p>Teléphone: {{ user.phone }}</p>#}
-                    <p>Actif : {{ user.active ? 'Yes' : 'No' }}</p>
-                </div>
-            </div>
-{#            <tr>#}
-{#                <th>Role</th>#}
-{#                <td>{{ user.roles }}</td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>ProfilePicture</th>#}
-{#                <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}" alt="">#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <th>Les quetes créees par {{ user.username }}</th>#}
-{#                {% for quest in user.quest %}#}
-{#                    <div>#}
-{#                        {{ quest.name }}#}
-{#                    </div>#}
-
-{#                {% endfor %}#}
-
-{#            </tr>#}
-{#        </tbody>#}
-{#    </table>#}
-{#        </div>#}
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-20">
-            <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                <h2 class="text-amber-500"> Quêtes inscrits </h2>
-                {% for quest in user.quest %}
-                    <div class="mt-2 flex gap-4">
-                        <h2> quests : {{ quest.name }}</h2>
-                    </div>
-                    <div>
-                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
-                    </div>
-                {% else %}
-                    <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
-                {% endfor %}
-
-            </div>
+    <div class="flex flex-col gap-y-2">
+        <p>Email: {{ user.email }}</p>
+        <p>Pseudo: {{ user.username }}</p>
+        <p>Nom: {{ user.firstname }}</p>
+        <p>Prénom: {{ user.lastname }}</p>
+        <p>Actif : {{ user.active ? 'Yes' : 'No' }}</p>
+    </div>
+</div>
 
 
-
-            <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                <h2 class="text-amber-500"> Quêtes Crées </h2>
-                {% for quest in user.quest %}
-                    <div class="mt-2 flex gap-4">
-                        <h2> quest : {{ quest.name }}</h2>
-                    </div>
-                    <div>
-                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
-                    </div>
-                {% else %}
-                    <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
-                {% endfor %}
-            </div>
-
+div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-20">
+<div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+    <h2 class="text-amber-500"> Quêtes inscrits </h2>
+    {% for quest in user.quest %}
+        <div class="mt-2 flex gap-4">
+            <h2> quests : {{ quest.name }}</h2>
         </div>
+        <div>
+            <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
+        </div>
+    {% else %}
+        <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
+    {% endfor %}
+
+</div>
+
+    <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+        <h2 class="text-amber-500"> Quêtes Crées </h2>
+        {% for quest in user.quest %}
+            <div class="mt-2 flex gap-4">
+                <h2> quest : {{ quest.name }}</h2>
+            </div>
+            <div>
+                <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
+            </div>
+        {% else %}
+            <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
+        {% endfor %}
+    </div>
+
+    </div>
 
 
-{#        <div>#}
-{#            <div class="text-white">#}
-{#                <a href="{{ path('user_edit', {'id': app.user.id}) }}">edit</a>#}
-{#                <form method="post" action="{{ path('user_delete', {'id': app.user.id}) }}"#}
-
-{#                      onsubmit="return confirm('Are you sure you want to delete this item?');">#}
-{#                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">#}
-{#                    <button class="btn bg-blue-500 text-white px-4 py-2 rounded" >Delete</button>#}
-
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
 <div class="text-white">
     <a href="{{ path('user_index') }}" class="border border-yellow-500">back to list</a>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('user_edit', {'id': user.id}) }}" class="border border-yellow-500">edit</a>
-
-        {{ include('user/_delete_form.html.twig') }}
+    {% if is_granted('USER_EDIT', user) %}
+    <a href="{{ path('user_edit', {'id': user.id}) }}" class="border border-yellow-500">edit</a>
     {% endif %}
-    </div>
+    {% if is_granted('USER_DELETE', user)%}
+        <a href="{{ path('user_delete', {'id': user.id}) }}" class="border border-yellow-500">delete</a>
+    {% endif %}
+</div>
 
 {% endblock %}

@@ -108,6 +108,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Quest::class, mappedBy: 'promoter',cascade: ['remove'], orphanRemoval: true)]
     private Collection $quest;
 
+    #[ORM\Column]
+    private int $experience = 0;
     public function __construct()
     {
         $this->quests = new ArrayCollection();
@@ -310,5 +312,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getQuest(): Collection
     {
         return $this->quest;
+    }
+
+    public function getExperience(): ?int
+    {
+        return $this->experience;
+    }
+
+    public function setExperience(int $experience): static
+    {
+        $this->experience = $experience;
+
+        return $this;
     }
 }
