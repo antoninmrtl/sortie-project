@@ -44,7 +44,6 @@ final class  QuestController extends AbstractController
         ]);
     }
 
-//GET USERS AU PLURIEL PARCE QUE USER (ORGANISATEUR N'EXISTE PAS ENCORE
     #[Route('/create', name: 'create')]
     #[IsGranted("ROLE_USER")]
     #[Route('/edit/{id}', name: 'edit', requirements: ['id' => '\d+'])]
@@ -55,20 +54,18 @@ final class  QuestController extends AbstractController
         QuestRepository        $questRepository,
         FileUploader           $fileUploader,
         StatusUpdater          $statusUpdater,
-        int                    $id = null): Response
+        ?Quest                 $quest = null,
+    ): Response
     {
-        $quest = new Quest();
-        if ($id != null) {
-            $quest = $questRepository->find($id);
 
-            if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+        $quest = $quest ?? new Quest();
 
-                throw $this->createAccessDeniedException("Vas saboter la quête d'autrui, malautru!");
-            }
-        }
+        $this->denyAccessUnlessGranted('QUEST_EDIT', $quest, "Vas saboter la quête d'autrui, malautru!");
+
 
         $form = $this->createForm(QuestType::class, $quest);
         $form->handleRequest($request);
+
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -88,16 +85,15 @@ final class  QuestController extends AbstractController
 
             $enCreationStatus = $statusRepository->findOneBy(['label' => 'En création']);
 
-            if($action === 'save') {
+            if ($action === 'save') {
                 $quest->setStatus($enCreationStatus);
                 $quest = $statusUpdater->createStatus($quest);
-                $entityManager->persist($quest);
 
-            } else{
+            } else {
                 $quest = $statusUpdater->createStatus($quest);
-                $entityManager->persist($quest);
             }
 
+            $entityManager->persist($quest);
             $entityManager->flush();
 
             return $this->redirectToRoute('quest_show', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
@@ -120,7 +116,6 @@ final class  QuestController extends AbstractController
     }
 
 
-
     #[Route('/inscription/{id}', name: 'inscription', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
     public function inscription(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
@@ -130,10 +125,10 @@ final class  QuestController extends AbstractController
 
         $verify = $questRegistrationService->inscriptionVerif($quest, $user);
 
-        if($verify){
+        if ($verify) {
             $this->addFlash('success', 'Bienvenue a l\'aventure');
             return $this->redirectToRoute('quest_show', ['id' => $quest->getId()]);
-        }else {
+        } else {
             $this->addFlash('warning', 'Vous Ne pouvez pas vous inscrire à cette quête aventurier');
         }
 
@@ -149,10 +144,10 @@ final class  QuestController extends AbstractController
 
         $verify = $questRegistrationService->desisterVerif($quest, $user);
 
-        if($verify){
+        if ($verify) {
             $this->addFlash('success', 'Vous venez de vous desister d\'une quête lâche ! ');
             return $this->redirectToRoute('quest_index');
-        }else {
+        } else {
             $this->addFlash('warning', 'Vous n\'avez pas pu vous désister ');
         }
 
@@ -160,7 +155,7 @@ final class  QuestController extends AbstractController
     }
 
     #[Route('/annuler/{id}', name: 'annuler', methods: ['GET'])]
-  //  #[IsGranted("ROLE_ADMIN")]
+    //  #[IsGranted("ROLE_ADMIN")]
     public function annuler(Quest $quest, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
@@ -168,11 +163,11 @@ final class  QuestController extends AbstractController
 
         $verify = $questRegistrationService->aboveVerif($quest, $user);
 
-        if($verify){
+        if ($verify) {
             $this->addFlash('success', 'Vous êtes bien propriétaire de cette quest !');
             return $this->render('quest/above.html.twig', ['id' => $quest->getId(),
-                'quest'=>$quest]);
-        }else {
+                'quest' => $quest]);
+        } else {
             $this->addFlash('warning', 'Vous n\'avez pas pu annuler la quête ');
         }
 
@@ -180,16 +175,16 @@ final class  QuestController extends AbstractController
 
     }
 
-    #[Route('/confirmAnnuler/{id}', name: 'confirmAnnuler')]
-    //  #[IsGranted("ROLE_ADMIN")]
-    public function confirmAnnuler(Request $request,Quest $quest,StatusRepository $statusRepository, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    #[Route('/confirmAnnuler/{id}', name: 'confirmAnnuler',requirements: ['id' => '\d+'])]
+    public function confirmAnnuler(Request $request, Quest $quest, StatusRepository $statusRepository, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
     {
+
+        $this->denyAccessUnlessGranted('QUEST_CANCEL', $quest);
+
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
         $motif = $request->request->get('motif');
-
-        //$verify = $questRegistrationService->aboveConfirmVerif($quest, $user);
 
         $annuledStatus = $statusRepository->findOneBy(['label' => 'Annulée']);
 
@@ -222,22 +217,18 @@ final class  QuestController extends AbstractController
     {
         $quest = $questRepository->find($id);
 
+        $this->denyAccessUnlessGranted('QUEST_DELETE', $quest, 'Ne destroies point la sortie qui n\'est nulle la tienne!');
 
-            if($quest->getPromoter() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')){
+        $entityManager->remove($quest);
+        $entityManager->flush();
+        $this->addFlash('success', 'Quête supprimée avec success');
 
-                throw $this->createAccessDeniedException("Ne destroies point la sortie qui n'est nulle la tienne!");
-            }
+        return $this->redirectToRoute('quest_index', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
 
-            $entityManager->remove($quest);
-            $entityManager->flush();
-
-
-        return $this->redirectToRoute('quest_index', ['id'=>$quest->getId()], Response::HTTP_SEE_OTHER);
-
-        }
+    }
 
     #[IsGranted("ROLE_ADMIN")]
-    #[Route('/archive',name: 'archive', methods: ['GET'])]
+    #[Route('/archive', name: 'archive', methods: ['GET'])]
     public function archive(QuestRepository $questRepository): Response
     {
         $quests = $questRepository->findAllArchive();

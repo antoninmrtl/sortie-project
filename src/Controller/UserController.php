@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/user', name: 'user_')]
 final class                   UserController extends AbstractController
 {
-    #[Route('',name: 'index', methods: ['GET'])]
+    #[Route('', name: 'index', methods: ['GET'])]
     public function displayAll(UserRepository $userRepository): Response
     {
         return $this->render('user/index.html.twig', [
@@ -66,7 +66,7 @@ final class                   UserController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'show', requirements: ['id'=>'\d+'],methods: ['GET'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
@@ -79,6 +79,9 @@ final class                   UserController extends AbstractController
     public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
+
+        $this->denyAccessUnlessGranted('USER_EDIT', $user, 'Vous ne pouvez pas modifer cet utilisateur');
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -94,23 +97,41 @@ final class                   UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
+
+        $this->denyAccessUnlessGranted('USER_DELETE', $user, 'Vous ne pouvez pas supprimer cet utilisateur');
+
+        $currentUser = $this->getUser();
+        $isSelfDelete = ($currentUser === $user);
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        if ($isSelfDelete) {
+            $request->getSession()->invalidate();
+            $this->container->get('security.token_storage')->setToken(null);
+
+            $this->addFlash('success', 'Votre compte a été définitivement supprimé.');
+            return $this->redirectToRoute('app_login');
         }
 
-        return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
+        $this->addFlash('success', "L'utilisateur {$user->getUsername()} a été supprimé.");
+        return $this->redirectToRoute('user_index');
     }
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/profile', name: 'profile', methods: ['GET'])]
     public function profile(#[CurrentUser] User $user, QuestRepository $questRepository): Response
     {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
 
-        return $this->render('user/profile.html.twig');
+        $questCreate = $questRepository->findAllCreateByPromoter($user);
+
+        return $this->render('user/profile.html.twig', [
+            'questCreate'=>$questCreate,
+        ]);
     }
 }
