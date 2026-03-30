@@ -11,8 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class StatusUpdater
 {
 
-    public function __construct(private ExperienceService $experienceService ,private StatusRepository $statusRepository, private QuestRepository $questRepository, private EntityManagerInterface $entityManager)
-    {
+    public function __construct(private ExperienceService $experienceService ,private StatusRepository $statusRepository, private QuestRepository $questRepository, private EntityManagerInterface $entityManager)    {
     }
 
     public function updateStatus(){
@@ -34,7 +33,6 @@ class StatusUpdater
             $endDateTime = clone $quest->getStartDateTime();
             $minutesToAdd = (int)($quest->getDuration() * 60);
             $endDateTime->modify("+$minutesToAdd minutes");
-
 
             if ($quest->getStartDateTime()  < new \DateTime('-30 days')){
                 $quest->setStatus($archiveStatus);

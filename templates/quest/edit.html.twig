@@ -2,8 +2,16 @@
 
 {% block title %}Edit Quest{% endblock %}
 
+{% block extraStyle %}
+    <style>
+    button, a, p{
+    font-family: "Pixelify Sans";
+    }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <h1>Edit Quest</h1>
+    <h1 class="text-[5rem] text-amber-500">Modifier la quête</h1>
 
     {{ include('quest/_form.html.twig', {'button_label': 'Update'}) }}
 

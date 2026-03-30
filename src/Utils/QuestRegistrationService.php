@@ -18,8 +18,7 @@ class QuestRegistrationService
 
     public function inscriptionVerif(Quest $quest, User $user){
 
-        if ($quest->getNbMaxInscription() <= $quest->getUsers()->count() || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime() || $quest->getStatus()->getLabel() === 'Annulée') {
-            return false;
+        if ($quest->getNbMaxInscription() <= $quest->getUsers()->count() || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime() || $quest->getStatus()->getLabel() === 'Annulée') {            return false;
         } else {
             $quest = $quest->addUser($user);
             $this->entityManager->persist($quest);
@@ -50,6 +49,17 @@ class QuestRegistrationService
             return false;
         }
     }
+
+//    public function aboveConfirmVerif(Quest $quest, User $user){
+//// inverser < (uniquement pou test)
+//        if () {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+
+
 
 
 

@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block body %}
-    <article class="p-5 text-white">
+    <article class="p-5 mr-10">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="p-4 mb-2 text-white font-bold bg-{{ label == 'success' ? 'green' : 'red' }}-500">
@@ -85,6 +85,8 @@
 
             </div>
         </div>
+
+
 
     </article>
 {% endblock %}
