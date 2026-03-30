@@ -1,9 +1,10 @@
-{{ form_start(form)}}
-<div class="flex gap-4 p-4" >
-    <div class="justify-items-start border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
+{{ form_start(form) }}
+<div class="flex gap-4 p-4">
+    <div
+        class="justify-items-start border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
         {{ form_row(form.picture) }}
     </div>
-    <div class="justify-items-start">
+    <div >
     <div>
         <div class="mb-4">
             {{ form_label(form.name, null, {'label_attr': {'class': 'text-white mb-1 text-black'}}) }}
@@ -47,7 +48,7 @@
         <div class="flex">
         {{ form_widget(form.place, {'attr': {'class': 'bg-gray-100 rounded-full px-4 py-2 w-full text-black'}}) }}
         {{ form_errors(form.place) }}
-        <a            class="flex items-center justify-center border-2 border-yellow-600 rounded-full w-8 h-8 ml-4 text-yellow-600 hover:bg-yellow-600 hover:text-white transition-all font-bold text-[1rem]" href="{{ path('quest_index') }}">+</a>
+        <a            class="flex items-center justify-center border-2 border-yellow-600 rounded-full w-8 h-8 ml-4 text-yellow-600 hover:bg-yellow-600 hover:text-white transition-all font-bold text-[1rem]" href="{{ path('place_add') }}">+</a>
     </div>
     </div>
     <div class="flex mb-4 flex-col">
@@ -57,7 +58,7 @@
     </div>
 </div>
 </div>
-    {{ form_widget(form) }}
+{{ form_widget(form) }}
 <button type="submit" name="save_action" value="save" class="">
     Enregistrer le brouillon
 </button>

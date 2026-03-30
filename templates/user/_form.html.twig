@@ -1,6 +1,83 @@
 
-{{ form_errors(form) }}
+
+
 {{ form_start(form) }}
+
+
+
+<div>
+    <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
+         class="border border-yellow-500 mt-5"
+         style="width:120px;"
+         alt="{{ app.user.username }}">
+</div>
+
+<div class="justify-items-start ">
+
+
+    <div>
+
+        <div class="mb-4">
+            {{ form_label(form.username) }}
+            {{ form_widget(form.username, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black' }}) }}
+            {{ form_errors(form.username) }}
+        </div>
+
+        <div class="mb-4">
+            {{ form_label(form.firstname) }}
+            {{ form_widget(form.firstname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+            {{ form_errors(form.firstname) }}
+        </div>
+
+
+    <div>
+        {{ form_label(form.lastname) }}
+        {{ form_widget(form.lastname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+        {{ form_errors(form.lastname) }}
+    </div>
+
+
+
+    <div>
+        {{ form_label(form.phone) }}
+        {{ form_widget(form.phone, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+        {{ form_errors(form.phone) }}
+
+
+    </div>
+
+    <div>
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+        {{ form_errors(form.email) }}
+    </div>
+
+    <div>
+        {{ form_label(form.campus) }}
+        {{ form_widget(form.campus, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+        {{ form_errors(form.campus) }}
+
+    </div>
+
+
+        <div>
+            {{ form_label(form.Password) }}
+            {{ form_widget(form.Password, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+            {{ form_errors(form.Password) }}
+
+        </div>
+
+
+
 {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    <div>
+        <button class="btn bg-[#1A1A1A]   px-4 py-1  border border-yellow-500  ">{{ button_label|default('Save') }}</button>
+    </div>
+
+
 {{ form_end(form) }}
+
+
+
+

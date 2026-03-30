@@ -24,7 +24,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 final class  QuestController extends AbstractController
 {
     #[Route(name: 'index', methods: ['GET'])]
-    public function index(QuestRepository $questRepository, EntityManagerInterface $entityManager, StatusUpdater $statusUpdater, StatusRepository $statusRepository, Request $request): Response
+    public function index(QuestRepository $questRepository, StatusUpdater $statusUpdater, Request $request): Response
     {
         $statusUpdater->updateStatus();
 
@@ -51,7 +51,6 @@ final class  QuestController extends AbstractController
         Request                $request,
         EntityManagerInterface $entityManager,
         StatusRepository       $statusRepository,
-        QuestRepository        $questRepository,
         FileUploader           $fileUploader,
         StatusUpdater          $statusUpdater,
         ?Quest                 $quest = null,
@@ -118,7 +117,7 @@ final class  QuestController extends AbstractController
 
     #[Route('/inscription/{id}', name: 'inscription', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
-    public function inscription(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    public function inscription(Quest $quest,  QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -137,7 +136,7 @@ final class  QuestController extends AbstractController
 
     #[Route('/desister/{id}', name: 'desister', methods: ['GET'])]
     #[IsGranted("ROLE_USER")]
-    public function desister(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    public function desister(Quest $quest, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -155,7 +154,6 @@ final class  QuestController extends AbstractController
     }
 
     #[Route('/annuler/{id}', name: 'annuler', methods: ['GET'])]
-    //  #[IsGranted("ROLE_ADMIN")]
     public function annuler(Quest $quest, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
@@ -176,13 +174,10 @@ final class  QuestController extends AbstractController
     }
 
     #[Route('/confirmAnnuler/{id}', name: 'confirmAnnuler',requirements: ['id' => '\d+'])]
-    public function confirmAnnuler(Request $request, Quest $quest, StatusRepository $statusRepository, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    public function confirmAnnuler(Request $request, Quest $quest, StatusRepository $statusRepository, EntityManagerInterface $entityManager): Response
     {
 
         $this->denyAccessUnlessGranted('QUEST_CANCEL', $quest);
-
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
 
         $motif = $request->request->get('motif');
 
@@ -194,14 +189,6 @@ final class  QuestController extends AbstractController
         $entityManager->flush();
         $this->addFlash('success', 'Vous venez d\'annuler votre quête');
 
-//        if($verify){
-//            $this->addFlash('success', 'Vous êtes bien propriétaire de cette quest !');
-//            return $this->render('quest/above.html.twig', ['id' => $quest->getId(),
-//                'quest'=>$quest]);
-//        }else {
-//            $this->addFlash('warning', 'Vous n\'avez pas pu annuler la quête ');
-//        }
-
         return $this->redirectToRoute('quest_index');
 
     }
@@ -209,8 +196,6 @@ final class  QuestController extends AbstractController
 
     #[Route('/delete/{id}', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(
-        Request                $request,
-        Quest                  $quest,
         EntityManagerInterface $entityManager,
         QuestRepository        $questRepository,
         int                    $id): Response
