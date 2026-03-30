@@ -18,15 +18,12 @@ class StatusUpdater
 
         $quests = $this->questRepository->findAllClean();
 
-        $closedStatus = $this->statusRepository->findOneBy(['label' => 'Clôturée']);
-        $openStatus = $this->statusRepository->findOneBy(['label' => 'Ouverte']);
-        $passedStatus = $this->statusRepository->findOneBy(['label' => 'Passée']);
-        $annuledStatus = $this->statusRepository->findOneBy(['label' => 'Annulée']);
-        $archiveStatus = $this->statusRepository->findOneBy(['label' => 'Archive']);
-        $enCoursStatus = $this->statusRepository->findOneBy(['label' => 'En cours']);
-        $enCreationStatus = $this->statusRepository->findOneBy(['label' => 'En création']);
+        $AllStatus = $this->statusRepository->findAll();
+        $statusMap = [];
 
-
+        foreach ($AllStatus as $status) {
+            $statusMap[$status->getLabel()] = $status;
+        }
 
         foreach ($quests as $quest){
 
@@ -35,22 +32,22 @@ class StatusUpdater
             $endDateTime->modify("+$minutesToAdd minutes");
 
             if ($quest->getStartDateTime()  < new \DateTime('-30 days')){
-                $quest->setStatus($archiveStatus);
-            }elseif ($quest->getStatus() === $annuledStatus){
-                $quest->setStatus($annuledStatus);
+                $quest->setStatus($statusMap['Archive']);
+            }elseif ($quest->getStatus() === $statusMap['Annulée']){
+                $quest->setStatus($statusMap['Annulée']);
                 continue;
-            }elseif ($quest->getStatus() === $enCreationStatus) {
-                $quest->setStatus($enCreationStatus);
+            }elseif ($quest->getStatus() === $statusMap['En création']) {
+                $quest->setStatus($statusMap['En création']);
                 continue;
             } elseif ($endDateTime <  new \DateTime()){
-                $quest->setStatus($passedStatus);
+                $quest->setStatus($statusMap['Passée']);
                 $this->experienceService->awardExperienceForQuest($quest);
             }elseif ($quest->getStartDateTime() < new \DateTime() && $endDateTime > new \DateTime()) {
-                $quest->setStatus($enCoursStatus);
+                $quest->setStatus($statusMap['En cours']);
             } elseif (count($quest->getUsers()) >= $quest->getNbMaxInscription() || $quest->getInscriptionLimitDate() < new \DateTime()){
-                $quest->setStatus($closedStatus);
+                $quest->setStatus($statusMap['Cloturée']);
             } else{
-                $quest->setStatus($openStatus);
+                $quest->setStatus($statusMap['Ouverte']);
             }
             $this->entityManager->persist($quest);
         }

@@ -45,6 +45,7 @@ class QuestRepository extends ServiceEntityRepository
             ->leftJoin('q.status', 's')->addSelect('s')
             ->leftJoin('q.promoter', 'p')->addSelect('p')
             ->leftJoin('q.users', 'u')->addSelect('u')
+            ->leftJoin('q.place', 'pl')->addSelect('pl')
             ->andWhere('s != :archive and s != :creation')
             ->setParameter('archive', $archiveStatus)
             ->setParameter('creation', $creationStatus);
