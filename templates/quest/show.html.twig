@@ -61,9 +61,9 @@
             <div class="text-white">
 
                 {% if is_granted('QUEST_UNREGISTER', quest) %}
-                    <button class="btn-quest-desister">Se désister</button>
+                    <a href="{{ path('quest_desister', {'id': quest.id}) }}">se désister</a>
                 {% elseif is_granted('QUEST_REGISTER', quest) %}
-                    <button class="btn-quest-inscription">Inscription</button>
+                    <a href="{{ path('quest_inscription', {'id': quest.id}) }}">Inscription</a>
                 {% endif %}
 
 
@@ -78,7 +78,7 @@
 {#                {% endif %}#}
 
 
-                {% if quest.status.label != 'Annulée' and (quest.promoter.username == app.user.username or is_granted('ROLE_ADMIN')) %}
+                {% if is_granted('QUEST_CANCEL', quest) %}
                     <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
                 {% endif %}
 
