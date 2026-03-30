@@ -49,8 +49,6 @@
 
             <div class="mb-4">
                 {{ form_widget(questForm.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.name) }}
-{#              {{ form_widget(questForm.startDateTime, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.startDateTime) }}#}
-{#              {{ form_widget(questForm.campus, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.campus) }}#}
             </div>
 
                 <div class="flex gap-4 items-center">
@@ -137,7 +135,6 @@
                         {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a href="{{ path('quest_edit', {'id': quest.id}) }}"
-                                   data-turbo="false"
                                    class="text-yellow-600 hover:underline">Modifier</a>
                             {% endif %}
                         {% endif %}

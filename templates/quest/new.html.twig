@@ -1,26 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Quest{% endblock %}
+{% block title %}Nouvelle Quête{% endblock %}
 
 {% block extraStyle %}
-    <style>
-        body {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
-            background-color: #1A1A1A;
-            background-size: contain;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-    </style>
+        {{ parent() }}
 {% endblock %}
 
 {% block body %}
 
-    <h1 class="text-[5rem]  text-amber-500">Créer une nouvelle quête</h1>
+    <h1 class="text-[5rem] ml-4 text-amber-500">Nouvelle quête</h1>
 
-<div class="text-white">
+<div class="text-white flex">
+
     {{ include('quest/_form.html.twig') }}
 
-    <a href="{{ path('quest_index') }}">back to list</a>
+    <a href="{{ path('quest_index') }}">Retour à la liste</a>
     </div>
 {% endblock %}
