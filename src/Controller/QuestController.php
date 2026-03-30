@@ -44,7 +44,6 @@ final class  QuestController extends AbstractController
         ]);
     }
 
-//GET USERS AU PLURIEL PARCE QUE USER (ORGANISATEUR N'EXISTE PAS ENCORE
     #[Route('/create', name: 'create')]
     #[IsGranted("ROLE_USER")]
     #[Route('/edit/{id}', name: 'edit', requirements: ['id' => '\d+'])]
@@ -87,17 +86,15 @@ final class  QuestController extends AbstractController
 
             $enCreationStatus = $statusRepository->findOneBy(['label' => 'En création']);
 
-
-            if($action === 'save') {
+            if ($action === 'save') {
                 $quest->setStatus($enCreationStatus);
                 $quest = $statusUpdater->createStatus($quest);
-                $entityManager->persist($quest);
 
-            } else{
+            } else {
                 $quest = $statusUpdater->createStatus($quest);
-                $entityManager->persist($quest);
             }
 
+            $entityManager->persist($quest);
             $entityManager->flush();
 
             return $this->redirectToRoute('quest_show', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
@@ -159,10 +156,9 @@ final class  QuestController extends AbstractController
         return $this->redirectToRoute('quest_index');
     }
 
-    #[Route('/annulee/{id}', name: 'annuler', methods: ['GET'])]
-    #[IsGranted("ROLE_USER")]
-    #[IsGranted("ROLE_ADMIN")]
-    public function annuler(Quest $quest, EntityManagerInterface $entityManager, QuestRegistrationService $questRegistrationService): Response
+    #[Route('/annuler/{id}', name: 'annuler', methods: ['GET'])]
+    //  #[IsGranted("ROLE_ADMIN")]
+    public function annuler(Quest $quest, QuestRegistrationService $questRegistrationService): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -209,7 +205,6 @@ final class  QuestController extends AbstractController
 //        }
 
         return $this->redirectToRoute('quest_index');
-
     }
 
 
