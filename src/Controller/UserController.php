@@ -49,8 +49,6 @@ final class                   UserController extends AbstractController
 
             /** @var string $plainPassword */
             $plainPassword = $form->get('Password')->getData();
-
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $user->setRoles(['ROLE_USER']);
             $entityManager->persist($user);
@@ -76,7 +74,7 @@ final class                   UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, int $id): Response
+    public function edit(Request $request, EntityManagerInterface $entityManager,FileUploader $fileUploader,UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository, int $id): Response
     {
         $user = $userRepository->find($id);
 
@@ -86,6 +84,19 @@ final class                   UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form->get('profilePicture')->getData();
+            if ($file) {
+                $user->setProfilePicture(
+                    $fileUploader->upload($file, 'assets/images/profilePicture', $user->getUsername())
+                );
+            }
+
+            /** @var string $plainPassword */
+            $plainPassword = $form->get('Password')->getData();
+            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+
+            $entityManager->persist($user);
             $entityManager->flush();
 
             return $this->redirectToRoute('user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
