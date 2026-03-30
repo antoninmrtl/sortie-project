@@ -16,36 +16,64 @@
         {% endfor %}
         <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
         <h2 class="text-[5rem]  ">{{ quest.name }}</h2>
-        <div class="flex gap-4">
 
-            <div>
-                <img class="border border-yellow-500" style="width:300px"
+        <div class="flex-col">
+        <div class="flex gap-4 text-white">
+
+            <div class="border border-yellow-500 overflow-hidden" style="width:400px; aspect-ratio:1/1;">
+                <img class="w-full h-full object-cover object-top"
                      src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
             </div>
 
-            <div class=" text-white">
+            <div class="  ml">
+                <div>Campus : {{ quest.campus.name }} </div>
+                <div>Place : {{ quest.place.name }}</div>
                 <div>Date de début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i:s') : '' }}</div>
                 <div>Durée : {{ quest.duration }} minutes</div>
+                <div>Description : <br>{{ quest.infoQuest }}</div>
+
                 <div>Date limite d'inscription
                     : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i:s') : '' }}</div>
-                <div>Nombre d'inscription maximum : {{ quest.nbMaxInscription }}</div>
-                <div>Nombre places restantes : {{ quest.nbMaxInscription - quest.users | length }}  </div>
-                <div>{{ quest.users | length }}</div>
-                <div>Description : <br>{{ quest.infoQuest }}</div>
+
+            </div>
+            <div class="mt-10 ml-10 place-content-end justify-items-end">
+                <div>Places disponibles : {{ quest.nbMaxInscription - quest.users | length }}  </div>
+
+                <div class="mt-2 flex gap-4">
+                    {% if is_granted('QUEST_UNREGISTER', quest) %}
+                    <a href="{{ path('quest_desister', {'id': quest.id}) }}">se désister</a>
+                    {% elseif is_granted('QUEST_REGISTER', quest) %}
+                        <a href="{{ path('quest_inscription', {'id': quest.id}) }}">Inscription</a>
+                    {% endif %}
+            </div>
             </div>
 
-            <div>Liste des participants inscrits: {{ quest.users | length }}
-                {% for user in quest.users %}
-                    <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.username }}</a>
-                {% endfor %}
-            </div>
-            <div class="text-white">
+            <div class="block relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center">
+                <div class=" text-center mt-10"><h4 class="text-[2rem]  text-amber-500">Liste des participants inscrits: </h4>
+                    {#                            {{ quest.users | length }}#}
+                    <div class="relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center"
+                         style="width: 720px; min-height: 700px; background-image: url('{{ asset('images/parchemin.png') }}');">
+                        <table class="place-items-startt border-spacing-3 text-taupe-950  w-1/3 gap-[3px] p-3 ">
+                            <thead>
+                            <tr class=" ">
+                                <th class="">Titre de quêteur</th>
+                                <th>Prenom</th>
+                            </tr>
+                            </thead>
+                            <tbody class="">
+                            {% for user in quest.users %}
+                            <tr>
+                                <td><a href="{{ path('user_show', {'id': user.id}) }}" >{{ user.username }}</a>
+                                </td>
+                                <td><a href="{{ path('user_show', {'id': user.id}) }}" >{{ user.firstname }}</a>
+                                    {% endfor %} </td>
 
-                {% if is_granted('QUEST_UNREGISTER', quest) %}
-                    <button class="btn-quest-desister">Se désister</button>
-                {% elseif is_granted('QUEST_REGISTER', quest) %}
-                    <button class="btn-quest-inscription">Inscription</button>
-                {% endif %}
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
 
 
                 <a href="{{ path('quest_index') }}">back to list</a>
