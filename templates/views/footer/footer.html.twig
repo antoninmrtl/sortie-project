@@ -1,5 +1,6 @@
 <footer class="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-yellow-500/30 z-50">
-    <div class="flex items-center p-4 gap-x-4 text-white">
+    <div class="flex items-center justify-between p-4 gap-x-4 text-white">
+        <div class="flex gap-5">
 
         {% if app.user %}
             <div class="flex-shrink-0">
@@ -28,8 +29,11 @@
                 <a href="{{ path('app_login') }}" class="text-yellow-500 hover:underline">Connexion requise pour voir votre profil</a>
             </div>
         {% endif %}
-        <div class="ml-auto">    <p>{{ "now"|date("d/m/Y") }}</p></div>
+        </div>
+        <div>
+            <div class="ml-auto">    <p>{{ "now"|date("d/m/Y") }}</p></div>
 
-
+        </div>
     </div>
+
 </footer>
