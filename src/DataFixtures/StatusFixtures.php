@@ -14,7 +14,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class StatusFixtures extends Fixture implements DependentFixtureInterface
+class StatusFixtures extends Fixture
 {
 
     public const STATUS_REFERENCE = 'status';

@@ -42,7 +42,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setFirstname($faker->firstName('male'|'female'))
                 ->setUsername($faker->userName())
                 ->setLastname($faker->lastName())
-                ->setCampus($faker->randomElement($this->getReference(CampusFixtures::CAMPUS_REFERENCE, Campus::class)))
+                ->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE, Campus::class))
                 ->setRoles($faker->randomElements(['ROLE_USER', 'ROLE_ADMIN']))
                 ->setActive($faker->boolean(75))
                 ->setEmail($faker->email())

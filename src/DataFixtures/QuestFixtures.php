@@ -32,11 +32,11 @@ class QuestFixtures extends Fixture implements DependentFixtureInterface
                 ->setInfoQuest($faker->text(200))
                 ->setStartDateTime($faker->dateTimeBetween('-5 month'));
             $quest->setInscriptionLimitDate($faker->dateTimeBetween($quest->getStartDateTime(), '+1 years'))
-                ->setStatus($faker->randomElement($this->getReference(StatusFixtures::STATUS_REFERENCE, Status::class)))
+                ->setStatus($this->getReference(StatusFixtures::STATUS_REFERENCE, Status::class))
                 ->setNbMaxInscription($faker->numberBetween(5, 60))
-                ->setCampus($faker->randomElement($this->getReference(CampusFixtures::CAMPUS_REFERENCE, Campus::class)))
-                ->setPlace($faker->randomElement($this->getReference(PlaceFixtures::PLACE_REFERENCE, Place::class)))
-                ->setPromoter($faker->randomElement($this->getReference(UserFixtures::USER_REFERENCE, User::class)));
+                ->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE, Campus::class))
+                ->setPlace($this->getReference(PlaceFixtures::PLACE_REFERENCE, Place::class))
+                ->setPromoter($this->getReference(UserFixtures::USER_REFERENCE, User::class));
 
             $manager->persist($quest);
 

@@ -30,6 +30,7 @@ class CityFixtures extends Fixture implements DependentFixtureInterface
             $city->setName($faker->text(25))
                 ->setPostalCode($faker->randomNumber([0],[99999]));
             $manager->persist($city);
+            $this->addReference('city_' . $i, $city);
         }
 
         $manager->flush();

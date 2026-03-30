@@ -25,15 +25,24 @@ class PlaceFixtures extends Fixture implements DependentFixtureInterface
 
         $faker = Factory::create('fr-FR');
 
+        $cities = [
+            $this->getReference('city_0', City::class),
+            $this->getReference('city_1', City::class),
+            $this->getReference('city_2', City::class),
+        ];
+
+
+
         for ($i = 0; $i < 5; $i++) {
             $place = new Place();
             $place->setName($faker->domainWord())
-                ->setCity($faker->randomElement($this->getReference(CityFixtures::CITY_REFERENCE, City::class)))
+                ->setCity(($faker->randomElement($cities)))
                 ->setLatitude($faker->latitude($min = -90, $max = 90))
                 ->setLongitude($faker->longitude($min = -180, $max = 180))
                 ->setStreet($faker->streetAddress());
             $manager->persist($place);
         }
+        $this->addReference('place_' . $i, $place);
         $manager->flush();
 
         $this->addReference(self::PLACE_REFERENCE, $place);
