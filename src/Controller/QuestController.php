@@ -221,6 +221,7 @@ final class  QuestController extends AbstractController
 
         $entityManager->remove($quest);
         $entityManager->flush();
+//        coucou
         $this->addFlash('success', 'Quête supprimée avec success');
 
         return $this->redirectToRoute('quest_index', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
