@@ -19,7 +19,10 @@
             min-height: 100vh;
         }
 
-        h3, a {
+        button, a, p{
+            font-family: "Pixelify Sans";
+        }
+        h3 {
             font-family: "ABeeZee";
         }
     </style>
@@ -38,7 +41,7 @@
     {% endfor %}
 
     <article class="p-5">
-        <h1 class="text-[5rem]  text-white">Quest Archived display</h1>
+        <h1 class="text-[5rem]  text-amber-500">Quêtes archivées</h1>
         <div>
 
         </div>
@@ -108,8 +111,25 @@
 
         </div>
 
-        <div class="mt-8">
-            <a href="{{ path('quest_create') }}" class="btn text-white">Créer une nouvelle quête</a>
+        <div class=" relative flex text-white items-center h-auto p-5">
+            {% if app.user %}
+                <div class="flex items-center gap-4">
+                    <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
+                         class="border border-yellow-500"
+                         style="width:120px;"
+                         alt="{{ app.user.username }}">
+                    <p>{{ app.user.username }}</p>
+
+                </div>
+
+                <div class="absolute left-1/2 -translate-x-1/2">
+                    <a href="{{ path('quest_create') }}" class="border border-yellow-500 btn text-yellow-500 p-1 font-(Pixelify Sans) text-center justify-center items-center">Créer une nouvelle quête</a>
+                </div>
+            {% endif %}
+
+            <div class="ml-auto">
+                <p>{{ "now"|date("d/m/Y") }}</p>
+            </div>
         </div>
     </article>
 {% endblock %}

@@ -5,33 +5,53 @@
     </div>
     <div class="justify-items-start">
     <div>
-        <div class="mb-4">    {{ form_label(form.name, null, {'label_attr': {'class': 'text-black mb-1'}}) }}
+        <div class="mb-4">
+            {{ form_label(form.name, null, {'label_attr': {'class': 'text-white mb-1 text-black'}}) }}
             {{ form_widget(form.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full'}}) }} {{ form_errors(form.name) }}</div>
         {#        {{ form_row(form.name)}}#}
+
     </div>
-    <div>
-        {{ form_row(form.startDateTime)}}
+        <div class="mb-4">
+            {{ form_label(form.startDateTime, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+            {{ form_widget(form.startDateTime, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+            {{ form_errors(form.startDateTime) }}
+        </div>
+    <div class="mb-4">
+      {{ form_label(form.duration, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+        {{ form_widget(form.duration, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_errors(form.duration) }}
+{#        {{ form_row(form.duration)}}#}
     </div>
-    <div>
-        {{ form_row(form.duration)}}
+    <div class="mb-4">
+        {{ form_label(form.inscriptionLimitDate, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+        {{ form_widget(form.inscriptionLimitDate, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_errors(form.inscriptionLimitDate) }}
     </div>
-    <div>
-        {{ form_row(form.inscriptionLimitDate) }}
-    </div>
-    <div>
-        {{ form_row(form.infoQuest) }}
-    </div>
+
 </div>
 <div class="justify-items-start">
-    <div>
-        {{ form_row(form.campus) }}
+    <div class="mb-4">
+        {{ form_label(form.infoQuest, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+        {{ form_widget(form.infoQuest, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_errors(form.infoQuest) }}
+{#        {{ form_row(form.infoQuest) }}#}
     </div>
-    <div class="flex">
-        {{ form_row(form.place) }}
+    <div class="mb-4">
+        {{ form_label(form.campus, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+        {{ form_widget(form.campus, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_errors(form.campus) }}
+{#        {{ form_row(form.campus) }}#}
+    </div>
+    <div class="flex mb-4">
+        {{ form_label(form.place, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+        {{ form_widget(form.place, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_errors(form.place) }}
         <a            class="flex items-center justify-center border-2 border-yellow-600 rounded-full w-8 h-8 ml-8 text-yellow-600 hover:bg-yellow-600 hover:text-white transition-all font-bold text-[1rem]" href="{{ path('quest_index') }}">+</a>
     </div>
-    <div>
-        {{ form_row(form.nbMaxInscription) }}
+    <div class="flex mb-4">
+        {{ form_label(form.nbMaxInscription, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+        {{ form_widget(form.nbMaxInscription, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+        {{ form_errors(form.nbMaxInscription) }}
     </div>
 </div>
 </div>

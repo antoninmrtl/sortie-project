@@ -1,37 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quest index{% endblock %}
+{% block title %}Quêtes{% endblock %}
 
 {% block extraStyle %}
-    {{ parent() }}
+    <style>
+        .abeezee-regular {
+            font-family: "ABeeZee", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
+            background-color: #1A1A1A;
+            background-size: contain;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+
+        button, p, a {
+            font-family: 'Pixelify Sans', sans-serif;
+
+        }
+        h3{
+            font-family: "ABeeZee";
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-    <div class="text-white">
-        {{ form_start(questForm, {'method': 'GET'}) }}
+{#    <div class="text-white mt-8 ml-4">#}
+{#        {{ form_start(questForm, {'method': 'GET'}) }}#}
 
-        {{ form_row(questForm.name) }}
 
-        {% if app.user %}
-            <div class="flex gap-4 my-2">
-                {{ form_row(questForm.isPromoter) }}
-                {{ form_row(questForm.isRegistered) }}
-            </div>
-        {% else %}
-            {% do questForm.isPromoter.setRendered() %}
-            {% do questForm.isRegistered.setRendered() %}
-        {% endif %}
-        <div class="flex gap-4 items-end">
-            {{ form_row(questForm.startDate) }}
-            {{ form_row(questForm.endDate) }}
-        </div>
+{#                        {{ form_row(questForm.name) }}#}
+{#        {{ form_widget(questForm.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.name) }}#}
+{#                        {{ form_widget(questForm.startDateTime, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.startDateTime) }}#}
+{#                        {{ form_widget(questForm.campus, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.campus) }}#}
 
-        <button type="submit">
-            Rechercher
-        </button>
+{#        {% if app.user %}#}
+{#            <div class="flex gap-4 my-2">#}
+{#                {{ form_row(questForm.isPromoter) }}#}
+{#                {{ form_row(questForm.isRegistered) }}#}
+{#            </div>#}
+{#        {% else %}#}
+{#            {% do questForm.isPromoter.setRendered() %}#}
+{#            {% do questForm.isRegistered.setRendered() %}#}
+{#        {% endif %}#}
 
-        {{ form_end(questForm) }}
-    </div>
+{#        <button type="submit">#}
+{#            Rechercher#}
+{#        </button>#}
+
+{#        {{ form_end(questForm) }}#}
+{#    </div>#}
 
 
     {% for label, messages in app.flashes %}
@@ -42,25 +65,53 @@
         {% endfor %}
     {% endfor %}
     <article class="p-5">
-        <h1 class="text-[5rem]  text-white">Liste des quêtes</h1>
-        <div>
+        <h1 class="text-[5rem]  text-amber-500">Quêtes</h1>
+        <div class="text-white mt-8 ml-4">
+            {{ form_start(questForm, {'method': 'GET'}) }}
 
+
+            <div class="mb-4">
+                {{ form_widget(questForm.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.name) }}
+{#              {{ form_widget(questForm.startDateTime, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.startDateTime) }}#}
+{#              {{ form_widget(questForm.campus, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.campus) }}#}
+            </div>
+
+                <div class="flex gap-4 items-center">
+            {% if app.user %}
+                    {{ form_row(questForm.isPromoter) }}
+                    {{ form_row(questForm.isRegistered) }}
+
+            {% else %}
+                {% do questForm.isPromoter.setRendered() %}
+                {% do questForm.isRegistered.setRendered() %}
+            {% endif %}
+
+            <button class="text-black bg-white p-1 hover:bg-yellow-500" type="submit">
+                Rechercher
+            </button>
+        </div>
+            {{ form_end(questForm) }}
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-20">
             {% for quest in quests %}
-                {% if quest.status.label == 'Annulée' %}
+            {% if quest.status.label == 'Annulée' %}
             <div class=" grayscale border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                {% else %}
-                    <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                {% endif %}
-                    <div class="flex justify-between">
-                        <h1 class="font-bold text-xl">
-                            {{ quest.name }}
-                        </h1>
+                {% elseif quest.status.label == 'Ouverte' %}
+                <div class="border border-green-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                    {% elseif quest.status.label == 'En cours' %}
+                    <div class="border border-green-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                        {% else %}
+                        <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
 
-                        <h2>{{ quest.status.label }}</h2>
+                            {% endif %}
+                            <div class="flex justify-between">
+                                <h1 class="font-bold text-[2rem] text-amber-500">
+                                    {{ quest.name }}
+                                </h1>
 
-                    </div>
+                                <h2>{{ quest.status.label }}</h2>
+
+                            </div>
 
 
                     {# Le flex-grow permet à la description de prendre tout l'espace libre,
@@ -90,17 +141,24 @@
                     </div>
                     <div class="mt-2 flex gap-4">
                         <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
+                        {% if app.user and quest.users.contains(app.user) and quest.status.label !== 'Annulée'%}
+                            <a href="{{ path('quest_desister', {'id': quest.id}) }}">se desister</a>
+                        {% else %}
 
-                        {% if is_granted('QUEST_UNREGISTER', quest) %}
-                            <a href="{{ path('quest_desister', {'id': quest.id}) }}">Se désister</a>
+                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' and  quest.status.label !== 'Annulée' %}
+                                <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
+                                   class="text-yellow-600 hover:underline">s'inscrire</a>
+                            {% endif %}
                         {% endif %}
 
-                        {% if is_granted('QUEST_REGISTER', quest) %}
-                            <a href="{{ path('quest_inscription', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">S'inscrire</a>
-                        {% endif %}
 
-                        {% if is_granted('QUEST_EDIT', quest) %}
-                            <a href="{{ path('quest_edit', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Modifier</a>
+
+                        {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('quest_edit', {'id': quest.id}) }}"
+                                   data-turbo="false"
+                                   class="text-yellow-600 hover:underline">Modifier</a>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -108,11 +166,30 @@
                 <p class="col-span-full text-center text-xl">Aucune quête trouvée sur le tableau.</p>
             {% endfor %}
 
-        </div>
+            </div>
 
-        <div class="mt-8">
-            <a href="{{ path('quest_create') }}" class="btn text-white">Créer une nouvelle quête</a>
-        </div>
+                    <div class=" relative flex text-white items-center h-auto p-5">
+                        {% if app.user %}
+                        <div class="flex items-center gap-4">
+                            <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
+                                 class="border border-yellow-500"
+                                 style="width:120px;"
+                                 alt="{{ app.user.username }}">
+                            <p>{{ app.user.username }}</p>
+
+                        </div>
+
+                        <div class="absolute left-1/2 -translate-x-1/2">
+                            <a href="{{ path('quest_create') }}" class="border border-yellow-500 btn text-yellow-500 p-1 font-(Pixelify Sans) text-center justify-center items-center">Créer une nouvelle quête</a>
+                        </div>
+                        {% endif %}
+
+                        <div class="ml-auto">
+                            <p>{{ "now"|date("d/m/Y") }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </article>
 {% endblock %}

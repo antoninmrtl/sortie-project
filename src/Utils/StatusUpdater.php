@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class StatusUpdater
 {
 
-    public function __construct(private ExperienceService $experienceService ,private StatusRepository $statusRepository, private QuestRepository $questRepository, private EntityManagerInterface $entityManager)
+    public function __construct(private StatusRepository $statusRepository, private QuestRepository $questRepository, private EntityManagerInterface $entityManager)
     {
     }
 
@@ -35,7 +35,6 @@ class StatusUpdater
             $minutesToAdd = (int)($quest->getDuration() * 60);
             $endDateTime->modify("+$minutesToAdd minutes");
 
-
             if ($quest->getStartDateTime()  < new \DateTime('-30 days')){
                 $quest->setStatus($archiveStatus);
             }elseif ($quest->getStatus() === $annuledStatus){
@@ -46,7 +45,6 @@ class StatusUpdater
                 continue;
             } elseif ($endDateTime <  new \DateTime()){
                 $quest->setStatus($passedStatus);
-                $this->experienceService->awardExperienceForQuest($quest);
             }elseif ($quest->getStartDateTime() < new \DateTime() && $endDateTime > new \DateTime()) {
                 $quest->setStatus($enCoursStatus);
             } elseif (count($quest->getUsers()) >= $quest->getNbMaxInscription() || $quest->getInscriptionLimitDate() < new \DateTime()){
@@ -64,22 +62,13 @@ class StatusUpdater
         $closedStatus = $this->statusRepository->findOneBy(['label' => 'Clôturée']);
         $openStatus = $this->statusRepository->findOneBy(['label' => 'Ouverte']);
         $passedStatus = $this->statusRepository->findOneBy(['label' => 'Passée']);
-        $enCreationStatus = $this->statusRepository->findOneBy(['label' => 'En création']);
 
-        $now = new \DateTime();
-
-        if ($quest->getStatus() === $enCreationStatus) {
-            return $quest;
-        }
-
-        if ($quest->getInscriptionLimitDate() < $now) {
-            $quest->setStatus($closedStatus);
-        } elseif (count($quest->getUsers()) >= $quest->getNbMaxInscription()) {
-            $quest->setStatus($closedStatus);
-        } elseif ($quest->getStartDateTime() < $now) {
-            $quest->setStatus($passedStatus);
-        } else {
+        if (count($quest->getUsers()) < $quest->getNbMaxInscription() && $quest->getInscriptionLimitDate() > new \DateTime()){
             $quest->setStatus($openStatus);
+        } elseif ($quest->getInscriptionLimitDate() < new \DateTime() || count($quest->getUsers()) >= $quest->getNbMaxInscription()){
+            $quest->setStatus($closedStatus);
+        } else {
+            $quest->setStatus($passedStatus);
         }
 
         return $quest;

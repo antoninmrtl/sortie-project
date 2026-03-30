@@ -18,7 +18,7 @@ class QuestRegistrationService
 
     public function inscriptionVerif(Quest $quest, User $user){
 
-        if ($quest->getNbMaxInscription() <= $quest->getUsers()->count() || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime() || $quest->getStatus()->getLabel() === 'Annulée') {
+        if ($quest->getNbMaxInscription() < count($quest->getUsers()) || $quest->getUsers()->contains($user) || $quest->getInscriptionLimitDate() < new \DateTime() || $quest->getStatus()->getLabel() === 'Annulée') {
             return false;
         } else {
             $quest = $quest->addUser($user);
@@ -44,7 +44,7 @@ class QuestRegistrationService
 
     public function aboveVerif(Quest $quest, User $user){
 
-        if ($quest->getPromoter() === $user && $quest->getStartDateTime() > new \DateTime() || in_array('ROLE_ADMIN', $user->getRoles())) {
+        if ($quest->getPromoter() === $user && $quest->getStartDateTime() > new \DateTime()) {
             return true;
         } else {
             return false;
@@ -59,6 +59,8 @@ class QuestRegistrationService
 //            return false;
 //        }
 //    }
+
+
 
 
 
