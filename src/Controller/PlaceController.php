@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Place;
+use App\Entity\User;
 use App\Form\PlaceType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,10 +15,13 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PlaceController extends AbstractController
 {
     #[Route('/add', name: 'add')]
-    public function add( Request $request, EntityManagerInterface $entityManager): Response
+    public function add(  Request $request, EntityManagerInterface $entityManager): Response
     {
 
         $place = new Place();
+
+        $this->denyAccessUnlessGranted('PLACE_CREATE',$place, 'Vous devez être connecté ou admin');
+
 
         $form = $this->createForm(PlaceType::class, $place);
         $form->handleRequest($request);
