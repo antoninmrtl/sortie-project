@@ -16,45 +16,47 @@
 
 {% block body %}
 
-    <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-left">Profil</h1>
+    <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-left ml-35 mt-15">Profil</h1>
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
 
-        <div>
+
         <div class="flex justify-center">
             <div class=" flex border border-yellow-500 bg-[#1A1A1A] text-white w-5/6 h-auto p-5 gap-4">
 
             <div>
                 <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
-                     class="border border-yellow-500"
+                     class="border border-yellow-500 mt-5"
                      style="width:120px;"
                      alt="{{ app.user.username }}">
             </div>
 
-            <div class="flex flex-col gap-y-2">
-                <p>Email: {{ app.user.email }}</p>
+            <div class="flex flex-col gap-y-2 mt-5">
+
                 <p>Pseudo: {{ app.user.username }}</p>
                 <p>Nom: {{ app.user.firstname }}</p>
                 <p>Prénom: {{ app.user.lastname }}</p>
+                <p>Email: {{ app.user.email }}</p>
                 <p>Teléphone: {{ app.user.phone }}</p>
             </div>
 
-                <div>
-                    <div class="text-white  ">
-                        <a href="{{ path('user_edit', {'id': app.user.id}) }}">Modifier</a>
-                        <form method="post" action="{{ path('user_delete', {'id': app.user.id}) }}"
+                <div class="ml-auto flex flex-col items-end mt-30 gap-y-2 mr-6">
 
+                    <div>
+                        <form class="flex flex-col gap-y-4" method="post" action="{{ path('user_delete', {'id': app.user.id}) }}"
                               onsubmit="return confirm('Are you sure you want to delete this item?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
-                            <button class="btn bg-[#1A1A1A]  text-white px-4 py-2 place-items-end border border-yellow-500 " >Delete</button>
-
+                            <button class="btn bg-[#1A1A1A]   px-4 py-2  border border-yellow-500 ">Delete</button>
+                            <div>
+                                <a href="{{ path('user_edit', {'id': app.user.id}) }}">Modifier mon profile</a>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
 
-        </div>
+
 
 
 
@@ -67,8 +69,10 @@
                     <div class="mt-2 flex gap-4">
                         <h2> quests : {{ quest.name }}</h2>
                     </div>
+
+                <hr class="border-yellow-500/30">
                     <div>
-                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
+                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline flex flex-col items-end  gap-y-2 mr-6">Détail</a>
                     </div>
                 {% else %}
                     <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
@@ -83,8 +87,9 @@
                     <div class="mt-2 flex gap-4">
                         <h2> quest : {{ quest.name }}</h2>
                     </div>
+                    <hr class="border-yellow-500/30">
                     <div>
-                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
+                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline flex flex-col items-end  gap-y-2 mr-6">Voir Détail</a>
                     </div>
                 {% else %}
                     <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
