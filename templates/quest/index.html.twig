@@ -3,30 +3,7 @@
 {% block title %}Quêtes{% endblock %}
 
 {% block extraStyle %}
-    <style>
-        .abeezee-regular {
-            font-family: "ABeeZee", sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        body {
-
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
-            background-color: #1A1A1A;
-            background-size: contain;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-
-        button, p, a {
-            font-family: 'Pixelify Sans', sans-serif;
-
-        }
-        h3{
-            font-family: "ABeeZee";
-        }
-    </style>
+    {{ parent() }}
 {% endblock %}
 
 {% block body %}
@@ -85,6 +62,10 @@
                 {% do questForm.isPromoter.setRendered() %}
                 {% do questForm.isRegistered.setRendered() %}
             {% endif %}
+                    <div class="flex gap-4 items-end">
+                        {{ form_row(questForm.startDate) }}
+                        {{ form_row(questForm.endDate) }}
+                    </div>
 
             <button class="text-black bg-white p-1 hover:bg-yellow-500" type="submit">
                 Rechercher
@@ -168,28 +149,17 @@
 
             </div>
 
-                    <div class=" relative flex text-white items-center h-auto p-5">
-                        {% if app.user %}
-                        <div class="flex items-center gap-4">
-                            <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
-                                 class="border border-yellow-500"
-                                 style="width:120px;"
-                                 alt="{{ app.user.username }}">
-                            <p>{{ app.user.username }}</p>
 
-                        </div>
 
-                        <div class="absolute left-1/2 -translate-x-1/2">
+                        <div>
                             <a href="{{ path('quest_create') }}" class="border border-yellow-500 btn text-yellow-500 p-1 font-(Pixelify Sans) text-center justify-center items-center">Créer une nouvelle quête</a>
                         </div>
-                        {% endif %}
 
-                        <div class="ml-auto">
-                            <p>{{ "now"|date("d/m/Y") }}</p>
-                        </div>
+
+
                     </div>
                 </div>
-            </div>
+
         </div>
     </article>
 {% endblock %}
