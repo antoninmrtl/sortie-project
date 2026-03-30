@@ -21,10 +21,13 @@ class AppFixtures extends Fixture
     {
         $this->passwordHasher = $passwordHasher;
     }
+
+
     public function load(ObjectManager $manager): void
     {
 
         $faker = Factory::create('fr-FR');
+        $profilePictureTest = 'profilePTest.jpg';
 
         foreach (['Créee', 'Ouverte', 'Cloturée', 'En cours', 'Passée', 'Annulée', 'Archive', 'En création'] as $value) {
             $status = new Status();
@@ -85,7 +88,7 @@ class AppFixtures extends Fixture
                 ->setActive($faker->boolean(75))
                 ->setEmail($faker->email())
                 ->setPassword($hashedPassword)
-                ->setProfilePicture($faker->text(35))
+                ->setProfilePicture($profilePictureTest)
                 ->setPhone($faker->e164PhoneNumber());
 
             $manager->persist($user);
@@ -109,7 +112,7 @@ class AppFixtures extends Fixture
                 ->setRoles(['ROLE_ADMIN'])
                 ->setActive(true)
                 ->setCampus($campus[0])
-                ->setProfilePicture('profilepicture');
+                ->setProfilePicture($profilePictureTest);
             $admin->setPassword(
                 $this->passwordHasher->hashPassword($admin, 'azerty')
             );
@@ -124,7 +127,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 50; $i++) {
             $quest = new Quest();
             $quest->setName($faker->text(25))
-                ->setDuration($faker->randomFloat([2], [1], [24])) //bug sur la duration
+                ->setDuration($faker->randomFloat([2], [1], [24])) //bug sur la duration en bdd
                 ->setInfoQuest($faker->text(200))
                 ->setStartDateTime($faker->dateTimeBetween('-5 month'));
             $quest->setInscriptionLimitDate($faker->dateTimeBetween($quest->getStartDateTime(), '+1 years'))
