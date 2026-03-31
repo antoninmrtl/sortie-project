@@ -70,14 +70,15 @@
 
         </div>
             <div class="block relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center">
-                <div class=" text-center mt-10"><h4 class="text-[2rem]  text-amber-500">Liste des participants inscrits: </h4>
+                <div class=" text-center mt-10">
+                    <h4 class="text-[2rem]  text-amber-500">Liste des participants inscrits: </h4>
                     {#                            {{ quest.users | length }}#}
                     <div class="relative flex items-center justify-center bg-no-repeat bg-cover bg-center align-center text-black"
                          style="width: 720px; min-height: 700px; background-image: url('{{ asset('images/parchemin.png') }}');">
                         <table class="place-items-startt border-spacing-3 text-taupe-950  w-1/3 gap-[3px] p-3 ">
                             <thead>
                             <tr class=" ">
-                                <th class="">Titre de quêteur</th>
+                                <th>Titre de quêteur</th>
                                 <th>Prenom</th>
                             </tr>
                             </thead>
