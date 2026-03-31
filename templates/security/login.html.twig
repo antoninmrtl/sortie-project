@@ -8,17 +8,7 @@
 
 {% block extraStyle %}
 
-    <style>
-
-        body {
-
-            background-image: url("{{ asset('images/Image.png') }}");
-            background-size: cover;
-            background-color: gray;
-            background-blend-mode: luminosity;
-        }
-
-    </style>
+{{ parent() }}
 
 {% endblock %}
 
