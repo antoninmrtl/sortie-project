@@ -4,7 +4,7 @@
 
 <div>
     <div
-        class=" ml-40 border border-yellow-500 flex-col  bg-[#1A1A1A] text-white shadow-md tracking-tight mt-5  w-5/6 h-55">
+        class=" ml-4 border border-yellow-500 flex-col  bg-[#1A1A1A] text-white shadow-md tracking-tight mt-5  w-5/6 h-55">
         {{ form_row(form.profilePicture) }}
     </div>
 </div>
@@ -15,31 +15,31 @@
     <div class="mr-10">
         <div class="mb-4">
             {{ form_label(form.username) }}
-            {{ form_widget(form.username, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black' }}) }}
+            {{ form_widget(form.username, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full text-black' }}) }}
             {{ form_errors(form.username) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.firstname) }}
-            {{ form_widget(form.firstname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+            {{ form_widget(form.firstname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
             {{ form_errors(form.firstname) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.lastname) }}
-            {{ form_widget(form.lastname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+            {{ form_widget(form.lastname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
             {{ form_errors(form.lastname) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.phone) }}
-            {{ form_widget(form.phone, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+            {{ form_widget(form.phone, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
             {{ form_errors(form.phone) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.email) }}
-            {{ form_widget(form.email, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+            {{ form_widget(form.email, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
             {{ form_errors(form.email) }}
         </div>
 
@@ -51,7 +51,7 @@
 <div>
     <div class=" mb-4 ">
         {{ form_label(form.Password) }}
-        {{ form_widget(form.Password, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full focus:outline-none text-black'}}) }}
+        {{ form_widget(form.Password, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
         {{ form_errors(form.Password) }}
     </div>
 
