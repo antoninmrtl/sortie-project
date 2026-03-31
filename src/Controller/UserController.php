@@ -46,7 +46,7 @@ final class                   UserController extends AbstractController
                     $fileUploader->upload($file, 'assets/images/profilePicture', $user->getUsername())
                 );
             }else {
-                $user->setProfilePicture('profilePTest.jpg');
+                $user->setProfilePicture('profile-icon-9.png');
             }
 
             /** @var string $plainPassword */
