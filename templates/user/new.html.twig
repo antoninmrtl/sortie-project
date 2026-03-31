@@ -2,51 +2,35 @@
 
 {% block title %}New User{% endblock %}
 
-
-
-
 {% block extraStyle %}
-    <style>
-        body {
-
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
-            background-color: #1A1A1A;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-    </style>
+    {{ parent() }}
 {% endblock %}
 
 
 {% block body %}
-    <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-left ml-35 mt-15">Create new User</h1>
+    <article>
+        <h1>Créer un aventurier</h1>
 
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-
-
-<div class="flex justify-center">
-    <div class=" flex border border-yellow-500 bg-[#1A1A1A] text-white w-5/6 h-auto p-5 gap-4">
-
-{#        a changer pour nouvelle photo NEW USER#}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
 
-        <div class="flex flex-col gap-y-2 mt-5">
+            <div class="flex justify-center ">
+                <div class=" flex flex-col border border-yellow-500 bg-[#1A1A1A] text-white w-5/6 h-auto p-5 gap-4">
+
+                    <div class="mt-5">
+                        {{ include('user/_form.html.twig') }}
+                    </div>
+
+                </div>
+
+                <div class="ml-auto  flex flex-col items-end  gap-2 mr-6  mt-4">
+                    <a href="{{ path('user_index') }}">back to list</a>
+                </div>
 
 
-        </div>
+            </div>
 
 
-    <div >
-    {{ include('user/_form.html.twig') }}
-
-    <a href="{{ path('user_index') }}">back to list</a>
-    </div>
-
-        </div>
-
-
-</div>
-    {% endif %}
+        {% endif %}
+    </article>
 {% endblock %}

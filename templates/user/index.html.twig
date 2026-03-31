@@ -3,22 +3,15 @@
 {% block title %}User index{% endblock %}
 
 {% block extraStyle %}
-    <style>
-        body {
+    {{ parent() }}
 
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
-            background-color: #1A1A1A;
-            background-size: contain;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-    </style>
 {% endblock %}
 
 {% block body %}
-    <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-left">User index</h1>
-    <div class="flex justify-center p-5">
 
+    <article>
+    <h1 >User index</h1>
+    <div class="flex justify-center p-5">
 
     <table class="table text-white border border-yellow-500 bg-black w-2/3  p-5" >
         <thead>
@@ -67,6 +60,6 @@
 
 
         <a href="{{ path('user_create') }}">Create new</a>
-
+    </article>
 
 {% endblock %}

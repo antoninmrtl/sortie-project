@@ -2,71 +2,79 @@
 
 {% block title %}User{% endblock %}
 
+{% block extraStyle %}
+
+{{ parent() }}
+{% endblock %}
+
 {% block body %}
-    <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-left">{{ user.username }}</h1>
+    <article>
+        <h1>{{ user.username }}</h1>
 
-<div class=" border border-yellow-500 flex gap-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
+        <div class=" border border-yellow-500 flex gap-4 p-4 bg-[#1A1A1A] text-white shadow-md tracking-tight">
 
-    <div>
-        <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}"
-             class="border border-yellow-500"
-             style="width:120px;"
-             alt="{{ user.username }}">
-    </div>
-
-
-    <div class="flex flex-col gap-y-2">
-        <p>Email: {{ user.email }}</p>
-        <p>Pseudo: {{ user.username }}</p>
-        <p>Nom: {{ user.firstname }}</p>
-        <p>Prénom: {{ user.lastname }}</p>
-        <p>Actif : {{ user.active ? 'Yes' : 'No' }}</p>
-    </div>
-</div>
-
-
-div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-20">
-<div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-    <h2 class="text-amber-500"> Quêtes inscrits </h2>
-    {% for quest in user.quest %}
-        <div class="mt-2 flex gap-4">
-            <h2> quests : {{ quest.name }}</h2>
-        </div>
-        <div>
-            <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
-        </div>
-    {% else %}
-        <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
-    {% endfor %}
-
-</div>
-
-    <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-        <h2 class="text-amber-500"> Quêtes Crées </h2>
-        {% for quest in user.quest %}
-            <div class="mt-2 flex gap-4">
-                <h2> quest : {{ quest.name }}</h2>
-            </div>
             <div>
-                <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Détail</a>
+                <img src="{{ asset('assets/images/profilePicture/' ~ user.profilePicture) }}"
+                     class="border border-yellow-500"
+                     style="width:120px;"
+                     alt="{{ user.username }}">
             </div>
-        {% else %}
-            <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
-        {% endfor %}
-    </div>
-
-    </div>
 
 
-<div class="text-white">
-    <a href="{{ path('user_index') }}" class="border border-yellow-500">back to list</a>
+            <div class="flex flex-col gap-y-2">
+                <p>Email: {{ user.email }}</p>
+                <p>Pseudo: {{ user.username }}</p>
+                <p>Nom: {{ user.firstname }}</p>
+                <p>Prénom: {{ user.lastname }}</p>
+                <p>Actif : {{ user.active ? 'Yes' : 'No' }}</p>
+            </div>
+        </div>
 
-    {% if is_granted('USER_EDIT', user) %}
-    <a href="{{ path('user_edit', {'id': user.id}) }}" class="border border-yellow-500">edit</a>
-    {% endif %}
-    {% if is_granted('USER_DELETE', user)%}
-        <a href="{{ path('user_delete', {'id': user.id}) }}" class="border border-yellow-500">delete</a>
-    {% endif %}
-</div>
 
+        div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-20">
+        <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+            <h2 class="text-amber-500"> Quêtes inscrits </h2>
+            {% for quest in user.quest %}
+                <div class="mt-2 flex gap-4">
+                    <h2> quests : {{ quest.name }}</h2>
+                </div>
+                <div>
+                    <a href="{{ path('quest_show', {'id': quest.id}) }}"
+                       class="text-yellow-600 hover:underline">Détail</a>
+                </div>
+            {% else %}
+                <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
+            {% endfor %}
+
+        </div>
+
+        <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+            <h2 class="text-amber-500"> Quêtes Crées </h2>
+            {% for quest in user.quest %}
+                <div class="mt-2 flex gap-4">
+                    <h2> quest : {{ quest.name }}</h2>
+                </div>
+                <div>
+                    <a href="{{ path('quest_show', {'id': quest.id}) }}"
+                       class="text-yellow-600 hover:underline">Détail</a>
+                </div>
+            {% else %}
+                <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
+            {% endfor %}
+        </div>
+
+        </div>
+
+
+        <div class="text-white">
+            <a href="{{ path('user_index') }}" class="border border-yellow-500">back to list</a>
+
+            {% if is_granted('USER_EDIT', user) %}
+                <a href="{{ path('user_edit', {'id': user.id}) }}" class="border border-yellow-500">edit</a>
+            {% endif %}
+            {% if is_granted('USER_DELETE', user) %}
+                <a href="{{ path('user_delete', {'id': user.id}) }}" class="border border-yellow-500">delete</a>
+            {% endif %}
+        </div>
+    </article>
 {% endblock %}

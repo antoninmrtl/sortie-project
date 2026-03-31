@@ -7,3 +7,9 @@ h1, h2 {
     font-family: 'Pixelify Sans', sans-serif;
 
 }
+
+h1 {
+    font-size: 4rem;
+    color: #F5AD27;
+    margin-left: 145px;
+}
