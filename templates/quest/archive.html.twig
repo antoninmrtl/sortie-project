@@ -17,97 +17,78 @@
             </div>
         {% endfor %}
     {% endfor %}
-
     <article class="p-5">
-        <h1 class="text-[5rem]  text-amber-500">Quêtes archivées</h1>
-        <div>
-
-        </div>
+        <h1 class="text-[5rem]  text-amber-500">Quêtes Archivée</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-20">
             {% for quest in quests %}
-                <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                    <div class="flex justify-between">
-                        <h1 class="font-bold text-xl">
-                            {{ quest.name }}
-                        </h1>
-
-                        <h2>{{ quest.status.label }}</h2>
-
-                    </div>
-
-
-                    {# Le flex-grow permet à la description de prendre tout l'espace libre,
-                       poussant ainsi les dates toujours tout en bas, même si le texte est court #}
-                    <h3 class="flex-grow">
-                        {{ quest.infoQuest }}
-                    </h3>
-
-                    <div class="flex justify-between">
-                        <div>
-                            <h3>
-                                Places : {{ quest.nbMaxInscription }} |
-                                Durée : {{ quest.duration }}h
-                            </h3>
-                        </div>
-                        <div>
-                            {{ quest.promoter.username }}
-                        </div>
-                    </div>
-
-                    <hr class="border-yellow-500/30">
-
-                    <div class="text-sm">
-                        Début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i') : 'N/A' }}<br>
-                        Fin Inscription
-                        : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i') : 'N/A' }}
-                    </div>
-                    <div class="mt-2 flex gap-4">
-                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline">Voir</a>
-                        {% if app.user and quest.users.contains(app.user) %}
-                            <a href="{{ path('quest_desister', {'id': quest.id}) }}">se desister</a>
+            {% if quest.status.label == 'Annulée' %}
+            <div
+                class=" grayscale border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                {% elseif quest.status.label == 'Ouverte' %}
+                <div class="border border-green-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                    {% elseif quest.status.label == 'En cours' %}
+                    <div class="border border-green-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
                         {% else %}
+                        <div
+                            class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
 
-                            {% if quest.status.label == 'En cours' or quest.status.label == 'Créee' or quest.status.label == 'Ouverte' %}
-                                <a href="{{ path('quest_inscription', {'id': quest.id}) }}"
-                                   class="text-yellow-600 hover:underline">s'inscrire</a>
                             {% endif %}
-                        {% endif %}
+                            <div class="flex justify-between">
+                                <h2 class="font-bold text-[2rem] text-amber-500">
+                                    {{ quest.name }}
+                                </h2>
 
+                                <h2>{{ quest.status.label }}</h2>
 
+                            </div>
 
-                        {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('quest_edit', {'id': quest.id}) }}"
-                                   class="text-yellow-600 hover:underline">Modifier</a>
-                            {% endif %}
-                        {% endif %}
+                            <h3 class="flex-grow">
+                                {{ quest.infoQuest }}
+                            </h3>
+
+                            <div class="flex justify-between">
+                                <div>
+                                    <h3>
+                                        Places : {{ quest.nbMaxInscription }} |
+                                        Durée : {{ quest.duration }}h
+                                    </h3>
+                                </div>
+                                <div>
+                                    {{ quest.promoter.username }}
+                                </div>
+                            </div>
+
+                            <hr class="border-yellow-500/30">
+
+                            <div class="text-sm">
+                                Début : {{ quest.startDateTime ? quest.startDateTime|date('Y-m-d H:i') : 'N/A' }}<br>
+                                Fin Inscription
+                                : {{ quest.inscriptionLimitDate ? quest.inscriptionLimitDate|date('Y-m-d H:i') : 'N/A' }}
+                            </div>
+
+                            <div class="mt-2 flex gap-4">
+                                <a href="{{ path('quest_show', {'id': quest.id}) }}"
+                                   class="text-yellow-600 hover:underline">Voir</a>
+
+                            </div>
+                        </div>
+                        {% else %}
+                            <p class="col-span-full text-center text-xl">Aucune quête trouvée sur le tableau.</p>
+                        {% endfor %}
+
                     </div>
-                </div>
-            {% else %}
-                <p class="col-span-full text-center text-xl">Aucune quête trouvée sur le tableau.</p>
-            {% endfor %}
 
-        </div>
 
-        <div class=" relative flex text-white items-center h-auto p-5">
-            {% if app.user %}
-                <div class="flex items-center gap-4">
-                    <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
-                         class="border border-yellow-500"
-                         style="width:120px;"
-                         alt="{{ app.user.username }}">
-                    <p>{{ app.user.username }}</p>
+                    <div>
+                        <a href="{{ path('quest_create') }}"
+                           class="border border-yellow-500 btn text-yellow-500 p-1 font-(Pixelify Sans) text-center justify-center items-center">Créer
+                            une nouvelle quête</a>
+                    </div>
+
 
                 </div>
-
-                <div class="absolute left-1/2 -translate-x-1/2">
-                    <a href="{{ path('quest_create') }}" class="border border-yellow-500 btn text-yellow-500 p-1 font-(Pixelify Sans) text-center justify-center items-center">Créer une nouvelle quête</a>
-                </div>
-            {% endif %}
-
-            <div class="ml-auto">
-                <p>{{ "now"|date("d/m/Y") }}</p>
             </div>
+
         </div>
     </article>
 {% endblock %}

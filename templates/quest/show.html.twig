@@ -2,26 +2,7 @@
 
 {% block title %}Detail de la sortie{% endblock %}
 {% block extraStyle %}
-    <style>
-        .abeezee-regular {
-            font-family: "ABeeZee", sans-serif;
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        body {
-
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url("{{ asset('images/imageEni.png') }}");
-            background-color: #1A1A1A;
-            background-size: contain;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-
-        h3, h2, a {
-            font-family: "ABeeZee";
-        }
-    </style>
+{{ parent() }}
 {% endblock %}
 
 {% block body %}
@@ -72,21 +53,12 @@
                 {% if is_granted('QUEST_EDIT', quest) %}
                     <a href="{{ path('quest_edit', {'id': quest.id}) }}" >Modifier</a>
                 {% endif %}
-{#                {% if is_granted('QUEST_DELETE', quest) %}#}
-{#                    <a href="{{ path('quest_delete', {'id': quest.id}) }}"#}
-{#                       onclick="return confirm('Confirmer la suppression définitive ?')">Supprimer</a>#}
-{#                {% endif %}#}
-
 
                 {% if is_granted('QUEST_CANCEL', quest) %}
                     <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
                 {% endif %}
-
-
             </div>
         </div>
-
-
 
     </article>
 {% endblock %}

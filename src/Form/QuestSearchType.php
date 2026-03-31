@@ -17,6 +17,7 @@ class QuestSearchType extends AbstractType
         $builder
             ->add('name', TextType::class,[
                 'attr' => ['placeholder' => 'Recherche une quête par nom'],
+                'required' => false
             ])
             ->add('isPromoter', CheckboxType::class, [
                 'label' => "Quêtes dont je suis l'organisateur",
