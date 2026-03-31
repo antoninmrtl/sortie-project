@@ -107,8 +107,13 @@ final class  QuestController extends AbstractController
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
     #[IsGranted("ROLE_USER")]
-    public function show(Quest $quest): Response
+    public function show(int $id, QuestRepository $questRepository): Response
     {
+        $quest = $questRepository->find($id);
+        if (!$quest) {
+            throw $this->createNotFoundException('Quête introuvable !');
+        }
+
         return $this->render('quest/show.html.twig', [
             'quest' => $quest,
         ]);
