@@ -2,21 +2,14 @@
 
 {% block title %}{{ parent() }} Home{% endblock %}
 {% block extraStyle %}
-    <style>
-        body {
 
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url("{{ asset('images/Image.png') }}");
-            background-color: #1A1A1A;
-            background-size: contain;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-    </style>
+        {{ parent() }}
+
 {% endblock %}
 
 {% block body %}
-
-    <h1 class="text-[4rem] mb-3 font-weight-normal text-amber-500 text-left ml-35 mt-15">Profil</h1>
+<article>
+    <h1>Profil</h1>
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
@@ -48,6 +41,7 @@
                               onsubmit="return confirm('Are you sure you want to delete this item?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
                             <button class="btn bg-[#1A1A1A]   px-4 py-2  border border-yellow-500 ">Delete</button>
+
                             <div>
                                 <a href="{{ path('user_edit', {'id': app.user.id}) }}">Modifier mon profile</a>
                             </div>
@@ -99,8 +93,8 @@
         </div>
         </div>
 
-    </div>
+
     {% endif %}
 
-
+</article>
     {% endblock %}
