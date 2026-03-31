@@ -15,7 +15,7 @@
             {% endfor %}
         {% endfor %}
         <h1 class="text-[3rem]  text-amber-500">Details de la sortie</h1>
-        <h2 class="text-[5rem]  ">{{ quest.name }}</h2>
+        <h2 class="text-[5rem]  text-white">{{ quest.name }} <span class="text-[2rem]">- {{ quest.status.label }}</span></h2>
         <div class="flex gap-4">
 
             <div>
@@ -34,7 +34,7 @@
                 <div>Description : <br>{{ quest.infoQuest }}</div>
             </div>
 
-            <div>Liste des participants inscrits: {{ quest.users | length }}
+            <div class="text-white">Liste des participants inscrits: {{ quest.users | length }}
                 {% for user in quest.users %}
                     <a href="{{ path('user_show', {'id': user.id}) }}">{{ user.username }}</a>
                 {% endfor %}

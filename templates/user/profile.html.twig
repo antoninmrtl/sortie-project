@@ -90,7 +90,24 @@
                 {% endfor %}
             </div>
 
+            <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                <h2 class="text-amber-500"> Quêtes Enregistrées </h2>
+                {% for quest in questCreate %}
+                    <div class="mt-2 flex gap-4">
+                        <h2> quest : {{ quest.name }}</h2>
+                    </div>
+                    <hr class="border-yellow-500/30">
+                    <div>
+                        <a href="{{ path('quest_show', {'id': quest.id}) }}" class="text-yellow-600 hover:underline flex flex-col items-end  gap-y-2 mr-6">Voir Détail</a>
+                    </div>
+                {% else %}
+                    <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
+                {% endfor %}
+            </div>
+
+
         </div>
+
         </div>
 
 
