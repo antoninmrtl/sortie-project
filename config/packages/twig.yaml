@@ -1,7 +1,5 @@
 twig:
     file_name_pattern: '*.twig'
-    globals:
-        exp_service: '@App\Utils\ExperienceService'
 
 when@test:
     twig:
