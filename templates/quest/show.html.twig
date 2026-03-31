@@ -110,7 +110,7 @@
 {#                {% endif %}#}
 
 
-                {% if quest.status.label != 'Annulée' and (quest.promoter.username == app.user.username or is_granted('ROLE_ADMIN')) %}
+                {% if is_granted('QUEST_CANCEL', quest) %}
                     <a href="{{ path('quest_annuler', {'id': quest.id}) }}">Annuler</a>
                 {% endif %}
 
