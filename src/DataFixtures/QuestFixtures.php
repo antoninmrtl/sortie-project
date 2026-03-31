@@ -81,7 +81,8 @@ class QuestFixtures extends Fixture implements DependentFixtureInterface
             if ($i >= 40) {
                 $quest->setInscriptionLimitDate(new \DateTime('-1 day'));
             } else {
-                $quest->setInscriptionLimitDate($faker->dateTimeBetween('-2 months', $quest->getStartDateTime()->format('Y-m-d H:i:s')));            }
+                $quest->setInscriptionLimitDate($faker->dateTimeBetween('-2 months', $quest->getStartDateTime()->format('Y-m-d H:i:s')));
+            }
 
 
             if ($i === 0) {

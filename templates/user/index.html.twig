@@ -11,12 +11,27 @@
 
     <article>
     <h1 >User index</h1>
-    <div class="flex justify-center p-5">
 
-    <table class="table text-white border border-yellow-500 bg-black w-2/3  p-5" >
-        <thead>
-            <tr>
-{#                <th>Id</th>#}
+
+        <div class="flex justify-end mr-75">
+            <a href="{{ path('user_create') }}" class="text-white">
+                Create new</a>
+        </div>
+
+
+    </div>
+        <div class="flex justify-center p-5">
+            <div class="border border-yellow-500 bg-[#1A1A1A] w-3/3 p-6 overflow-x-auto">
+
+                <table class="table text-white w-full table-fixed break-words">
+
+                    <thead>
+                <tr>
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th>Id</th>
+
+                    {% endif %}
                 <th>Firstname</th>
                 <th>Lastname</th>
                 <th>PhoneNumber</th>
@@ -26,40 +41,58 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                {% if is_granted('ROLE_ADMIN') %}
-                <td>{{ user.id }}</td>
-                {% endif %}
-                <td>{{ user.firstname }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.active ? 'Yes' : 'No' }}</td>
-                <td>{{ user.profilePicture }}</td>
-                <td>
-                    <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-                                {{ include('user/_delete_form.html.twig') }}
-                    {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="11">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    </div>
+
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>{{ user.id }}</td>
+                            {% endif %}
+                            <td>{{ user.firstname }}</td>
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.active ? 'Yes' : 'No' }}</td>
+                            <td>{{ user.profilePicture }}</td>
+                            <td class="flex gap-3 items-center">
+                                <a href="{{ path('user_show', {'id': user.id}) }}">Detail</a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>
+                                    {{ include('user/_delete_form.html.twig') }}
+
+                                {% endif %}
+                            </td>
+
+
+
+
+{#                            <td class="flex gap-3 items-center">#}
+{#                                <a href="{{ path('user_show', {'id': user.id}) }}">Detail</a>#}
+
+{#                                {% if is_granted('ROLE_ADMIN') %}#}
+{#                                    <a href="{{ path('user_edit', {'id': user.id}) }}">Modifier</a>#}
+{#                                    {{ include('user/_delete_form.html.twig') }}#}
+{#                                {% endif %}#}
+{#                            </td>#}
 
 
 
 
 
-        <a href="{{ path('user_create') }}">Create new</a>
+
+
+
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="11">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
     </article>
 
 {% endblock %}

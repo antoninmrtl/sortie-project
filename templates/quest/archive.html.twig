@@ -21,22 +21,11 @@
         <h1 class="text-[5rem]  text-amber-500">Quêtes Archivée</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-20">
             {% for quest in quests %}
-            {% if quest.status.label == 'Annulée' %}
-            <div
-                class=" grayscale border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                {% elseif quest.status.label == 'Ouverte' %}
-                <div class="border border-green-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                    {% elseif quest.status.label == 'En cours' %}
-                    <div class="border border-green-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-                        {% else %}
-                        <div
-                            class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
-
-                            {% endif %}
-                            <div class="flex justify-between">
-                                <h2 class="font-bold text-[2rem] text-amber-500">
-                                    {{ quest.name }}
-                                </h2>
+                <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+                    <div class="flex justify-between">
+                        <h2 class="font-bold text-[2rem] text-amber-500">
+                            {{ quest.name }}
+                        </h2>
 
                                 <h2>{{ quest.status.label }}</h2>
 
@@ -78,6 +67,14 @@
 
                     </div>
 
+        <div class=" relative flex text-white items-center h-auto p-5">
+            {% if app.user %}
+                <div class="flex items-center gap-4">
+                    <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
+                         class="border border-yellow-500"
+                         style="width:120px;"
+                         alt="{{ app.user.username }}">
+                    <p>{{ app.user.username }}</p>
 
                     <div>
                         <a href="{{ path('quest_create') }}"
@@ -87,6 +84,10 @@
 
 
                 </div>
+            {% endif %}
+
+            <div class="ml-auto">
+                <p>{{ "now"|date("d/m/Y") }}</p>
             </div>
 
         </div>
