@@ -17,13 +17,17 @@
             </div>
         {% endfor %}
     {% endfor %}
+
     <article class="p-5">
-        <h1 class="text-[5rem]  text-amber-500">Quêtes Archivée</h1>
+        <h1 class="text-[5rem]">Quêtes archivées</h1>
+        <div>
+
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-20">
             {% for quest in quests %}
                 <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
                     <div class="flex justify-between">
-                        <h2 class="font-bold text-[2rem] text-amber-500">
+                        <h2 class="font-bold text-[2rem] text-yellow-500">
                             {{ quest.name }}
                         </h2>
 
@@ -59,11 +63,19 @@
                                 <a href="{{ path('quest_show', {'id': quest.id}) }}"
                                    class="text-yellow-600 hover:underline">Voir</a>
 
-                            </div>
-                        </div>
-                        {% else %}
-                            <p class="col-span-full text-center text-xl">Aucune quête trouvée sur le tableau.</p>
-                        {% endfor %}
+
+
+                        {% if quest.status.label not in ['Cloturée', 'Annulée', 'Passée'] %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a href="{{ path('quest_edit', {'id': quest.id}) }}"
+                                   class="text-yellow-600 hover:underline">Modifier</a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <p class="col-span-full text-center text-xl">Aucune quête trouvée sur le tableau.</p>
+            {% endfor %}
 
                     </div>
 
