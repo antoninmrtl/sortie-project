@@ -31,7 +31,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
         $faker = Factory::create('fr-FR');
 
-        $profilePictureTest = 'profilePTest.jpg';
+        $profilePictureTest = 'profile-icon-9.png';
 
         for ($i = 0; $i < 50; $i++) {
             $user = new User();
