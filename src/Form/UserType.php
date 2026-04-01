@@ -67,7 +67,7 @@ class UserType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new Assert\File(
-                        maxSize: '1024k',
+                        maxSize: '2048k',
                         extensions: ['pdf', 'png', 'jpeg', 'jpg'],
                         extensionsMessage: 'Please upload a valid image / document',
                     )
