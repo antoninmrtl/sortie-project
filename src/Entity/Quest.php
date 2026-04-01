@@ -31,6 +31,7 @@ class Quest
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Ne peut pas être vide')]
     #[Assert\NotBlank(message: 'Ne peut pas être nul')]
+    #[Assert\Positive]
     private ?float $duration = null;
 
     #[ORM\Column]
@@ -41,9 +42,13 @@ class Quest
     private ?\DateTime $inscriptionLimitDate = null;
 
     #[ORM\Column]
+    #[Assert\Positive]
+    #[Assert\NotBlank(message: 'Ne peut pas être nul')]
     private ?int $nbMaxInscription = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotBlank(message: 'Ne peut pas être nul')]
     private ?string $infoQuest = null;
 
     #[ORM\ManyToOne(inversedBy: 'quests')]
