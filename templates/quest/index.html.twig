@@ -17,12 +17,12 @@
     {% endfor %}
     <article class="p-5">
         <h1 class="text-[5rem]  text-amber-500">Quêtes</h1>
-        <div class="text-white mt-8 ml-35">
+        <div class="text-white mt-8 mr-20 ml-20 border-4 border-yellow-500 p-5 bg-[#1A1A1A] rounded-3xl flex justify-center">
             {{ form_start(questForm, {'method': 'GET'}) }}
 
 
-            <div class="mb-4">
-                {{ form_widget(questForm.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-max text-black'}}) }} {{ form_errors(questForm.name) }}
+            <div class="mb-4 flex justify-center ">
+                {{ form_widget(questForm.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full flex justify-center text-black'}}) }} {{ form_errors(questForm.name) }}
             </div>
 
             <div class="flex gap-4 items-center">
