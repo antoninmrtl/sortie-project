@@ -7,6 +7,7 @@ use App\Form\UserType;
 use App\Repository\QuestRepository;
 use App\Repository\UserRepository;
 use App\Utils\FileUploader;
+use App\Utils\UserLogicService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -30,7 +31,10 @@ final class                   UserController extends AbstractController
     }
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
+    public function new(
+        Request $request,
+        UserLogicService $logicService,
+        ): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user, [
@@ -40,25 +44,10 @@ final class                   UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /**
-             * @var UploadedFile $file
-             */
-            $file = $form->get('profilePicture')->getData();
-            if ($file) {
-                $user->setProfilePicture(
-                    $fileUploader->upload($file, 'assets/images/profilePicture', $user->getUsername())
-                );
-            }else {
-                $user->setProfilePicture('profile-icon-9.png');
-            }
 
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('Password')->getData();
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-            $user->setRoles(['ROLE_USER']);
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $logicService->create($form, $user);
 
+            $this->addFlash('success','Utilisateur crée avec succès');
             return $this->redirectToRoute('user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
@@ -79,41 +68,26 @@ final class                   UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $entityManager,FileUploader $fileUploader,UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository, int $id): Response
+    public function edit(Request $request,
+                         UserLogicService $userLogicService,
+                         UserRepository $userRepository,
+                         int $id
+    ): Response
     {
         $user = $userRepository->find($id);
 
         $this->denyAccessUnlessGranted('USER_EDIT', $user, 'Vous ne pouvez pas modifer cet utilisateur');
 
-        $oldPassword = $user->getPassword();
-
         $form = $this->createForm(UserType::class, $user, [
             'is_edit' => true
         ]);
+
         $form->handleRequest($request);
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $plainPassword = $form->get('Password')->getData();
-
-            if ($plainPassword) {
-                $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-            } else {
-                $user->setPassword($oldPassword);
-            }
-
-            $file = $form->get('profilePicture')->getData();
-            if ($file) {
-                $user->setProfilePicture(
-                    $fileUploader->upload($file, 'assets/images/profilePicture', $user->getUsername())
-                );
-            }
-
-
-
-            $entityManager->flush();
-
+            $userLogicService->edit($form,$user);
+            $this->addFlash('success','Utilisateur modifié avec succès');
             return $this->redirectToRoute('user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
@@ -149,7 +123,7 @@ final class                   UserController extends AbstractController
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/profile', name: 'profile', methods: ['GET'])]
-    public function profile(#[CurrentUser] User $user, QuestRepository $questRepository): Response
+    public function profile(QuestRepository $questRepository): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -157,7 +131,7 @@ final class                   UserController extends AbstractController
         $questCreate = $questRepository->findAllCreateByPromoter($user);
 
         return $this->render('user/profile.html.twig', [
-            'questCreate'=>$questCreate,
+            'questCreate' => $questCreate,
         ]);
     }
 }
