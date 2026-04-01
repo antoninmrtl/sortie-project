@@ -42,6 +42,7 @@ class QuestRepository extends ServiceEntityRepository
         $creationStatus = $this->statusRepository->findOneBy(['label' => 'En création']);
 
         $query = $this->createQueryBuilder('q')
+             ->addOrderBy('q.status', 'ASC')
             ->leftJoin('q.status', 's')->addSelect('s')
             ->leftJoin('q.promoter', 'p')->addSelect('p')
             ->leftJoin('q.users', 'u')->addSelect('u')
