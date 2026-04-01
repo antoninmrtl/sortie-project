@@ -17,10 +17,10 @@
         <div class="flex justify-center">
             <div class=" flex border border-yellow-500 bg-[#1A1A1A] text-white w-5/6 h-auto p-5 gap-4">
 
-            <div>
+            <div style="width:120px; aspect-ratio:1/1 ">
                 <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
-                     class="border border-yellow-500 mt-5"
-                     style="width:120px;"
+                     class="border border-yellow-500 mt-5 "
+                     style="width:120px; height: 180px; aspect-ratio:1/1"
                      alt="{{ app.user.username }}">
             </div>
 
@@ -43,8 +43,9 @@
                                 profil
                             </button>
 
+                                <a href="{{ path('user_edit', {'id': app.user.id}) }}" class="border border-yellow-500 p-3 flex justify-center">Modifier mon profil</a>
 
-                                <a href="{{ path('user_edit', {'id': app.user.id}) }}" class="border border-yellow-500 p-3 ">Modifier mon profil</a>
+
 
                         </form>
                     </div>

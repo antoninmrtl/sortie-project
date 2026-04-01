@@ -14,7 +14,7 @@
 
 
         <div class="flex justify-end mr-75">
-            <a href="{{ path('user_create') }}" class="text-white">
+            <a href="{{ path('user_create') }}" class="text-white border border-yellow-500 bg-[#1A1A1A] p-3">
                 Create new</a>
         </div>
 
@@ -28,17 +28,15 @@
                     <thead>
                 <tr>
 
-                    {% if is_granted('ROLE_ADMIN') %}
                         <th>Id</th>
 
-                    {% endif %}
-                <th>Firstname</th>
-                <th>Lastname</th>
-                <th>PhoneNumber</th>
+                <th>Prénom</th>
+                <th>Nom de Famille</th>
+                <th>Téléphone</th>
                 <th>Mail</th>
                 <th>Actif</th>
-                <th>ProfilePicture</th>
-                <th>actions</th>
+                <th>Photo de profil</th>
+                <th>Actions</th>
             </tr>
         </thead>
 
