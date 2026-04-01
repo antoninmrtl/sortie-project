@@ -8,7 +8,13 @@
 
 {% block body %}
 <article>
-    <h1 class="">Créer une nouvelle quête</h1>
+    <h1 class="">
+        {% if quest.id %}
+            Modifier la quête : {{ quest.name }}
+        {% else %}
+            Créer une nouvelle quête
+        {% endif %}
+    </h1>
 
 <div class="text-white ml-33">
     {{ include('quest/_form.html.twig') }}
