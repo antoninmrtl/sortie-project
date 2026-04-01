@@ -26,23 +26,28 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
+                'label'=>"Nom d'aventurier",
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 3, max: 50)],
             ])
             ->add('firstname', TextType::class, [
+                'label'=>'Prénom',
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 3, max: 50)],
             ])
             ->add('lastname', TextType::class, [
+                'label'=>'Nom de famille',
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 3, max: 50)],
             ])
             ->add('phone', TextType::class, [
+                'label'=>"Téléphone",
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 10)],
             ])
             ->add('email')
             ->add('Password', RepeatedType::class, [
+                'label'=>"Mot de passe",
                 'type' => PasswordType::class,
                 'mapped' => false,
                 'required' => false,
@@ -57,7 +62,7 @@ class UserType extends AbstractType
             ])
             ->add('active', CheckboxType::class)
             ->add('profilePicture', FileType::class, [
-                'label' => 'Photo de profile (png,jpeg)',
+                'label' => 'Photo de profil (png,jpeg)',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [

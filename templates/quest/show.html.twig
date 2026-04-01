@@ -1,7 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %}Detail de la sortie{% endblock %}
-{% block extraStyle %}{{ parent() }}{% endblock %}
-{% block body %}    <div class="p-5 mr-10">
+
+{% block extraStyle %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    <div class="p-5 mr-10">
     {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="p-4 mb-2 text-white font-bold bg-{{ label == 'success' ? 'green' : 'red' }}-500">{{ message }}</div>
@@ -16,8 +20,8 @@
             <div class="flex gap-4">
                 <div class="justify-center align-center items-center">
                     <div class="border border-yellow-500 overflow-hidden " style="width:400px; aspect-ratio:1/1;">
-                        <div class="">
-                            <img class="w-full h-full object-cover object-top" style="width:300px"
+                        <div class="" style="width:400px; aspect-ratio:1/1;">
+                            <img class=" object-cover object-center" style="width:400px; aspect-ratio:1/1;"
                                  src="{{ asset('assets/images/pictureQuest/' ~ quest.picture) }}" alt="">
                         </div>
                     </div>
@@ -80,5 +84,5 @@
         </div>
 
     </article>
-    </div>
+</div>
 {% endblock %}

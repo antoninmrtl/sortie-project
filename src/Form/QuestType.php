@@ -46,6 +46,7 @@ class QuestType extends AbstractType
                 'choice_label' => 'name',
             ])
             ->add('place', EntityType::class, [
+                'label'=>'Lieu',
                 'class' => Place::class,
                 'choice_label' => 'name',
             ])
