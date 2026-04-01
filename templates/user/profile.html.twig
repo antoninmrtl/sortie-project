@@ -14,7 +14,6 @@
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 
 
-
         <div class="flex justify-center">
             <div class=" flex border border-yellow-500 bg-[#1A1A1A] text-white w-5/6 h-auto p-5 gap-4">
 
@@ -35,24 +34,28 @@
             </div>
 
                 <div class="ml-auto flex flex-col items-end mt-30 gap-y-2 mr-6">
-
                     <div>
-                        <form class="flex flex-col gap-y-4" method="post" action="{{ path('user_delete', {'id': app.user.id}) }}"
+                        <form class="flex flex-col gap-y-4" method="post"
+                              action="{{ path('user_delete', {'id': app.user.id}) }}"
                               onsubmit="return confirm('Are you sure you want to delete this item?');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
-                            <button class="btn bg-[#1A1A1A]   px-4 py-2  border border-yellow-500 ">supprimer mon profil</button>
+                            <button class="btn bg-[#1A1A1A]   px-4 py-2  border border-yellow-500 text-red-500 ">Supprimer mon
+                                profil
+                            </button>
 
-                            <div>
-                                <a href="{{ path('user_edit', {'id': app.user.id}) }}">Modifier mon profil</a>
-                            </div>
+
+                                <a href="{{ path('user_edit', {'id': app.user.id}) }}" class="border border-yellow-500 p-3 ">Modifier mon profil</a>
+
                         </form>
                     </div>
                 </div>
             </div>
-
 </div>
-        <div >
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-20 ">
+
+    <div class="flex border border-yellow-500 bg-[#1A1A1A]  mt-5 text-white w-5/6 mx-auto">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 p-12 w-full">
+
             <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
                 <h2 class="text-amber-500"> Quêtes inscrits </h2>
                 {% for quest in app.user.quest %}
@@ -67,7 +70,7 @@
                 {% else %}
                     <p class="col-span-full text-center text-xl">Aucune quête trouvée.</p>
                 {% endfor %}
-                </div>
+            </div>
 
 
 
@@ -86,7 +89,11 @@
                 {% endfor %}
             </div>
 
-            <div class="border border-yellow-500 flex flex-col gap-y-4 p-4 bg-[#1A1A1A] text-white shadow-md">
+
+                <div class="col-span-full md:col-span-2 ">
+                    <div class="w-full border border-yellow-500 p-4 bg-[#1A1A1A] ">
+
+
                 <h2 class="text-amber-500"> Quêtes Enregistrées </h2>
                 {% for quest in questCreate %}
                     <div class="mt-2 flex gap-4">
@@ -105,7 +112,7 @@
         </div>
 
         </div>
-
+</div>
 
     {% endif %}
 
