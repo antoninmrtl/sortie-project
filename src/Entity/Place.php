@@ -6,6 +6,7 @@ use App\Repository\PlaceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PlaceRepository::class)]
 class Place
@@ -16,19 +17,43 @@ class Place
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $name = null;
 
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères'
+    )]
     private ?string $street = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
     private ?float $latitude = null;
 
+
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
     private ?float $longitude = null;
 
     #[ORM\ManyToOne(inversedBy: 'places')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\NotBlank(message: 'Ne peut pas être vide')]
     private ?City $city = null;
 
     /**
