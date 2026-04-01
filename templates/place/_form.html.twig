@@ -1,25 +1,37 @@
 {{ form_start(form)}}
 <div class="flex gap-4 p-4" >
-    <div class="justify-items-start">
     <div>
-        {{ form_row(form.name)  }}
-    </div>
-    <div>
-        {{ form_row(form.street)}}
-    </div>
-    <div>
-        {{ form_row(form.latitude)}}
-    </div>
-    <div>
-        {{ form_row(form.longitude) }}
-    </div>
-    <div>
-        {{ form_row(form.city) }}
+        <div class="mb-4 ">
+            {{ form_label(form.name, null, {'label_attr': {'class': 'text-white mb-1 text-black'}}) }}
+            {{ form_widget(form.name, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }} {{ form_errors(form.name) }}</div>
+
+        <div class="mb-4 ">
+            {{ form_label(form.city, null, {'label_attr': {'class': 'text-white mb-1 text-black'}}) }}
+            {{ form_widget(form.city, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }} {{ form_errors(form.city) }}</div>
+        <div class="mb-4 ">
+            {{ form_label(form.street, null, {'label_attr': {'class': 'text-white mb-1 text-black'}}) }}
+            {{ form_widget(form.street, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }} {{ form_errors(form.street) }}</div>
+
+        <div class="flex mb-4 flex-col">
+            {{ form_label(form.latitude, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+            {{ form_widget(form.latitude, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+            {{ form_errors(form.latitude) }}
+        </div>
+
+        <div class="flex mb-4 flex-col">
+            {{ form_label(form.longitude, null, {'label_attr': {'class': 'text-white mb-1'}}) }}
+            {{ form_widget(form.longitude, {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full text-black'}}) }}
+            {{ form_errors(form.longitude) }}
+        </div>
+
+
     </div>
 </div>
-</div>
+<div class="mb-2 ml-4">
     {{ form_widget(form) }}
-<button type="submit" name="save_action" value="publish" class="">
+<button type="submit" name="save_action" value="publish" class="border border-yellow-500 text-white p-2 bg-[#1A1A1A] mb-4">
     Enregister l'endroit
 </button>
+</div>
 {{ form_end(form) }}
+

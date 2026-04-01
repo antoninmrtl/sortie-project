@@ -1,18 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Place{% endblock %}
+{% block title %}Nouvel endroit{% endblock %}
 
 {% block extraStyle %}
     {{ parent() }}
 {% endblock %}
 
 {% block body %}
-
+<article>
     <h1 class="text-[5rem]  text-amber-500">Créer un nouvel endroit</h1>
 
-    <div class="text-white">
+    <div class="text-white m-4">
         {{ include('place/_form.html.twig') }}
 
-        <a href="{{ path('quest_create') }}">back to create</a>
+        <a class="border border-yellow-500 text-white p-2 bg-[#1A1A1A] mt-4 ml-4" href="{{ path('quest_create') }}">Retour à l'ajout quête</a>
     </div>
+    <article>
 {% endblock %}
