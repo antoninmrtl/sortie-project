@@ -19,12 +19,6 @@ class FileUploader
         return $newFileName;
     }
 
-    public function uploadPPDefault(UploadedFile $file, string $directory, string $name = '')
-    {
-        $newFileName = ($name ? $name . '-' : '') . uniqid() . 'png';
-        $file->move($directory, $newFileName);
-        return $newFileName;
-    }
 
     public function delete(string $filename, string $directory)
     {

@@ -4,7 +4,7 @@
 
         {% if app.user %}
             <div class="flex-shrink-0">
-                <img src="{{ asset('/images/profilePicture/' ~ app.user.profilePicture) }}"
+                <img src="{{ asset('assets/images/profilePicture/' ~ app.user.profilePicture) }}"
                      class="border border-yellow-500"
                      style="width:80px;"
                      alt="{{ app.user.username }}">

@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,35 +25,34 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username', TextType::class,[
+            ->add('username', TextType::class, [
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 3, max: 50)],
             ])
-            ->add('firstname', TextType::class,[
+            ->add('firstname', TextType::class, [
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 3, max: 50)],
             ])
-            ->add('lastname', TextType::class,[
+            ->add('lastname', TextType::class, [
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 3, max: 50)],
             ])
-            ->add('phone', TextType::class,[
+            ->add('phone', TextType::class, [
                 'required' => true,
                 'constraints' => [new Assert\Length(min: 10)],
             ])
             ->add('email')
-            ->add('Password', PasswordType::class, [
+            ->add('Password', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank(
-                        message: 'Please enter a password',
-                    ),
-                    new Length(
-                        min: 6,
-                        max: 4096,
-                        minMessage: 'Your password should be at least {{ limit }} characters',
-                    ),
+                'required' => false,
+                'invalid_message' => 'Les parchemins de mots de passe doivent être identiques !',
+                'options' => ['attr' => ['class' => 'rounded-lg bg-gray-100 px-4 py-2 w-full text-black']],
+                'first_options'  => ['label' => 'Nouveau mot de passe'],
+                'second_options' => ['label' => 'Confirmez le mot de passe'],
+                'constraints' => $options['is_edit'] ? [] : [
+                    new NotBlank(['message' => 'L\'aventurier doit avoir un mot de passe !']),
+                    new Length(['min' => 6]),
                 ],
             ])
             ->add('active', CheckboxType::class)
@@ -63,7 +63,7 @@ class UserType extends AbstractType
                 'constraints' => [
                     new Assert\File(
                         maxSize: '1024k',
-                        extensions: ['pdf','png','jpeg', 'jpg'],
+                        extensions: ['pdf', 'png', 'jpeg', 'jpg'],
                         extensionsMessage: 'Please upload a valid image / document',
                     )
                 ],
@@ -78,6 +78,9 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'is_edit' => false
         ]);
+
+        $resolver->setAllowedTypes('is_edit', 'bool');
     }
 }

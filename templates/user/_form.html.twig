@@ -15,31 +15,31 @@
     <div class="mr-10">
         <div class="mb-4">
             {{ form_label(form.username) }}
-            {{ form_widget(form.username, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full text-black' }}) }}
+            {{ form_widget(form.username, { attr: { class: 'bg-gray-100 rounded-lg p-2 w-full text-black' }}) }}
             {{ form_errors(form.username) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.firstname) }}
-            {{ form_widget(form.firstname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
+            {{ form_widget(form.firstname, { attr: { class: 'bg-gray-100 rounded-lg p-2 w-full  text-black'}}) }}
             {{ form_errors(form.firstname) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.lastname) }}
-            {{ form_widget(form.lastname, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
+            {{ form_widget(form.lastname, { attr: { class: 'bg-gray-100 rounded-lg p-2 w-full  text-black'}}) }}
             {{ form_errors(form.lastname) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.phone) }}
-            {{ form_widget(form.phone, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
+            {{ form_widget(form.phone, { attr: { class: 'bg-gray-100 rounded-lg p-2 w-full  text-black'}}) }}
             {{ form_errors(form.phone) }}
         </div>
 
         <div class="mb-4">
             {{ form_label(form.email) }}
-            {{ form_widget(form.email, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
+            {{ form_widget(form.email, { attr: { class: 'bg-gray-100 rounded-lg p-2 w-full  text-black'}}) }}
             {{ form_errors(form.email) }}
         </div>
 
@@ -49,10 +49,18 @@
 </div>
 
 <div>
-    <div class=" mb-4 ">
-        {{ form_label(form.Password) }}
-        {{ form_widget(form.Password, { attr: { class: 'bg-gray-100 rounded-full p-2 w-full  text-black'}}) }}
-        {{ form_errors(form.Password) }}
+    <div class="space-y-4">
+        <div>
+            {{ form_label(form.Password.first, null, {'label_attr': {'class': 'block mb-1 text-sm font-medium'}}) }}
+            {{ form_widget(form.Password.first) }}
+            {{ form_errors(form.Password.first) }}
+        </div>
+
+        <div>
+            {{ form_label(form.Password.second, null, {'label_attr': {'class': 'block mb-1 text-sm font-medium'}}) }}
+            {{ form_widget(form.Password.second) }}
+            {{ form_errors(form.Password.second) }}
+        </div>
     </div>
 
         <div class="mb-4">

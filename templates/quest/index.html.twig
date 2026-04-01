@@ -27,19 +27,32 @@
 
             <div class="flex gap-4 items-center">
                 {% if app.user %}
-                    {{ form_row(questForm.isPromoter) }}
-                    {{ form_row(questForm.isRegistered) }}
+                    <div class="flex flex-wrap gap-6 items-center my-4">
+                        <div class="flex items-center gap-2 cursor-pointer group">
+                            {{ form_widget(questForm.isPromoter, {
+                                'attr': {'class': 'w-5 h-5 cursor-pointer accent-amber-500 bg-gray-900 border-yellow-500 rounded focus:ring-amber-600 focus:ring-offset-gray-900'}
+                            }) }}
+                            {{ form_label(questForm.isPromoter, null, {'label_attr': {'class': 'text-white group-hover:text-amber-500 transition-colors'}}) }}
+                        </div>
+
+                        <div class="flex items-center gap-2 cursor-pointer group">
+                            {{ form_widget(questForm.isRegistered, {
+                                'attr': {'class': 'w-5 h-5 cursor-pointer accent-amber-500 bg-gray-900 border-yellow-500 rounded focus:ring-amber-600 focus:ring-offset-gray-900'}
+                            }) }}
+                            {{ form_label(questForm.isRegistered, null, {'label_attr': {'class': 'text-white group-hover:text-amber-500 transition-colors'}}) }}
+                        </div>
+                    </div>
 
                 {% else %}
                     {% do questForm.isPromoter.setRendered() %}
                     {% do questForm.isRegistered.setRendered() %}
                 {% endif %}
                 <div class="flex gap-4 items-end">
-                    {{ form_row(questForm.startDate) }}
-                    {{ form_row(questForm.endDate) }}
+                    {{ form_row(questForm.startDate,  {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full flex justify-center text-black'} })}}
+                    {{ form_row(questForm.endDate,  {'attr': {'class': 'bg-gray-100 rounded-lg px-4 py-2 w-full flex justify-center text-black'} })}}
                 </div>
 
-                <button class="text-black bg-white p-1 hover:bg-yellow-500" type="submit">
+                <button class="text-black bg-white p-3 hover:bg-yellow-500 " type="submit">
                     Rechercher
                 </button>
             </div>

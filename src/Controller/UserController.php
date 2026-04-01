@@ -33,7 +33,10 @@ final class                   UserController extends AbstractController
     public function new(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, FileUploader $fileUploader): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, [
+            'is_edit' => false
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -82,10 +85,23 @@ final class                   UserController extends AbstractController
 
         $this->denyAccessUnlessGranted('USER_EDIT', $user, 'Vous ne pouvez pas modifer cet utilisateur');
 
-        $form = $this->createForm(UserType::class, $user);
+        $oldPassword = $user->getPassword();
+
+        $form = $this->createForm(UserType::class, $user, [
+            'is_edit' => true
+        ]);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $plainPassword = $form->get('Password')->getData();
+
+            if ($plainPassword) {
+                $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
+            } else {
+                $user->setPassword($oldPassword);
+            }
 
             $file = $form->get('profilePicture')->getData();
             if ($file) {
@@ -94,11 +110,8 @@ final class                   UserController extends AbstractController
                 );
             }
 
-            /** @var string $plainPassword */
-            $plainPassword = $form->get('Password')->getData();
-            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
-            $entityManager->persist($user);
+
             $entityManager->flush();
 
             return $this->redirectToRoute('user_show', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
