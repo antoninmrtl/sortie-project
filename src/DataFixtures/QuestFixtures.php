@@ -55,7 +55,9 @@ class QuestFixtures extends Fixture implements DependentFixtureInterface
 
         $allStatuses = $manager->getRepository(Status::class)->findAll();
         $statusMap = [];
-        foreach ($allStatuses as $s) { $statusMap[$s->getLabel()] = $s; }
+        foreach ($allStatuses as $s) {
+            $statusMap[$s->getLabel()] = $s;
+        }
 
         for ($i = 0; $i < 60; $i++) {
             $quest = new Quest();
@@ -81,7 +83,9 @@ class QuestFixtures extends Fixture implements DependentFixtureInterface
             if ($i >= 40) {
                 $quest->setInscriptionLimitDate(new \DateTime('-1 day'));
             } else {
-                $quest->setInscriptionLimitDate($faker->dateTimeBetween('-2 months', $quest->getStartDateTime()->format('Y-m-d H:i:s')));
+                $startDate = clone $quest->getStartDateTime();
+                $daysBefore = $faker->numberBetween(1, 10);
+                $quest->setInscriptionLimitDate($startDate->modify("-" . $daysBefore . " days"));
             }
 
 
@@ -96,7 +100,7 @@ class QuestFixtures extends Fixture implements DependentFixtureInterface
             $quest->setNbMaxInscription($faker->numberBetween(5, 60))
                 ->setCampus($this->getReference(CampusFixtures::CAMPUS_REFERENCE, Campus::class))
                 ->setPlace($this->getReference(PlaceFixtures::PLACE_REFERENCE, Place::class))
-               ->setPromoter($this->getReference(UserFixtures::USER_REFERENCE, User::class));
+                ->setPromoter($this->getReference(UserFixtures::USER_REFERENCE, User::class));
 
             $manager->persist($quest);
         }
@@ -105,6 +109,7 @@ class QuestFixtures extends Fixture implements DependentFixtureInterface
         $this->addReference(self::QUEST_REFERENCE, $quest);
 
     }
+
     public function getDependencies(): array
     {
         return [
