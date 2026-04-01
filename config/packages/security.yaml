@@ -45,7 +45,6 @@ security:
         - { path: ^/quest/(create|update|delete), roles: ROLE_USER }
         - { path: ^/quest, roles: ROLE_USER }
         - { path: ^/user/create, roles: ROLE_ADMIN }
-        - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
