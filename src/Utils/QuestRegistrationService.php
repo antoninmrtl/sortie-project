@@ -50,14 +50,7 @@ class QuestRegistrationService
         }
     }
 
-//    public function aboveConfirmVerif(Quest $quest, User $user){
-//// inverser < (uniquement pou test)
-//        if () {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+
 
 
 

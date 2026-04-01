@@ -70,6 +70,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Type('string')]
     #[Assert\NotBlank(message: 'Ne peut pas être vide')]
     #[Assert\NotNull(message: 'Ne peut pas être nul')]
+    #[Assert\Regex(
+        pattern: '/^[0-9]+$/',
+        message: "Le numéro de téléphone ne doit contenir que des chiffres, aventurier !"
+    )]
     private ?string $phone = null;
 
     #[ORM\Column]

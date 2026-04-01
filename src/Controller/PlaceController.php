@@ -30,6 +30,7 @@ final class PlaceController extends AbstractController
 
             $entityManager->persist($place);
             $entityManager->flush();
+
             $this->addFlash('success', 'Nouvel endroit créee');
             return $this->redirectToRoute('quest_create');
 

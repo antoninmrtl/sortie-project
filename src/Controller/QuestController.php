@@ -10,6 +10,7 @@ use App\Repository\QuestRepository;
 use App\Repository\StatusRepository;
 use App\Services\QuestService;
 use App\Utils\FileUploader;
+use App\Utils\QuestLogicService;
 use App\Utils\QuestRegistrationService;
 use App\Utils\StatusUpdater;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,8 +30,10 @@ final class  QuestController extends AbstractController
         $statusUpdater->updateStatus();
 
         $questSearch = new QuestSearch();
+
         /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
+
         $questForm = $this->createForm(QuestSearchType::class, $questSearch);
         $questForm->handleRequest($request);
 
@@ -44,16 +47,14 @@ final class  QuestController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'create')]
     #[IsGranted("ROLE_USER")]
+    #[Route('/create', name: 'create')]
     #[Route('/edit/{id}', name: 'edit', requirements: ['id' => '\d+'])]
     public function createOrEdit(
         Request                $request,
-        EntityManagerInterface $entityManager,
-        StatusRepository       $statusRepository,
-        FileUploader           $fileUploader,
-        StatusUpdater          $statusUpdater,
+        QuestLogicService      $questLogicService,
         ?Quest                 $quest = null,
+
     ): Response
     {
 
@@ -70,34 +71,12 @@ final class  QuestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $action = $request->request->get('save_action');
-
-
-            $file = $form->get('picture')->getData();
-            if ($file) {
-                $quest->setPicture(
-                    $fileUploader->upload($file, 'assets/images/pictureQuest', $quest->getName())
-                );
-            }
-            $quest->setPromoter($user);
-            $quest->addUser($user);
-
-            $enCreationStatus = $statusRepository->findOneBy(['label' => 'En création']);
-
-            if($action === 'save') {
-                $quest->setStatus($enCreationStatus);
-                $quest = $statusUpdater->createStatus($quest);
-
-            } else {
-                $quest = $statusUpdater->createStatus($quest);
-            }
-
-            $entityManager->persist($quest);
-            $entityManager->flush();
-
+            $questLogicService->createAndEdit($form, $quest, $user, $request);
+            $this->addFlash('success', 'Quête créee avec succès ');
             return $this->redirectToRoute('quest_show', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
         }
 
+        //$this->addFlash('warning', 'Impossible de créer la quête');
         return $this->render('quest/new.html.twig', [
             'quest' => $quest,
             'form' => $form,
@@ -110,6 +89,7 @@ final class  QuestController extends AbstractController
     public function show(int $id, QuestRepository $questRepository): Response
     {
         $quest = $questRepository->find($id);
+
         if (!$quest) {
             throw $this->createNotFoundException('Quête introuvable !');
         }
@@ -211,7 +191,7 @@ final class  QuestController extends AbstractController
 
         $entityManager->remove($quest);
         $entityManager->flush();
-//        coucou
+
         $this->addFlash('success', 'Quête supprimée avec success');
 
         return $this->redirectToRoute('quest_index', ['id' => $quest->getId()], Response::HTTP_SEE_OTHER);
