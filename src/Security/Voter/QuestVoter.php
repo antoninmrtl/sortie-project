@@ -30,11 +30,8 @@ final class QuestVoter extends Voter
             return false;
         }
 
-
         /** @var Quest $quest */
         $quest = $subject;
-
-
 
         switch ($attribute) {
             case self::EDIT:
@@ -53,26 +50,21 @@ final class QuestVoter extends Voter
 
                 return false;
 
-
             case self::REGISTER:
                 return $quest->getStatus()->getLabel() === 'Ouverte'
                     && !$quest->getUsers()->contains($user)
                     && $quest->getUsers()->count() < $quest->getNbMaxInscription();
 
-
             case self::UNREGISTER:
                 return $quest->getUsers()->contains($user)
                 && in_array($quest->getStatus()->getLabel(), ['Ouverte', 'Cloturée']);
-
 
             case self::DELETE:
                 return $quest->getPromoter() === $user || in_array('ROLE_ADMIN', $user->getRoles());
 
             case self::CANCEL:
                 return ($quest->getPromoter() === $user || in_array('ROLE_ADMIN', $user->getRoles())) && $quest->getStatus()->getLabel() != 'Annulée';
-
         }
-
         return false;
     }
 
